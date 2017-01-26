@@ -1,0 +1,17 @@
+module Liquid
+  class Error < ::Exception; end
+
+  class ArgumentError < Error; end
+
+  class ContextError < Error; end
+
+  class FilterNotFound < Error; end
+
+  class FileSystemError < Error; end
+
+  class StandardError < Error; end
+
+  class SyntaxError < Error; end
+
+  class StackLevelError < Error; end
+end

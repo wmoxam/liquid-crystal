@@ -1,0 +1,15 @@
+name: liquid-crystal
+version: 0.1.0
+authors:
+  - Wesley Moxam <me@wmoxam.com>
+
+description: |
+  Liquid Markup for Crystal
+
+
+development_dependencies:
+  minitest:
+    git: https://github.com/ysbaddaden/minitest.cr.git
+    version: ~> 0.3.0
+
+license: MIT
