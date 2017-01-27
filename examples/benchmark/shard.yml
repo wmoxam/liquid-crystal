@@ -1,0 +1,17 @@
+name: benchmark
+version: 0.1.0
+
+authors:
+  - Wesley Moxam <wes@4ormat.com>
+
+targets:
+  benchmark:
+    main: src/benchmark.cr
+
+dependencies:
+  liquid-crystal:
+    github: wmoxam/liquid-crystal
+
+crystal: 0.20.5
+
+license: MIT
