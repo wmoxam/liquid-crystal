@@ -14,9 +14,9 @@ class AssignTest < Minitest::Test
                            _h({"values" => %w{foo bar baz}}))
   end
 
-  # def test_assign_with_filter
-  #   assert_template_result(".bar.",
-  #                          "{% assign foo = values | split: \",\" %}.{{ foo[1] }}.",
-  #                          _h({"values" => "foo,bar,baz"}))
-  # end
+  def test_assign_with_filter
+    assert_template_result(".bar.",
+                           "{% assign foo = values | split: \",\" %}.{{ foo[1] }}.",
+                           _h({"values" => "foo,bar,baz"}))
+  end
 end # AssignTest
