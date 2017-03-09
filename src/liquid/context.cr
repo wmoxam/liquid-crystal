@@ -231,7 +231,7 @@ module Liquid
           # If object is a hash- or array-like object we look for the
           # presence of the key and if its available we return it
 
-          if object.is_a?(Hash) || (object.is_a?(Array) && part.is_a?(Int))
+          if (object.is_a?(Hash) && has_key?(object, part)) || (object.is_a?(Array) && part.is_a?(Int))
             res = lookup_and_evaluate(object, part)
             object = res.to_liquid
 
@@ -266,15 +266,8 @@ module Liquid
     end # variable
 
     private def lookup_and_evaluate(obj, key) : Any
-      normalized_key = if key.is_a?(Regex::MatchData)
-        key[0]?
-      else
-        key
-      end
-
-      any = Any.new(obj)
-      if any.has_key?(normalized_key)
-        return any[normalized_key]
+      if has_key?(obj, key)
+        return Any.new(obj)[normalized_key(key)]
       else
         return Any.new()
       end
@@ -285,6 +278,18 @@ module Liquid
       #  value
       #end
     end # lookup_and_evaluate
+
+    private def has_key?(obj, key)
+      Any.new(obj).has_key?(normalized_key(key))
+    end
+
+    private def normalized_key(key)
+      if key.is_a?(Regex::MatchData)
+        key[0]?
+      else
+        key
+      end
+  end
 
     private def squash_instance_assigns_with_environments
       @scopes.last.each_key do |k|

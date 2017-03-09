@@ -35,19 +35,9 @@ missing tests and improving the data passing interface which is a bit clunky
 
 * sort
 * map
-* strip_newlines
-* newlines_to_br
-* plus
-* minus
-* times
-* divided_by
-* modulo
-* append
-* prepend
 
 ### Missing tests
 
-* Some tests for the ```remove``` filter
 * Template tokenize tests
 * All tests that expect an error raised
 * Half of the Drop & Context tests
