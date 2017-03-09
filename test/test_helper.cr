@@ -1,6 +1,6 @@
 require "minitest/autorun"
 
-require "../src/liquid.cr"
+require "../src/liquid-crystal.cr"
 
 module Minitest
   class Test

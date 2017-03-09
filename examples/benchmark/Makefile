@@ -3,9 +3,11 @@
 all: compile test
 
 test:
-	ruby src/benchmark.rb
+	bundle install --path .bundle
+	bundle exec ruby src/benchmark.rb
 	./benchmark
 
 compile:
+	shards install
 	crystal build --release src/benchmark.cr
 

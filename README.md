@@ -7,7 +7,7 @@ A port of the [Liquid template engine](https://github.com/Shopify/liquid) to [Cr
 ## Usage
 
 ```crystal
-require "liquid"
+require "liquid-crystal"
 
 include Liquid::Data
 
@@ -50,6 +50,5 @@ missing tests and improving the data passing interface which is a bit clunky
 * Some tests for the ```remove``` filter
 * Template tokenize tests
 * All tests that expect an error raised
-* Filter tests
 * Half of the Drop & Context tests
 * Half of the if/else tag tests

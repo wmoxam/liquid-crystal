@@ -4,3 +4,6 @@ pkg
 .crystal
 .shards
 lib
+example/benchmark/benchmark
+example/benchmark/lib
+example/benchmark/.bundle
