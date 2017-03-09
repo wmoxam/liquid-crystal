@@ -23,18 +23,18 @@ class CaptureTest < Minitest::Test
     assert_equal "test-string", rendered.gsub(/\s/, "")
   end
 
-  # def test_assigning_from_capture
-  #   template_source = <<-END_TEMPLATE
-  #   {% assign first = '' %}
-  #   {% assign second = '' %}
-  #   {% for number in (1..3) %}
-  #   {% capture first %}{{number}}{% endcapture %}
-  #   {% assign second = first %}
-  #   {% endfor %}
-  #   {{ first }}-{{ second }}
-  #   END_TEMPLATE
-  #   template = Template.parse(template_source)
-  #   rendered = template.render
-  #   assert_equal "3-3", rendered.gsub(/\s/, "")
-  # end
+  def test_assigning_from_capture
+    template_source = <<-END_TEMPLATE
+    {% assign first = '' %}
+    {% assign second = '' %}
+    {% for number in (1..3) %}
+    {% capture first %}{{number}}{% endcapture %}
+    {% assign second = first %}
+    {% endfor %}
+    {{ first }}-{{ second }}
+    END_TEMPLATE
+    template = Template.parse(template_source)
+    rendered = template.render
+    assert_equal "3-3", rendered.gsub(/\s/, "")
+  end
 end # CaptureTest
