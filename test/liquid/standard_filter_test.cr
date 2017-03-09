@@ -160,73 +160,73 @@ class StandardFiltersTest < Minitest::Test
   def test_replace
     assert_equal "2 2 2 2", @filters.replace("1 1 1 1", "1", 2)
     assert_equal "2 1 1 1", @filters.replace_first("1 1 1 1", "1", 2)
-#    assert_template_result "2 1 1 1", "{{ '1 1 1 1' | replace_first: '1', 2 }}"
+    assert_template_result "2 1 1 1", "{{ '1 1 1 1' | replace_first: '1', 2 }}"
   end
 
   def test_remove
     assert_equal "   ", @filters.remove("a a a a", "a")
     assert_equal "a a a", @filters.remove_first("a a a a", "a ")
-#    assert_template_result "a a a", "{{ 'a a a a' | remove_first: 'a ' }}"
+    assert_template_result "a a a", "{{ 'a a a a' | remove_first: 'a ' }}"
   end
 
-  # def test_pipes_in_string_arguments
-  #   assert_template_result "foobar", "{{ 'foo|bar' | remove: '|' }}"
-  # end
-  #
-  # #   def test_strip_newlines
-  # #     assert_template_result "abc", "{{ source | strip_newlines }}", {"source" => "a\nb\nc".as Type}
-  # #   end
-  #
-  # # def test_newlines_to_br
-  # #   assert_template_result "a<br />\nb<br />\nc", "{{ source | newline_to_br }}", {"source" => "a\nb\nc".as Type}
-  # # end
-  #
-  # def test_plus
-  #   assert_template_result "2", "{{ 1 | plus:1 }}"
-  #   assert_template_result "2.0", "{{ '1' | plus:'1.0' }}"
-  # end
-  #
-  # def test_minus
-  #   #    assert_template_result "4", "{{ input | minus:operand }}", {"input" => 5.as Type, "operand" => 1.as Type}
-  #   assert_template_result "2.3", "{{ '4.3' | minus:'2' }}"
-  # end
-  #
-  # def test_times
-  #   assert_template_result "12", "{{ 3 | times:4 }}"
-  #   assert_template_result "0", "{{ 'foo' | times:4 }}"
-  #
-  #   assert_match(/(6\.3)|(6\.(0{13})1)/, Template.parse("{{ '2.1' | times:3 }}").render)
-  #
-  #   #    assert_template_result "6", "{{ '2.1' | times:3 | replace: '.','-' | plus:0}}"
-  # end
-  #
-  # def test_divided_by
-  #   assert_template_result "4", "{{ 12 | divided_by:3 }}"
-  #   assert_template_result "4", "{{ 14 | divided_by:3 }}"
-  #
-  #   assert_match(/4\.(6{13,14})7/, Template.parse("{{ 14 | divided_by:'3.0' }}").render)
-  #
-  #   assert_template_result "5", "{{ 15 | divided_by:3 }}"
-  #   assert_template_result "Liquid error: Division by zero", "{{ 5 | divided_by:0 }}"
-  # end
-  #
-  # def test_modulo
-  #   assert_template_result "1", "{{ 3 | modulo:2 }}"
-  # end
-  #
-  # # def test_append
-  # #   assigns = {"a" => "bc".as Type, "b" => "d".as Type}
-  # #   assert_template_result("bcd","{{ a | append: 'd'}}",assigns)
-  # #   assert_template_result("bcd", "{{ a | append: b}}", assigns)
-  # # end
-  #
-  # # def test_prepend
-  # #   assigns = {"a" => "bc".as Type, "b" => "a".as Type}
-  # #   assert_template_result("abc","{{ a | prepend: 'a'}}",assigns)
-  # #   assert_template_result("abc","{{ a | prepend: b}}",assigns)
-  # # end
-  #
-  # def test_cannot_access_private_methods
-  #   assert_template_result("a", "{{ 'a' | to_number }}")
-  # end
+  def test_pipes_in_string_arguments
+    assert_template_result "foobar", "{{ 'foo|bar' | remove: '|' }}"
+  end
+ 
+  def test_strip_newlines
+    assert_template_result "abc", "{{ source | strip_newlines }}", {"source" => "a\nb\nc".as Type}
+  end
+ 
+  def test_newlines_to_br
+    assert_template_result "a<br />\nb<br />\nc", "{{ source | newline_to_br }}", {"source" => "a\nb\nc".as Type}
+  end
+ 
+  def test_plus
+    assert_template_result "2", "{{ 1 | plus:1 }}"
+    assert_template_result "2.0", "{{ '1' | plus:'1.0' }}"
+  end
+ 
+  def test_minus
+    assert_template_result "4", "{{ input | minus:operand }}", {"input" => 5.as Type, "operand" => 1.as Type}
+    assert_template_result "2.3", "{{ '4.3' | minus:'2' }}"
+  end
+ 
+  def test_times
+    assert_template_result "12", "{{ 3 | times:4 }}"
+    assert_template_result "0", "{{ 'foo' | times:4 }}"
+ 
+    assert_match(/(6\.3)|(6\.(0{13})1)/, Template.parse("{{ '2.1' | times:3 }}").render)
+ 
+    # assert_template_result "6", "{{ '2.1' | times:3 | replace: '.','-' | plus:0}}"
+  end
+ 
+  def test_divided_by
+    assert_template_result "4", "{{ 12 | divided_by:3 }}"
+    assert_template_result "4", "{{ 14 | divided_by:3 }}"
+ 
+    assert_match(/4\.(6{13,14})7/, Template.parse("{{ 14 | divided_by:'3.0' }}").render)
+ 
+    assert_template_result "5", "{{ 15 | divided_by:3 }}"
+    assert_template_result "Liquid error: Division by zero", "{{ 5 | divided_by:0 }}"
+  end
+ 
+  def test_modulo
+    assert_template_result "1", "{{ 3 | modulo:2 }}"
+  end
+ 
+  def test_append
+    assigns = {"a" => "bc".as Type, "b" => "d".as Type}
+    assert_template_result("bcd","{{ a | append: 'd'}}",assigns)
+    assert_template_result("bcd", "{{ a | append: b}}", assigns)
+  end
+ 
+  def test_prepend
+    assigns = {"a" => "bc".as Type, "b" => "a".as Type}
+    assert_template_result("abc","{{ a | prepend: 'a'}}",assigns)
+    assert_template_result("abc","{{ a | prepend: b}}",assigns)
+  end
+ 
+  def test_cannot_access_private_methods
+    assert_template_result("a", "{{ 'a' | to_number }}")
+  end
 end # StandardFiltersTest
