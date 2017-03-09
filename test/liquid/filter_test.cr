@@ -101,12 +101,12 @@ class FiltersTest < Minitest::Test
     assert_equal 1000, Variable.new("var | xyzzy").render(@context).as(Any).raw
   end
 
-  # def test_filter_with_keyword_arguments
-  #   @context["surname"] = "john"
-  #   @context.add_filters(SubstituteFilter)
-  #   output = Variable.new(%[ 'hello %{first_name}, %{last_name}' | substitute: first_name: surname, last_name: 'doe' ]).render(@context)
-  #   assert_equal "hello john, doe", output
-  # end
+#  def test_filter_with_keyword_arguments
+#    @context["surname"] = "john"
+#    @context.add_filters(SubstituteFilter)
+#    output = Variable.new(%[ 'hello %{first_name}, %{last_name}' | substitute: first_name: surname, last_name: 'doe' ]).render(@context)
+#    assert_equal "hello john, doe", output
+#  end
 end
 
 class FiltersInTemplate < Minitest::Test
@@ -116,7 +116,7 @@ class FiltersInTemplate < Minitest::Test
     Template.register_filter(MoneyFilter)
 
     assert_equal " 1000$ ", Template.parse("{{1000 | money}}").render()
-#    assert_equal " 1000$ CAD ", Template.parse("{{1000 | money}}").render({} of String => Type, CanadianMoneyFilter)
-#    assert_equal " 1000$ CAD ", Template.parse("{{1000 | money}}").render({} of String => Type, [CanadianMoneyFilter])
+    # assert_equal " 1000$ CAD ", Template.parse("{{1000 | money}}").render(({} of String => Type), CanadianMoneyFilter)
+    assert_equal " 1000$ CAD ", Template.parse("{{1000 | money}}").render(({} of String => Type), [CanadianMoneyFilter])
   end
 end # FiltersTest

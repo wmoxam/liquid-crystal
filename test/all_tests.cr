@@ -5,7 +5,7 @@ require "./liquid/context_test"
 require "./liquid/drop_test"
 require "./liquid/error_handling_test"
 require "./liquid/file_system_test"
-#require "./liquid/filter_test"  # TODO
+require "./liquid/filter_test"
 require "./liquid/output_test"
 require "./liquid/parsing_quirks_test"
 require "./liquid/regexp_test"

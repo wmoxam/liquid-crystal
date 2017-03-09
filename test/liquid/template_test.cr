@@ -15,7 +15,7 @@ class TemplateTest < Minitest::Test
   #   assert_equal [' ', '{{funk}}', ' ', '{{so}}', ' ', '{{brother}}', ' '], Template.new.send(:tokenize, ' {{funk}} {{so}} {{brother}} ')
   #   assert_equal [' ', '{{  funk  }}', ' '], Template.new.send(:tokenize, ' {{  funk  }} ')
   # end
-  #
+ 
   # def test_tokenize_blocks
   #   assert_equal ['{%comment%}'], Template.new.send(:tokenize, '{%comment%}')
   #   assert_equal [' ', '{%comment%}', ' '], Template.new.send(:tokenize, ' {%comment%} ')
