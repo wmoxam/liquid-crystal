@@ -12,8 +12,18 @@ module Liquid
   #   end
   #
   #   context["bob"]  #=> nil  class Context
+
+  class VariableParts
+    getter parts : Array(String), first_part : Type
+    def initialize(@parts, @first_part)
+    end
+  end
+
   class Context
+    include Liquid::Data
+
     getter scopes : Array(Hash(String, Type)), :errors, :registers, :environments
+    @literals : Hash(String, Type)
 
     def initialize( environments = [] of Hash(String, Type),
                     outer_scope = {} of String => Type,
@@ -25,6 +35,17 @@ module Liquid
       @errors         = [] of Exception
       @rethrow_errors = rethrow_errors
       @interrupts = [] of Interrupt
+      @literals = _h({
+        "nil" => nil,
+        "null" => nil,
+        "" => nil,
+        "true"  => true,
+        "false" => false,
+        "blank" => :blank?,
+        "empty" => :empty?
+      })
+
+      @variable_parts = {} of String => VariableParts
 
       squash_instance_assigns_with_environments
     end
@@ -137,16 +158,6 @@ module Liquid
       resolve(key) != nil
     end
 
-    private def literals
-      {
-        nil => nil, "nil" => nil, "null" => nil, "" => nil,
-        "true"  => true,
-        "false" => false,
-        "blank" => :blank?,
-        "empty" => :empty?
-      }
-    end
-
     # Look up variable, either resolve directly after considering the name. We can directly handle
     # Strings, digits, floats and booleans (true,false).
     # If no match is made we lookup the variable in the current scope and
@@ -156,10 +167,13 @@ module Liquid
     # Example:
     #   products == empty #=> products.empty?
     private def resolve(key)
-      if literals.key_index(key)
-        literals[key]
+      if key.nil?
+        return nil
+      elsif key.is_a?(String) && @literals.key_index(key)
+        @literals[key]
       else
-        case key
+        is_variable = false
+        value = case key
         when /^'(.*)'$/ # Single quoted strings
           $1
         when /^"(.*)"$/ # Double quoted strings
@@ -173,8 +187,15 @@ module Liquid
         when /^(-?\d[\d\.]+)$/ # Floats
           $1.to_f
         else
+          is_variable = true
           variable(key)
         end
+
+        if !is_variable && key.is_a?(String)
+          @literals[key] = value.as(Type)
+        end
+
+        value
       end
     end
 
@@ -214,19 +235,26 @@ module Liquid
     #  assert_equal "tobi", @context["hash.name"]
     #  assert_equal "tobi", @context["hash["name"]"]
     private def variable(markup)
-      parts = markup.to_s.scan(VariableParser)
       square_bracketed = /^\[(.*)\]$/
+      markup_string = markup.to_s
+      unless @variable_parts[markup]?
+        parts = markup_string.scan(VariableParser).map {|p| p[0]? }.compact
 
-      first_part = parts.shift[0]?
+        first_part = parts.shift
 
-      if first_part =~ square_bracketed
-        first_part = resolve($1)
+        if first_part =~ square_bracketed
+          first_part = resolve($1)
+        end
+
+        @variable_parts[markup_string] = VariableParts.new(parts, first_part.as(Type))
       end
+
+      parts = @variable_parts[markup_string].parts
+      first_part = @variable_parts[markup_string].first_part
 
       if object = find_variable(first_part)
 
-        parts.each do |part_match|
-          part = part_match[0]?
+        parts.each do |part|
           part = resolve($1) if part_resolved = (part =~ square_bracketed)
           # If object is a hash- or array-like object we look for the
           # presence of the key and if its available we return it
