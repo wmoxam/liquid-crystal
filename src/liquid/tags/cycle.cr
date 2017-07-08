@@ -1,6 +1,7 @@
 module Liquid
 
-  # Cycle is usually used within a loop to alternate between values, like colors or DOM classes.
+  # Cycle is usually used within a loop to alternate between values, like
+  # colors or DOM classes.
   #
   #   {% for item in items %}
   #     <div class="{% cycle 'red', 'green', 'blue' %}"> {{ item }} </div>
@@ -28,7 +29,8 @@ module Liquid
         @variables = variables_from_string(markup)
       	@name = "'#{@variables.to_s}'"
       else
-        raise SyntaxError.new("Syntax Error in 'cycle' - Valid syntax: cycle [name :] var [, var2, var3 ...]")
+        raise SyntaxError.new("Syntax Error in 'cycle' - Valid syntax: " \
+          "cycle [name :] var [, var2, var3 ...]")
       end
       super
     end
@@ -47,7 +49,11 @@ module Liquid
 
       context.stack do
         key = context[@name].to_s
-        iteration = cycle_hash[key]? ? Any.new(cycle_hash[key]?.not_nil!).to_i : 0
+        iteration = if cycle_hash[key]?
+          Any.new(cycle_hash[key]?.not_nil!).to_i
+        else
+          0
+        end
         result = context[@variables[iteration]]
         iteration += 1
         iteration  = 0  if iteration >= @variables.size

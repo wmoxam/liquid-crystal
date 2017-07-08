@@ -28,7 +28,11 @@ module Liquid
 
     def escape_once(input)
       regexp = /["><']|&(?!([a-zA-Z]+|(#\d+));)/
-      mappings = {"&" => "&amp;", ">" => "&gt;", "<" => "&lt;", "\"" => "&quot;", "'" => "&#39;"}
+      mappings = {"&" => "&amp;",
+                  ">" => "&gt;",
+                  "<" => "&lt;",
+                  "\"" => "&quot;",
+                  "'" => "&#39;"}
       input.to_s.gsub(regexp, mappings)
     end
 
@@ -37,14 +41,18 @@ module Liquid
     end
 
     # Truncate a string down to x characters
-    def truncate(input : String?, length : Int32 = 30, truncate_string : String = "...")
+    def truncate(input : String?,
+                 length : Int32 = 30,
+                 truncate_string : String = "...")
       return nil if input.nil?
       l = length.to_i - truncate_string.size
       l = 0 if l < 0
       input.size > length.to_i ? input[0...l] + truncate_string : input
     end
 
-    def truncatewords(input : String?, words : Int32 = 15, truncate_string : String = "...")
+    def truncatewords(input : String?,
+                      words : Int32 = 15,
+                      truncate_string : String = "...")
       return nil if input.nil?
       wordlist = input.to_s.split
       l = words.to_i - 1

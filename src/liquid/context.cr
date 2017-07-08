@@ -35,8 +35,8 @@ module Liquid
 
     # Adds filters to this context.
     #
-    # Note that this does not register the filters with the main Template object. see <tt>Template.register_filter</tt>
-    # for that
+    # Note that this does not register the filters with the main Template
+    # object. see <tt>Template.register_filter</tt> for that
     def add_filters(filters : Array(Filter.class) | Filter.class)
       [filters].flatten.compact.each do |klass|
         strainer.add_filter(klass.new(self))
@@ -116,7 +116,8 @@ module Liquid
       @scopes[0] = {} of String => Type
     end
 
-    # Only allow String, Numeric, Hash, Array, Proc, Boolean or <tt>Liquid::Drop</tt>
+    # Only allow String, Numeric, Hash, Array, Proc, Boolean or
+    # <tt>Liquid::Drop</tt>
     def []=(key : String, value : Any)
       @scopes[0][key] = value.raw
     end
@@ -147,11 +148,13 @@ module Liquid
       }
     end
 
-    # Look up variable, either resolve directly after considering the name. We can directly handle
-    # Strings, digits, floats and booleans (true,false).
+    # Look up variable, either resolve directly after considering the name.
+    # We can directly handle Strings, digits, floats and booleans (true,false).
     # If no match is made we lookup the variable in the current scope and
-    # later move up to the parent blocks to see if we can resolve the variable somewhere up the tree.
-    # Some special keywords return symbols. Those symbols are to be called on the rhs object in expressions
+    # later move up to the parent blocks to see if we can resolve the variable
+    #  somewhere up the tree.
+    # Some special keywords return symbols. Those symbols are to be called on
+    # the rhs object in expressions
     #
     # Example:
     #   products == empty #=> products.empty?
@@ -178,7 +181,8 @@ module Liquid
       end
     end
 
-    # Fetches an object starting at the local scope and then moving up the hierachy
+    # Fetches an object starting at the local scope and then moving up the
+    # hierachy
     private def find_variable(key)
       scope = @scopes.find { |s| s.has_key?(key) }
       lookup = nil
@@ -231,7 +235,8 @@ module Liquid
           # If object is a hash- or array-like object we look for the
           # presence of the key and if its available we return it
 
-          if (object.is_a?(Hash) && has_key?(object, part)) || (object.is_a?(Array) && part.is_a?(Int))
+          if (object.is_a?(Hash) && has_key?(object, part)) ||
+              (object.is_a?(Array) && part.is_a?(Int))
             res = lookup_and_evaluate(object, part)
             object = res.to_liquid
 
@@ -251,8 +256,9 @@ module Liquid
           elsif object.is_a?(Drop)
             object = object.invoke_drop(part).to_liquid.as Type
           else
-            # No key was present with the desired value and it wasn't one of the directly supported
-            # keywords either. The only thing we got left is to return nil
+            # No key was present with the desired value and it wasn't one of
+            # the directly supported keywords either. The only thing we got
+            # left is to return nil
 
             return nil
           end

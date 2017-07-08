@@ -141,7 +141,8 @@ module Liquid
       when Hash
         return object.has_key?(key)
       else
-        raise "expected Array or Hash for #has_key?(key : Type), not #{object.class}"
+        raise "expected Array or Hash for #has_key?(key : Type), " \
+          "not #{object.class}"
       end
     end
 

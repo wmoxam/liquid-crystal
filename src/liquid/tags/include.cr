@@ -16,7 +16,8 @@ module Liquid
           @attributes[match[1]?.not_nil!] = match[2]?
         end
       else
-        raise SyntaxError.new("Error in tag 'include' - Valid syntax: include '[template]' (with|for) [object|collection]")
+        raise SyntaxError.new("Error in tag 'include' - Valid syntax: " \
+          "include '[template]' (with|for) [object|collection]")
       end
 
       super

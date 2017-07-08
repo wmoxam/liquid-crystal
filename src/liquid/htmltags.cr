@@ -15,7 +15,8 @@ module Liquid
           @attributes[match[1].not_nil!] = match[2]?
         end
       else
-        raise SyntaxError.new("Syntax Error in 'table_row loop' - Valid syntax: table_row [item] in [collection] cols=3")
+        raise SyntaxError.new("Syntax Error in 'table_row loop' - Valid " \
+          "syntax: table_row [item] in [collection] cols=3")
       end
 
       super
@@ -25,10 +26,22 @@ module Liquid
       collection = context[@collection_name]
       return "" if collection.nil?
 
-      from = @attributes["offset"]? ? Any.new(context[@attributes["offset"]]).to_i : 0
-      to = @attributes["limit"]? ? from + Any.new(context[@attributes["limit"]]).to_i : nil
+      from = if @attributes["offset"]?
+        Any.new(context[@attributes["offset"]]).to_i
+      else
+        0
+      end
 
-      collection = Utils.slice_collection_using_each(Any.new(collection), from, to)
+      to = if @attributes["limit"]?
+        from + Any.new(context[@attributes["limit"]]).to_i
+      else
+        nil
+      end
+
+      collection = Utils.slice_collection_using_each(
+        Any.new(collection),
+        from,
+        to)
 
       length = collection.size
 
@@ -61,7 +74,9 @@ module Liquid
 
             col += 1
 
-            result << "<td class=\"col#{col}\">" << render_all(@nodelist, context) << "</td>"
+            result << "<td class=\"col#{col}\">"
+            result << render_all(@nodelist, context)
+            result << "</td>"
 
             if col == cols && !(index == length - 1)
               col  = 0

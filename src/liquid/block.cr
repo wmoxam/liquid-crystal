@@ -11,8 +11,8 @@ module Liquid
         case token = tokens.shift
         when IsTag
           if token =~ FullToken
-            # if we found the proper block delimitor just end parsing here and let the outer block
-            # proceed
+            # if we found the proper block delimitor just end parsing here and
+            # let the outer block proceed
             if block_delimiter == $~[1]
               end_tag
               return
@@ -22,12 +22,13 @@ module Liquid
             if tag = Template.tags[$~[1]]?
               @nodelist << tag.new($~[1], $~[2], tokens)
             else
-              # this tag is not registered with the system
-              # pass it to the current block for special handling or error reporting
+              # this tag is not registered with the system pass it
+              # to the current block for special handling or error reporting
               unknown_tag($~[1], $~[2], tokens)
             end
           else
-            raise SyntaxError.new "Tag '#{token}' was not properly terminated with regexp: #{TagEnd.inspect} "
+            raise SyntaxError.new "Tag '#{token}' was not properly terminated" \
+             " with regexp: #{TagEnd.inspect} "
           end
         when IsVariable
           @nodelist << create_variable(token)
@@ -39,8 +40,8 @@ module Liquid
       end
 
       # Make sure that its ok to end parsing in the current block.
-      # Effectively this method will throw and exception unless the current block is
-      # of type Document
+      # Effectively this method will throw and exception unless the current
+      # block is of type Document
       assert_missing_delimitation!
     end
 
@@ -52,7 +53,8 @@ module Liquid
       when "else"
         raise SyntaxError.new "#{block_name} tag does not expect else tag"
       when "end"
-        raise SyntaxError.new "'end' is not a valid delimiter for #{block_name} tags. use #{block_delimiter}"
+        raise SyntaxError.new "'end' is not a valid delimiter for " \
+          "#{block_name} tags. use #{block_delimiter}"
       else
         raise SyntaxError.new "Unknown tag '#{tag}'"
       end
@@ -70,7 +72,8 @@ module Liquid
       token.scan(ContentOfVariable) do |content|
         return Variable.new(content[1])
       end
-      raise SyntaxError.new("Variable '#{token}' was not properly terminated with regexp: #{VariableEnd.inspect} ")
+      raise SyntaxError.new("Variable '#{token}' was not properly terminated" \
+                           " with regexp: #{VariableEnd.inspect} ")
     end
 
     def render(context)
@@ -88,15 +91,21 @@ module Liquid
           break if context.has_interrupt?
 
           begin
-            # If we get an Interrupt that means the block must stop processing. An
-            # Interrupt is any command that stops block execution such as {% break %}
-            # or {% continue %}
+            # If we get an Interrupt that means the block must stop processing.
+            # An Interrupt is any command that stops block execution such as
+            # {% break %} or {% continue %}
             if token.is_a? Continue || token.is_a? Break
-              context.push_interrupt(token.interrupt) if token.responds_to?(:interrupt)
+              if token.responds_to?(:interrupt)
+                context.push_interrupt(token.interrupt)
+              end
               break
             end
 
-            output << (token.responds_to?(:render) ? token.render(context) : token).to_s
+            output << if token.responds_to?(:render)
+              token.render(context).to_s
+            else
+              token.to_s
+            end
           rescue e : StandardError
             output << (context.handle_error(e))
           end

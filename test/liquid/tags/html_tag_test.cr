@@ -19,14 +19,22 @@ class HtmlTagTest < Minitest::Test
   # end
 
   def test_html_table
+    result = <<-RESULT
+    <tr class="row1">
+    <td class="col1"> 1 </td><td class="col2"> 2 </td><td class="col3"> 3 </td></tr>
+    <tr class="row2"><td class="col1"> 4 </td><td class="col2"> 5 </td><td class="col3"> 6 </td></tr>
 
-    assert_template_result("<tr class=\"row1\">\n<td class=\"col1\"> 1 </td><td class=\"col2\"> 2 </td><td class=\"col3\"> 3 </td></tr>\n<tr class=\"row2\"><td class=\"col1\"> 4 </td><td class=\"col2\"> 5 </td><td class=\"col3\"> 6 </td></tr>\n",
-                           "{% tablerow n in numbers cols:3%} {{n}} {% endtablerow %}",
-                           _h({"numbers" => [1,2,3,4,5,6]}))
+    RESULT
 
-    assert_template_result("<tr class=\"row1\">\n</tr>\n",
-                           "{% tablerow n in numbers cols:3%} {{n}} {% endtablerow %}",
-                           _h({"numbers" => [] of Type}))
+    assert_template_result(
+      result,
+      "{% tablerow n in numbers cols:3%} {{n}} {% endtablerow %}",
+      _h({"numbers" => [1,2,3,4,5,6]}))
+
+    assert_template_result(
+      "<tr class=\"row1\">\n</tr>\n",
+      "{% tablerow n in numbers cols:3%} {{n}} {% endtablerow %}",
+      _h({"numbers" => [] of Type}))
   end
 
   def test_html_table_with_different_cols

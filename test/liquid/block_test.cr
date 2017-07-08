@@ -52,7 +52,7 @@ class BlockTest < Minitest::Test
   # end
 
   private def block_types(nodelist)
-    return [] of Class.class if nodelist.nil?
+    return [] of Nil.class if nodelist.nil?
     nodelist.not_nil!.map { |node| node.class }
   end
 end # VariableTest

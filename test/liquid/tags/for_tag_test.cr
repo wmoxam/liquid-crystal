@@ -5,10 +5,18 @@ class ForTagTest < Minitest::Test
   include Liquid::Data
 
   def test_for
-    assert_template_result(" yo  yo  yo  yo ", "{%for item in array%} yo {%endfor%}", _h({"array" => [1,2,3,4]}))
-    assert_template_result("yoyo", "{%for item in array%}yo{%endfor%}", _h({"array" => [1,2]}))
-    assert_template_result(" yo ", "{%for item in array%} yo {%endfor%}", _h({"array" => [1]}))
-    assert_template_result("", "{%for item in array%}{%endfor%}", _h({"array" => [1,2]}))
+    assert_template_result(" yo  yo  yo  yo ",
+                           "{%for item in array%} yo {%endfor%}",
+                           _h({"array" => [1,2,3,4]}))
+    assert_template_result("yoyo",
+                           "{%for item in array%}yo{%endfor%}",
+                           _h({"array" => [1,2]}))
+    assert_template_result(" yo ",
+                           "{%for item in array%} yo {%endfor%}",
+                           _h({"array" => [1]}))
+    assert_template_result("",
+                           "{%for item in array%}{%endfor%}",
+                           _h({"array" => [1,2]}))
     expected = "
 
   yo
@@ -28,54 +36,99 @@ class ForTagTest < Minitest::Test
 
   def test_for_reversed
     assigns = _h({"array" => [ 1, 2, 3] })
-    assert_template_result("321", "{%for item in array reversed %}{{item}}{%endfor%}", assigns)
+    assert_template_result("321",
+                           "{%for item in array reversed %}{{item}}{%endfor%}",
+                           assigns)
   end
 
   def test_for_with_range
-    assert_template_result(" 1  2  3 ", "{%for item in (1..3) %} {{item}} {%endfor%}")
+    assert_template_result(" 1  2  3 ",
+                           "{%for item in (1..3) %} {{item}} {%endfor%}")
   end
 
   def test_for_with_variable
-    assert_template_result(" 1  2  3 ", "{%for item in array%} {{item}} {%endfor%}", _h({"array" => [1,2,3]}))
-    assert_template_result("123", "{%for item in array%}{{item}}{%endfor%}", _h({"array" => [1,2,3]}))
-    assert_template_result("123", "{% for item in array %}{{item}}{% endfor %}", _h({"array" => [1,2,3]}))
-    assert_template_result("abcd", "{%for item in array%}{{item}}{%endfor%}", _h({"array" => ["a","b","c","d"]}))
-    assert_template_result("a b c", "{%for item in array%}{{item}}{%endfor%}", _h({"array" => ["a"," ","b"," ","c"]}))
-    assert_template_result("abc", "{%for item in array%}{{item}}{%endfor%}", _h({"array" => ["a","","b","","c"]}))
+    assert_template_result(" 1  2  3 ",
+                           "{%for item in array%} {{item}} {%endfor%}",
+                           _h({"array" => [1,2,3]}))
+    assert_template_result("123",
+                           "{%for item in array%}{{item}}{%endfor%}",
+                           _h({"array" => [1,2,3]}))
+    assert_template_result("123",
+                           "{% for item in array %}{{item}}{% endfor %}",
+                           _h({"array" => [1,2,3]}))
+    assert_template_result("abcd",
+                           "{%for item in array%}{{item}}{%endfor%}",
+                           _h({"array" => ["a","b","c","d"]}))
+    assert_template_result("a b c",
+                           "{%for item in array%}{{item}}{%endfor%}",
+                           _h({"array" => ["a"," ","b"," ","c"]}))
+    assert_template_result("abc",
+                           "{%for item in array%}{{item}}{%endfor%}",
+                           _h({"array" => ["a","","b","","c"]}))
   end
 
   def test_for_helpers
     assigns = _h({"array" => [1,2,3] })
-    assert_template_result(" 1/3  2/3  3/3 ",
-                           "{%for item in array%} {{forloop.index}}/{{forloop.length}} {%endfor%}",
+    assert_template_result(
+      " 1/3  2/3  3/3 ",
+      "{%for item in array%} {{forloop.index}}/{{forloop.length}} {%endfor%}",
+      assigns)
+    assert_template_result(" 1  2  3 ",
+                           "{%for item in array%} {{forloop.index}} {%endfor%}",
                            assigns)
-    assert_template_result(" 1  2  3 ", "{%for item in array%} {{forloop.index}} {%endfor%}", assigns)
-    assert_template_result(" 0  1  2 ", "{%for item in array%} {{forloop.index0}} {%endfor%}", assigns)
-    assert_template_result(" 2  1  0 ", "{%for item in array%} {{forloop.rindex0}} {%endfor%}", assigns)
-    assert_template_result(" 3  2  1 ", "{%for item in array%} {{forloop.rindex}} {%endfor%}", assigns)
-    assert_template_result(" true  false  false ", "{%for item in array%} {{forloop.first}} {%endfor%}", assigns)
-    assert_template_result(" false  false  true ", "{%for item in array%} {{forloop.last}} {%endfor%}", assigns)
+    assert_template_result(" 0  1  2 ",
+                           "{%for item in array%} {{forloop.index0}} {%endfor%}",
+                           assigns)
+    assert_template_result(" 2  1  0 ",
+                           "{%for item in array%} {{forloop.rindex0}} {%endfor%}",
+                           assigns)
+    assert_template_result(" 3  2  1 ",
+                           "{%for item in array%} {{forloop.rindex}} {%endfor%}",
+                           assigns)
+    assert_template_result(" true  false  false ",
+                           "{%for item in array%} {{forloop.first}} {%endfor%}",
+                           assigns)
+    assert_template_result(" false  false  true ",
+                           "{%for item in array%} {{forloop.last}} {%endfor%}",
+                           assigns)
   end
 
   def test_for_and_if
     assigns = _h({"array" => [1,2,3] })
-    assert_template_result("+--",
-                           "{%for item in array%}{% if forloop.first %}+{% else %}-{% endif %}{%endfor%}",
-                           assigns)
+    assert_template_result(
+      "+--",
+      "{%for item in array%}{% if forloop.first %}+{% else %}-{% endif %}{%endfor%}",
+      assigns)
   end
 
   def test_for_else
-    assert_template_result("+++", "{%for item in array%}+{%else%}-{%endfor%}", _h({"array" => [1,2,3]}))
-    assert_template_result("-", "{%for item in array%}+{%else%}-{%endfor%}", _h({"array" => [] of Liquid::Type}))
-    assert_template_result("-", "{%for item in array%}+{%else%}-{%endfor%}", _h({"array" => nil}))
+    assert_template_result("+++",
+                           "{%for item in array%}+{%else%}-{%endfor%}",
+                           _h({"array" => [1,2,3]}))
+    assert_template_result("-",
+                           "{%for item in array%}+{%else%}-{%endfor%}",
+                           _h({"array" => [] of Liquid::Type}))
+    assert_template_result("-",
+                           "{%for item in array%}+{%else%}-{%endfor%}",
+                           _h({"array" => nil}))
   end
 
   def test_limiting
     assigns = _h({"array" => [1,2,3,4,5,6,7,8,9,0]})
-    assert_template_result("12", "{%for i in array limit:2 %}{{ i }}{%endfor%}", assigns)
-    assert_template_result("1234", "{%for i in array limit:4 %}{{ i }}{%endfor%}", assigns)
-    assert_template_result("3456", "{%for i in array limit:4 offset:2 %}{{ i }}{%endfor%}", assigns)
-    assert_template_result("3456", "{%for i in array limit: 4 offset: 2 %}{{ i }}{%endfor%}", assigns)
+    assert_template_result("12",
+                           "{%for i in array limit:2 %}{{ i }}{%endfor%}",
+                           assigns)
+    assert_template_result("1234",
+                           "{%for i in array limit:4 %}{{ i }}{%endfor%}",
+                           assigns)
+    assert_template_result(
+      "3456",
+      "{%for i in array limit:4 offset:2 %}{{ i }}{%endfor%}",
+      assigns)
+    assert_template_result(
+      "3456",
+      "{%for i in array limit: 4 offset: 2 %}{{ i }}{%endfor%}",
+      assigns)
   end
 
   def test_dynamic_variable_limiting
@@ -83,17 +136,25 @@ class ForTagTest < Minitest::Test
     assigns["limit"] = 2
     assigns["offset"] = 2
 
-    assert_template_result("34", "{%for i in array limit: limit offset: offset %}{{ i }}{%endfor%}", assigns)
+    assert_template_result(
+      "34",
+      "{%for i in array limit: limit offset: offset %}{{ i }}{%endfor%}",
+      assigns)
   end
 
   def test_nested_for
     assigns = _h({"array" => [[1,2],[3,4],[5,6]] })
-    assert_template_result("123456", "{%for item in array%}{%for i in item%}{{ i }}{%endfor%}{%endfor%}", assigns)
+    assert_template_result(
+      "123456",
+      "{%for item in array%}{%for i in item%}{{ i }}{%endfor%}{%endfor%}",
+      assigns)
   end
 
   def test_offset_only
     assigns = _h({"array" => [1,2,3,4,5,6,7,8,9,0]})
-    assert_template_result("890", "{%for i in array offset:7 %}{{ i }}{%endfor%}", assigns)
+    assert_template_result("890",
+                           "{%for i in array offset:7 %}{{ i }}{%endfor%}",
+                           assigns)
   end
 
   def test_pause_resume
@@ -184,7 +245,8 @@ class ForTagTest < Minitest::Test
     expected = ""
     assert_template_result(expected, markup, assigns)
 
-    markup = "{% for i in array.items %}{{ i }}{% if i > 3 %}{% break %}{% endif %}{% endfor %}"
+    markup = "{% for i in array.items %}{{ i }}{% if i > 3 %}{% break %}" \
+      "{% endif %}{% endfor %}"
     expected = "1234"
     assert_template_result(expected, markup, assigns)
 
@@ -204,7 +266,8 @@ class ForTagTest < Minitest::Test
 
     # test break does nothing when unreached
     assigns = _h({"array" => {"items" => [1,2,3,4,5]}})
-    markup = "{% for i in array.items %}{% if i == 9999 %}{% break %}{% endif %}{{ i }}{% endfor %}"
+    markup = "{% for i in array.items %}{% if i == 9999 %}{% break %}" \
+      "{% endif %}{{ i }}{% endfor %}"
     expected = "12345"
     assert_template_result(expected, markup, assigns)
   end
@@ -224,11 +287,13 @@ class ForTagTest < Minitest::Test
     expected = ""
     assert_template_result(expected,markup,assigns)
 
-    markup = "{% for i in array.items %}{% if i > 3 %}{% continue %}{% endif %}{{ i }}{% endfor %}"
+    markup = "{% for i in array.items %}{% if i > 3 %}{% continue %}" \
+      "{% endif %}{{ i }}{% endfor %}"
     expected = "123"
     assert_template_result(expected,markup,assigns)
 
-    markup = "{% for i in array.items %}{% if i == 3 %}{% continue %}{% else %}{{ i }}{% endif %}{% endfor %}"
+    markup = "{% for i in array.items %}{% if i == 3 %}{% continue %}" \
+      "{% else %}{{ i }}{% endif %}{% endfor %}"
     expected = "1245"
     assert_template_result(expected,markup,assigns)
 
@@ -247,7 +312,8 @@ class ForTagTest < Minitest::Test
 
     # test continue does nothing when unreached
     assigns = _h({"array" => {"items" => [1,2,3,4,5]}})
-    markup = "{% for i in array.items %}{% if i == 9999 %}{% continue %}{% endif %}{{ i }}{% endfor %}"
+    markup = "{% for i in array.items %}{% if i == 9999 %}{% continue %}" \
+      "{% endif %}{{ i }}{% endfor %}"
     expected = "12345"
     assert_template_result(expected, markup, assigns)
   end
@@ -282,6 +348,9 @@ class ForTagTest < Minitest::Test
   end
 
   def test_blank_string_not_iterable
-    assert_template_result("", "{% for char in characters %}I WILL NOT BE OUTPUT{% endfor %}", _h({"characters" => ""}))
+    assert_template_result(
+      "",
+      "{% for char in characters %}I WILL NOT BE OUTPUT{% endfor %}",
+      _h({"characters" => ""}))
   end
 end

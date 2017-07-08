@@ -20,7 +20,8 @@ module Liquid
       [] of String
     end
 
-    # Document blocks don't need to be terminated since they are not actually opened
+    # Document blocks don't need to be terminated since they are not
+    # actually opened
     def assert_missing_delimitation!
     end
   end

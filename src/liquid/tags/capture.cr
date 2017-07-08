@@ -1,6 +1,7 @@
 module Liquid
 
-  # Capture stores the result of a block into a variable without rendering it inplace.
+  # Capture stores the result of a block into a variable without rendering
+  # it inplace.
   #
   #   {% capture heading %}
   #     Monkeys!
@@ -20,7 +21,8 @@ module Liquid
       if markup =~ Syntax
         @to = $1
       else
-        raise SyntaxError.new("Syntax Error in 'capture' - Valid syntax: capture [var]")
+        raise SyntaxError.new("Syntax Error in 'capture' - Valid syntax: " \
+          "capture [var]")
       end
 
       super

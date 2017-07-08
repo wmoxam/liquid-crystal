@@ -1,10 +1,11 @@
 module Liquid
 
-  # A drop in liquid is a class which allows you to export DOM like things to liquid.
+  # A drop in liquid is a class which allows you to export DOM like things to
+  # liquid.
   # Methods of drops are callable.
   # The main use for liquid drops is to implement lazy loaded objects.
-  # If you would like to make data available to the web designers which you don't want loaded unless needed then
-  # a drop is a great way to do that.
+  # If you would like to make data available to the web designers which you don't
+  # want loaded unless needed then a drop is a great way to do that.
   #
   # Example:
   #
@@ -17,8 +18,8 @@ module Liquid
   #   tmpl = Liquid::Template.parse( ' {% for product in product.top_sales %} {{ product.name }} {%endfor%} '  )
   #   tmpl.render('product' => ProductDrop.new ) # will invoke top_sales query.
   #
-  # Your drop can either implement the methods sans any parameters or implement the before_method(name) method which is a
-  # catch all.
+  # Your drop can either implement the methods sans any parameters or implement
+  # the before_method(name) method which is a catch all.
   class Drop
     property context : Context
 
@@ -42,7 +43,15 @@ module Liquid
       when nil, ""
         nil
       {% for method in @type.methods %}
-        {% if !method.name.ends_with?("=") && method.visibility == :public && !["context", "before_method", "invoke_drop", "[]", "has_key?", "each", "inspect"].any? {|meth| meth == method.name} %}
+        {% if !method.name.ends_with?("=") &&
+            method.visibility == :public &&
+            !["context",
+              "before_method",
+              "invoke_drop",
+              "[]",
+              "has_key?",
+              "each",
+              "inspect"].any? {|meth| meth == method.name} %}
       when {{method.name.stringify}}
         self.{{method.name}}()
         {% end %}
