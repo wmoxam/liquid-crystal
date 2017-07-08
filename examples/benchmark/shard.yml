@@ -10,7 +10,7 @@ targets:
 
 dependencies:
   liquid-crystal:
-    github: wmoxam/liquid-crystal
+    path: ../../.
 
 crystal: 0.20.5
 

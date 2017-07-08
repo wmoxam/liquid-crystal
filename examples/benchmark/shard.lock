@@ -1,6 +1,6 @@
 version: 1.0
 shards:
   liquid-crystal:
-    github: wmoxam/liquid-crystal
-    commit: a6c7a34819a82c91a3ff5208848fbd207e176f29
+    path: ../../.
+    version: 0.1.0
 
