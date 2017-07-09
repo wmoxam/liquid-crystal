@@ -4,7 +4,8 @@ class CaptureTest < Minitest::Test
   include Liquid
 
   def test_captures_block_content_in_variable
-    assert_template_result("test string", "{% capture 'var' %}test string{% endcapture %}{{var}}")
+    assert_template_result("test string", "{% capture 'var' %}test " \
+      "string{% endcapture %}{{var}}")
   end
 
   def test_capture_to_variable_from_outer_scope_if_existing

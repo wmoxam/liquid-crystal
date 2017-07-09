@@ -11,11 +11,21 @@ module Liquid
       when nil, ""
         nil
       {% for method in @type.methods %}
-        {% if !method.name.ends_with?("=") && method.visibility == :public && !["invoke", "[]", "has_key?", "each", "inspect"].any? { |meth| meth == method.name } %}
+        {% if !method.name.ends_with?("=") &&
+            method.visibility == :public &&
+            !["invoke",
+              "[]",
+              "has_key?",
+              "each",
+              "inspect"].any? { |meth| meth == method.name } %}
       when {{method.name.stringify}}
         {% for i in (0..(method.args.size - 1)) %}
           default{{i}} = {% if method.args[i].default_value %}{{method.args[i].default_value}}{% else %}nil{% end %}
-          arg{{i}} = args.nil? ? default{{i}} : args.at({{i}}) { default{{i}} }{% if method.args[i].restriction %}.as {{method.args[i].restriction}}{% end %}
+          arg{{i}} = if args.nil?
+            default{{i}}
+          else
+            args.at({{i}}) { default{{i}} }{% if method.args[i].restriction %}.as {{method.args[i].restriction}}{% end %}
+          end
         {% end %}
 
         self.{{method.name}}({% for i in (0..(method.args.size - 1)) %}arg{{i}}{% if i < (method.args.size - 1) %}, {% end %}{% end %})

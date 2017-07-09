@@ -1,10 +1,10 @@
 module Liquid
-
   # Strainer is the parent class for the filters system.
-  # New filters are registered with the strainer class which is then instantiated for each liquid template render run.
+  # New filters are registered with the strainer class which is then
+  # instantiated for each liquid template render run.
   #
-  # The Strainer only allows method calls defined in filters given to it via Strainer.global_filter,
-  # Context#add_filters or Template.register_filter
+  # The Strainer only allows method calls defined in filters given to it
+  # via Strainer.global_filter, Context#add_filters or Template.register_filter
   class Strainer #:nodoc:
     include Data
 
@@ -30,14 +30,14 @@ module Liquid
       @filters.reverse.each do |filter|  # last filter that matches wins
         result = filter.invoke(method, *args)
         case result
-	when FilterNotInvokable
-	  # no-op
+	      when FilterNotInvokable
+	        # no-op
         when Array
           return Any.new(_a(result))
-	when Hash
+	      when Hash
           return Any.new(_h(result))
         else
-	  return Any.new(result.as Type)
+	        return Any.new(result.as Type)
         end
       end
       Any.new(args.first?)

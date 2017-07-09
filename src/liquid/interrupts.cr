@@ -1,5 +1,6 @@
 module Liquid
-  # An interrupt is any command that breaks processing of a block (ex: a for loop).
+  # An interrupt is any command that breaks processing of a block
+  # (ex: a for loop).
   class Interrupt
     getter :message
 

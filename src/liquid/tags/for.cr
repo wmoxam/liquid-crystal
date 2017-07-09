@@ -62,7 +62,8 @@ module Liquid
           @attributes[capture[1]] = capture[2]
         end
       else
-        raise SyntaxError.new("Syntax Error in 'for loop' - Valid syntax: for [item] in [collection]")
+        raise SyntaxError.new("Syntax Error in 'for loop' - Valid syntax: " \
+          "for [item] in [collection]")
       end
 
       @nodelist = @for_block = [] of Liquid::Tag | Liquid::Variable | String

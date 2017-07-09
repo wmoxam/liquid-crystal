@@ -34,10 +34,10 @@ module Liquid
             if f && (matches = f[0].match(/\s*(\w+)(?:\s*#{FilterArgumentSeparator}(.*))?/))
               filtername = matches[1]
               filterargs = if matches[2]?.nil?
-                             [] of String
-                           else
-                             matches[2].to_s.scan(/(?:\A|#{ArgumentSeparator})\s*((?:\w+\s*\:\s*)?#{QuotedFragment})/).flatten.map { |m| m[1]?.to_s.strip }
-                           end
+                [] of String
+              else
+                matches[2].to_s.scan(/(?:\A|#{ArgumentSeparator})\s*((?:\w+\s*\:\s*)?#{QuotedFragment})/).flatten.map { |m| m[1]?.to_s.strip }
+              end
 
               @filters << FilterParams.new(filtername, filterargs)
             end
@@ -69,20 +69,26 @@ module Liquid
           when 0
             context.invoke(filter.filtername, output)
           when 1
-            context.invoke(filter.filtername, output, *Tuple(Type).from(filterargs))
+            context.invoke(filter.filtername, output,
+                           *Tuple(Type).from(filterargs))
           when 2
-            context.invoke(filter.filtername, output, *Tuple(Type, Type).from(filterargs))
+            context.invoke(filter.filtername, output,
+                           *Tuple(Type, Type).from(filterargs))
           when 3
-            context.invoke(filter.filtername, output, *Tuple(Type, Type, Type).from(filterargs))
+            context.invoke(filter.filtername, output,
+                           *Tuple(Type, Type, Type).from(filterargs))
           when 4
-            context.invoke(filter.filtername, output, *Tuple(Type, Type, Type, Type).from(filterargs))
+            context.invoke(filter.filtername, output,
+                           *Tuple(Type, Type, Type, Type).from(filterargs))
           when 5
-            context.invoke(filter.filtername, output, *Tuple(Type, Type, Type, Type, Type).from(filterargs))
+            context.invoke(filter.filtername, output,
+                           *Tuple(Type, Type, Type, Type, Type).from(filterargs))
           else
             raise "Currently no support for more than 5 arguments, sorry!"
           end
         rescue FilterNotFound
-          raise FilterNotFound.new "Error - filter '#{filter.filtername}' in '#{@markup.strip}' could not be found."
+          raise FilterNotFound.new "Error - filter '#{filter.filtername}' in" \
+           " '#{@markup.strip}' could not be found."
         end
       end
     end

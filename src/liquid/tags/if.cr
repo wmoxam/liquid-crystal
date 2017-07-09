@@ -7,12 +7,13 @@ module Liquid
   #     Not admin user
   #   {% endif %}
   #
-  #    There are {% if count < 5 %} less {% else %} more {% endif %} items than you need.
+  #    There are {% if count < 5 %} less {% else %} more {% endif %} items
+  #    than you need.
   #
   #
   class If < Block
-    SyntaxHelp              = "Syntax Error in tag 'if' - Valid syntax: if [expression]"
-    Syntax                  = /(#{QuotedFragment})\s*([=!<>a-z_]+)?\s*(#{QuotedFragment})?/
+    SyntaxHelp = "Syntax Error in tag 'if' - Valid syntax: if [expression]"
+    Syntax     = /(#{QuotedFragment})\s*([=!<>a-z_]+)?\s*(#{QuotedFragment})?/
     ExpressionsAndOperators = /(?:\b(?:\s?and\s?|\s?or\s?)\b|(?:\s*(?!\b(?:\s?and\s?|\s?or\s?)\b)(?:#{QuotedFragment}|\S+)\s*)+)/
 
     def initialize(tag_name, markup, tokens)
@@ -55,7 +56,9 @@ module Liquid
 
         raise(SyntaxError.new "SyntaxHelp 1") if syntax_match.nil?
 
-        condition = Condition.new(syntax_match[1]?, syntax_match[2]?, syntax_match[3]?)
+        condition = Condition.new(syntax_match[1]?,
+                                  syntax_match[2]?,
+                                  syntax_match[3]?)
 
         while !expressions.empty?
           operator = (expressions.shift)[0].to_s.strip
@@ -64,7 +67,9 @@ module Liquid
 
           raise(SyntaxError.new "SyntaxHelp 2") if syntax_match.nil?
 
-          new_condition = Condition.new(syntax_match[1]?, syntax_match[2]?, syntax_match[3]?)
+          new_condition = Condition.new(syntax_match[1]?,
+                                        syntax_match[2]?,
+                                        syntax_match[3]?)
 
           case operator
           when "and"

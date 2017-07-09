@@ -1,8 +1,8 @@
 module Liquid
   # Templates are central to liquid.
   # Interpretating templates is a two step process. First you compile the
-  # source code you got. During compile time some extensive error checking is performed.
-  # your code should expect to get some SyntaxErrors.
+  # source code you got. During compile time some extensive error checking is
+  # performed. Your code should expect to get some SyntaxErrors.
   #
   # After you have a compiled template you can then <tt>render</tt> it.
   # You can use a compiled template over and over again and keep it cached.
@@ -47,7 +47,8 @@ module Liquid
       template
     end
 
-    # creates a new <tt>Template</tt> from an array of tokens. Use <tt>Template.parse</tt> instead
+    # creates a new <tt>Template</tt> from an array of tokens.
+    # Use <tt>Template.parse</tt> instead
     def initialize
       @rethrow_errors = false
       @root = nil
@@ -78,19 +79,21 @@ module Liquid
 
     # Render takes a hash with local variables.
     #
-    # if you use the same filters over and over again consider registering them globally
+    # if you use the same filters over and over again consider registering
+    # them globally
     # with <tt>Template.register_filter</tt>
     #
     # Following options can be passed:
     #
     #  * <tt>filters</tt> : array with local filters
-    #  * <tt>registers</tt> : hash with register variables. Those can be accessed from
-    #    filters and tags and might be useful to integrate liquid more with its host application
-    #
+    #  * <tt>registers</tt> : hash with register variables. Those can be
+    # accessed from filters and tags and might be useful to integrate liquid
+    # more with its host application
     def render(context : Context)
       begin
         # render the nodelist.
-        # for performance reasons we get a array back here. join will make a string out of it
+        # for performance reasons we get a array back here. join will
+        # make a string out of it
         if @root.nil?
           ""
         else
@@ -102,7 +105,9 @@ module Liquid
       end
     end
 
-    def render(context : Context, registers : Hash(Symbol, Type), filters : Array(Filter.class))
+    def render(context : Context,
+               registers : Hash(Symbol, Type),
+               filters : Array(Filter.class))
       self.registers.merge!(registers)
       context.add_filters(filters)
 
@@ -120,25 +125,41 @@ module Liquid
     end
 
     def render(environment : Hash(String, Type))
-      render Context.new([environment, assigns], instance_assigns, registers, @rethrow_errors)
+      render Context.new([environment, assigns],
+                         instance_assigns,
+                         registers,
+                         @rethrow_errors)
     end
 
-    def render(environment : Hash(String, Type), registers : Hash(Symbol, Type), filters : Array(Filter.class))
-      context = Context.new([environment, assigns], instance_assigns, registers, @rethrow_errors)
+    def render(environment : Hash(String, Type),
+               registers : Hash(Symbol, Type),
+               filters : Array(Filter.class))
+      context = Context.new([environment, assigns],
+                            instance_assigns,
+                            registers,
+                            @rethrow_errors)
       self.registers.merge!(registers)
       context.add_filters(filters)
 
       render context
     end
 
-    def render(environment : Hash(String, Type), registers : Hash(Symbol, Type))
-      context = Context.new([environment, assigns], instance_assigns, registers, @rethrow_errors)
+    def render(environment : Hash(String, Type),
+               registers : Hash(Symbol, Type))
+      context = Context.new([environment, assigns],
+                            instance_assigns,
+                            registers,
+                            @rethrow_errors)
       self.registers.merge!(registers)
       render context
     end
 
-    def render(environment : Hash(String, Type), filters : Array(Filter.class))
-      context = Context.new([environment, assigns], instance_assigns, registers, @rethrow_errors)
+    def render(environment : Hash(String, Type),
+               filters : Array(Filter.class))
+      context = Context.new([environment, assigns],
+                            instance_assigns,
+                            registers,
+                            @rethrow_errors)
       context.add_filters(filters)
 
       render context
@@ -152,7 +173,8 @@ module Liquid
       @rethrow_errors = true; render(*args)
     end
 
-    # Uses the <tt>Liquid::TemplateParser</tt> regexp to tokenize the passed source
+    # Uses the <tt>Liquid::TemplateParser</tt> regexp to tokenize the
+    # passed source
     private def tokenize(source)
       source = source.source if source.responds_to?(:source)
       source = source.to_s
