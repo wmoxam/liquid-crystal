@@ -133,11 +133,11 @@ class ContextTest < Minitest::Test
     assert_equal 4, context["numbers.size"]
 
     context["numbers"] = _h({"1" => 1,"2" => 2,"3" => 3,"4" => 4})
-   
+
     assert_equal 4, context["numbers.size"]
 
     context["numbers"] = _h({"1" => 1,"2" => 2,"3" => 3,"4" => 4, "size" => 1000})
-    
+
     assert_equal 1000, context["numbers.size"]
   end
 
