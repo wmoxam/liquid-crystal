@@ -232,15 +232,15 @@ class StandardTagTest < Minitest::Test
                  Liquid::Template.parse( "{%for i in (1..2) %}{% assign a = 'variable'%}{% endfor %}{{a}}"  ).render
   end
 
-  # def test_case_detects_bad_syntax
-  #   assert_raise(SyntaxError) do
-  #     assert_template_result("",  "{% case false %}{% when %}true{% endcase %}", _h({} of String => Type))
-  #   end
-  #
-  #   assert_raise(SyntaxError) do
-  #     assert_template_result("",  "{% case false %}{% huh %}true{% endcase %}", _h({} of String => Type))
-  #   end
-  # end
+  def test_case_detects_bad_syntax
+    assert_raises(SyntaxError) do
+      assert_template_result("",  "{% case false %}{% when %}true{% endcase %}", _h({} of String => Type))
+    end
+
+    assert_raises(SyntaxError) do
+      assert_template_result("",  "{% case false %}{% huh %}true{% endcase %}", _h({} of String => Type))
+    end
+  end
 
   def test_cycle
     assert_template_result("one","{%cycle \"one\", \"two\"%}")

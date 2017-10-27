@@ -230,15 +230,15 @@ class VariableResolutionTest < Minitest::Test
     assert_equal "bazbar", template.render
   end
 
-#   def test_hash_with_default_proc
-#     template = Template.parse(%|Hello {{ test }}|)
-#     assigns = Hash.new { |h,k| raise "Unknown variable '#{k}'" }
-#     assigns['test'] = 'Tobi'
-#     assert_equal 'Hello Tobi', template.render!(assigns)
-#     assigns.delete('test')
-#     e = assert_raises(RuntimeError) {
-#       template.render!(assigns)
-#     }
-#     assert_equal "Unknown variable 'test'", e.message
-#   end
+  # def test_hash_with_default_proc
+  #   template = Template.parse(%|Hello {{ test }}|)
+  #   assigns = Hash(String, Type).new { |h,k| raise "Unknown variable '#{k}'" }
+  #   assigns["test"] = "Tobi"
+  #   assert_equal "Hello Tobi", template.render!(assigns)
+  #   assigns.delete("test")
+  #   e = assert_raises(Error) {
+  #     template.render!(assigns)
+  #   }
+  #   assert_equal "Unknown variable 'test'", e.message
+  # end
 end # VariableTest
