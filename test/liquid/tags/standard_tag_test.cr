@@ -72,13 +72,13 @@ class StandardTagTest < Minitest::Test
                            assigns)
   end
 
-  # def test_capture_detects_bad_syntax
-  #   assert_raise(SyntaxError) do
-  #     assert_template_result('content foo content foo ',
-  #                            '{{ var2 }}{% capture %}{{ var }} foo {% endcapture %}{{ var2 }}{{ var2 }}',
-  #                            {'var' => 'content' })
-  #   end
-  # end
+  def test_capture_detects_bad_syntax
+    assert_raises(SyntaxError) do
+      assert_template_result("content foo content foo ",
+                             "{{ var2 }}{% capture %}{{ var }} foo {% endcapture %}{{ var2 }}{{ var2 }}",
+                             _h({"var" => "content" }))
+    end
+  end
 
   def test_case
     assigns = _h({"condition" => 2 })
