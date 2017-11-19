@@ -20,6 +20,7 @@ end
 
 class ErrorHandlingTest < Minitest::Test
   include Liquid
+  include Liquid::Data
 
   def test_exceptions
     drop = ErrorDrop.new
@@ -62,11 +63,11 @@ class ErrorHandlingTest < Minitest::Test
   #   end
   # end
 
-  # def test_missing_endtag_parse_time_error
-  #   assert_raise(Liquid::SyntaxError) do
-  #     template = Liquid::Template.parse(' {% for a in b %} ... ')
-  #   end
-  # end
+  def test_missing_endtag_parse_time_error
+    assert_raises(Liquid::SyntaxError) do
+      template = Liquid::Template.parse(" {% for a in b %} ... ")
+    end
+  end
 
   # def test_unrecognized_operator
   #   assert_nothing_raised do
@@ -79,9 +80,9 @@ class ErrorHandlingTest < Minitest::Test
 
   # Liquid should not catch Exceptions that are not subclasses of StandardError, like Interrupt and NoMemoryError
   # def test_exceptions_propagate
-  #   assert_raise Exception do
-  #     template = Liquid::Template.parse( ' {{ errors.exception }} '  )
-  #     template.render('errors' => ErrorDrop.new)
+  #   assert_raises Exception do
+  #     template = Liquid::Template.parse(" {{ errors.exception }} ")
+  #     template.render(_h({"errors" => ErrorDrop.new}))
   #   end
   # end
 end # ErrorHandlingTest

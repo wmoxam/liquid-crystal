@@ -107,13 +107,13 @@ class IncludeTagTest < Minitest::Test
 
   end
 
-  # def test_recursively_included_template_does_not_produce_endless_loop
-  #   Liquid::Template.file_system = InfiniteFileSystem.new
-  #
-  #   assert_raise(Liquid::StackLevelError) do
-  #     Template.parse("{% include 'loop' %}").render!
-  #   end
-  # end
+  def test_recursively_included_template_does_not_produce_endless_loop
+    Liquid::Template.file_system = InfiniteFileSystem.new
+
+    assert_raises(Liquid::StackLevelError) do
+      Template.parse("{% include 'loop' %}").render!
+    end
+  end
 
   def test_dynamically_choosen_template
 

@@ -39,6 +39,6 @@ missing tests and improving the data passing interface which is a bit clunky
 ### Missing tests
 
 * Template tokenize tests
-* All tests that expect an error raised
+* All tests that expect an error to *not* be raised
 * Half of the Drop & Context tests
 * Half of the if/else tag tests

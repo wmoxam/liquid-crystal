@@ -51,7 +51,12 @@ module Liquid
         ElseCondition.new
       else
         expressions = markup.scan(ExpressionsAndOperators).reverse
-        expr = expressions.shift[0]?
+        expr_arr = expressions.shift?
+        expr = if expr_arr
+          expr_arr[0]?
+        else
+          nil
+        end
         syntax_match = expr.nil? ? nil : expr.match(Syntax)
 
         raise(SyntaxError.new "SyntaxHelp 1") if syntax_match.nil?
