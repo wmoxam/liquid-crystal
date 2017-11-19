@@ -5,7 +5,7 @@ module Liquid
     def initialize(@context : Nil | Context)
     end
 
-    macro def invoke(method_name, *args) : Object
+    def invoke(method_name, *args) : Object
       {% begin %}
       case method_name
       when nil, ""
