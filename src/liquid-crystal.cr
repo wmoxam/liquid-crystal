@@ -44,7 +44,7 @@ module Liquid
   TemplateParser              = /(#{PartialTemplateParser}|#{AnyStartingTag})/
   VariableParser              = /\[[^\]]+\]|#{VariableSegment}+\??/
 
-  alias Type = Nil | Bool | Int32 | Float32 | Int64 | Float64 | String | Time | Liquid::Drop | Array(Type) | Hash(String, Type) | Range(Int32, Int32) | Symbol | Tuple(Liquid::Type) | Liquid::FileSystem
+  alias Type = Nil | Bool | Int32 | Float32 | Int64 | Float64 | String | Time | Liquid::Drop | Array(Type) | Hash(String, Type) | Range(Int32, Int32) | Symbol | Liquid::FileSystem
 
 
 end

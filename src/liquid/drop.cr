@@ -36,7 +36,7 @@ module Liquid
     # TODO: explictly defining forbidden methods shouldn't be needed
     # the macro type methods should only return methods defined in that class,
     # not any inherited methods
-    macro def invoke_drop(method_or_key) : Liquid::Type
+    def invoke_drop(method_or_key) : Liquid::Type
       value = nil
       {% begin %}
       value = case method_or_key
