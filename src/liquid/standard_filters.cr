@@ -193,13 +193,13 @@ module Liquid
                Time.epoch(input)
              else
                begin
-                 Time.parse(input.to_s, "%F %T")
+                 Time.parse(input.to_s, "%F %T", Time::Location::UTC)
                rescue # Time::Format::Error
                  begin
-                   Time.parse(input.to_s, "%c")
+                   Time.parse(input.to_s, "%c", Time::Location::UTC)
                  rescue
                    begin
-                     Time.parse(input.to_s, "%Y%m%d")
+                     Time.parse(input.to_s, "%Y%m%d", Time::Location::UTC)
                    rescue
                      nil
                    end
