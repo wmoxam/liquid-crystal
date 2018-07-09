@@ -127,9 +127,9 @@ class StandardFiltersTest < Minitest::Test
   # end
 
   def test_date
-    assert_equal "May", @filters.date(Time.parse("2006-05-05 10:00:00", "%F %T", Time::Location::UTC), "%B")
-    assert_equal "June", @filters.date(Time.parse("2006-06-05 10:00:00", "%F %T", Time::Location::UTC), "%B")
-    assert_equal "July", @filters.date(Time.parse("2006-07-05 10:00:00", "%F %T", Time::Location::UTC), "%B")
+    assert_equal "May", @filters.date(Time.parse("2006-05-05 10:00:00", "%F %T", Time::Location.local), "%B")
+    assert_equal "June", @filters.date(Time.parse("2006-06-05 10:00:00", "%F %T", Time::Location.local), "%B")
+    assert_equal "July", @filters.date(Time.parse("2006-07-05 10:00:00", "%F %T", Time::Location.local), "%B")
 
     assert_equal "May", @filters.date("2006-05-05 10:00:00", "%B")
     assert_equal "June", @filters.date("2006-06-05 10:00:00", "%B")
