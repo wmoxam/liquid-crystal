@@ -190,7 +190,7 @@ module Liquid
              elsif (input.is_a?(String) && !/^\d+$/.match(input.to_s).nil?)
                Time.unix(input.to_i)
              elsif input.is_a?(Int) && input > 0
-               Time.unix(input.to_i)
+               Time.unix(input)
              else
                begin
                  Time.parse(input.to_s, "%F %T", Time::Location.local)
