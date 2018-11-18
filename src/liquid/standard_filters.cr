@@ -188,9 +188,9 @@ module Liquid
       date = if input.is_a?(Time)
                input
              elsif (input.is_a?(String) && !/^\d+$/.match(input.to_s).nil?)
-               Time.epoch(input.to_i)
+               Time.unix(input.to_i)
              elsif input.is_a?(Int) && input > 0
-               Time.epoch(input)
+               Time.unix(input)
              else
                begin
                  Time.parse(input.to_s, "%F %T", Time::Location.local)
