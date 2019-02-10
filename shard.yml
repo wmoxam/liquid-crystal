@@ -10,6 +10,10 @@ description: |
 development_dependencies:
   minitest:
     git: https://github.com/ysbaddaden/minitest.cr.git
+<<<<<<< HEAD
     version: ~> 0.4.2
+=======
+    version: ~> 0.4.0
+>>>>>>> origin/master
 
 license: MIT

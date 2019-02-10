@@ -193,13 +193,13 @@ module Liquid
                Time.unix(input)
              else
                begin
-                 Time.parse(input.to_s, "%F %T", Time::Location::UTC)
+                 Time.parse(input.to_s, "%F %T", Time::Location.local)
                rescue # Time::Format::Error
                  begin
-                   Time.parse(input.to_s, "%c", Time::Location::UTC)
+                   Time.parse(input.to_s, "%c", Time::Location.local)
                  rescue
                    begin
-                     Time.parse(input.to_s, "%Y%m%d", Time::Location::UTC)
+                     Time.parse(input.to_s, "%Y%m%d", Time::Location.local)
                    rescue
                      nil
                    end
