@@ -86,13 +86,8 @@ class ContextTest < Minitest::Test
     context["num"] = 5
     assert_equal 5, context["num"]
 
-<<<<<<< HEAD
-    context["time"] = Time.parse("2006-06-06 12:00:00", "%F", Time::Location::UTC)
-    assert_equal Time.parse("2006-06-06 12:00:00", "%F", Time::Location::UTC), context["time"]
-=======
     context["time"] = Time.parse("2006-06-06 12:00:00", "%F", Time::Location.local)
     assert_equal Time.parse("2006-06-06 12:00:00", "%F", Time::Location.local), context["time"]
->>>>>>> origin/master
 
     # context["date"] = Date.today
     # assert_equal Date.today, context["date"]
