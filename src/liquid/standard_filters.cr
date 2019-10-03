@@ -251,7 +251,14 @@ module Liquid
 
     # division
     def divided_by(input, operand)
-      to_number(input) / to_number(operand)
+      numeric_input = to_number(input)
+      numeric_operand = to_number(operand)
+
+      if numeric_input.is_a?(Int) && numeric_operand.is_a?(Int)
+        numeric_input // numeric_operand
+      else
+        numeric_input / numeric_operand
+      end
     end
 
     def modulo(input, operand)

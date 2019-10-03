@@ -19,7 +19,7 @@ template = Liquid::Template.parse template
 
 result = template.render(_h({"user" => {"name" => "Matz"}}))
 
-# Hello Matz
+# <p>Hello Matz</p>
 ```
 
 # Development Status
