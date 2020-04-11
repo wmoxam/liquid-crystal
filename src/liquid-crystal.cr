@@ -253,6 +253,8 @@ module Liquid
           num >= object
         when "<="
           num <= object
+	else
+	  raise "undefined op '#{op}'"
         end
       else
         false
@@ -271,6 +273,8 @@ module Liquid
           str >= object
         when "<="
           str <= object
+	else
+	  raise "undefined op '#{op}'"
         end
       else
         false

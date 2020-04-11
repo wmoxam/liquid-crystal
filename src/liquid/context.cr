@@ -279,7 +279,9 @@ module Liquid
               object.last if object.responds_to?(:last)
             when "size"
               object.size if object.responds_to?(:size)
-            end
+            else
+	      # impossible!
+	    end
             object = raw.as Type
           elsif object.is_a?(Drop)
             object = object.invoke_drop(part).to_liquid.as Type

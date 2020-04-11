@@ -63,7 +63,9 @@ module Liquid
           right_raw.blank? if right_raw.responds_to?(:blank?)
         when :empty?
           right_raw.empty? if right_raw.responds_to?(:empty?)
-        end
+        else
+	  raise "unsupported context '#{left_raw}'"
+	end
       end
 
       if right_raw.is_a? Symbol
@@ -72,6 +74,8 @@ module Liquid
           left_raw.blank? if left_raw.responds_to?(:blank?)
         when :empty?
           left_raw.empty? if left_raw.responds_to?(:empty?)
+	else
+	  raise "unsupported context '#{right_raw}'"
         end
       end
 
