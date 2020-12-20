@@ -298,7 +298,6 @@ require "./liquid/variable"
 require "./liquid/template"
 require "./liquid/htmltags"
 require "./liquid/condition"
-# require 'liquid/module_ex'
 require "./liquid/utils"
 #
 # # Load all the tags of the standard library
