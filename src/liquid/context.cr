@@ -1,5 +1,4 @@
 module Liquid
-
   # Context keeps the variable stack and resolves variables, as well as keywords
   #
   #   context["variable"] = "testing"
@@ -15,6 +14,7 @@ module Liquid
 
   class VariableParts
     getter parts : Array(String), first_part : Type
+
     def initialize(@parts, @first_part)
     end
   end
@@ -25,24 +25,24 @@ module Liquid
     getter scopes : Array(Hash(String, Type)), :errors, :registers, :environments
     @literals : Hash(String, Type)
 
-    def initialize( environments = [] of Hash(String, Type),
-                    outer_scope = {} of String => Type,
-                    registers = {} of Symbol => Type,
-                    rethrow_errors = false)
-      @environments   = environments
-      @scopes         = [outer_scope]
-      @registers      = RegisterCollection.new(registers)
-      @errors         = [] of Exception
+    def initialize(environments = [] of Hash(String, Type),
+                   outer_scope = {} of String => Type,
+                   registers = {} of Symbol => Type,
+                   rethrow_errors = false)
+      @environments = environments
+      @scopes = [outer_scope]
+      @registers = RegisterCollection.new(registers)
+      @errors = [] of Exception
       @rethrow_errors = rethrow_errors
       @interrupts = [] of Interrupt
       @literals = _h({
-        "nil" => nil,
-        "null" => nil,
-        "" => nil,
+        "nil"   => nil,
+        "null"  => nil,
+        ""      => nil,
         "true"  => true,
         "false" => false,
         "blank" => :blank?,
-        "empty" => :empty?
+        "empty" => :empty?,
       })
 
       @variable_parts = {} of String => VariableParts
@@ -172,27 +172,27 @@ module Liquid
     private def resolve(key)
       if key.nil?
         return nil
-      elsif key.is_a?(String) && @literals.key_index(key)
+      elsif key.is_a?(String) && @literals.has_key?(key)
         @literals[key]
       else
         is_variable = false
         value = case key
-        when /^'(.*)'$/ # Single quoted strings
-          $1
-        when /^"(.*)"$/ # Double quoted strings
-          $1
-        when /^(-?\d+)$/ # Integer and floats
-          $1.to_i
-        when /^\((\S+)\.\.(\S+)\)$/ # Ranges
-          range_start = resolve($1).as Int32 | String
-          range_end = resolve($2).as Int32 | String
-          (range_start.to_i..range_end.to_i)
-        when /^(-?\d[\d\.]+)$/ # Floats
-          $1.to_f
-        else
-          is_variable = true
-          variable(key)
-        end
+                when /^'(.*)'$/ # Single quoted strings
+                  $1
+                when /^"(.*)"$/ # Double quoted strings
+                  $1
+                when /^(-?\d+)$/ # Integer and floats
+                  $1.to_i
+                when /^\((\S+)\.\.(\S+)\)$/ # Ranges
+                  range_start = resolve($1).as Int32 | String
+                  range_end = resolve($2).as Int32 | String
+                  (range_start.to_i..range_end.to_i)
+                when /^(-?\d[\d\.]+)$/ # Floats
+                  $1.to_f
+                else
+                  is_variable = true
+                  variable(key)
+                end
 
         if !is_variable && key.is_a?(String)
           @literals[key] = value.as(Type)
@@ -218,7 +218,7 @@ module Liquid
         end
       end
 
-      scope  ||= @environments.last { nil } || @scopes.last { nil }
+      scope ||= @environments.last { nil } || @scopes.last { nil }
 
       # TODO: Returning + checking for nil rather than returining an
       # uninitialized Liquid::Any object triggers a compiler bug.
@@ -227,7 +227,7 @@ module Liquid
       end
 
       variable = lookup.to_liquid
-      #variable.context = self if variable.respond_to?(:context=)
+      # variable.context = self if variable.respond_to?(:context=)
 
       return variable
     end
@@ -242,7 +242,7 @@ module Liquid
       square_bracketed = /^\[(.*)\]$/
       markup_string = markup.to_s
       unless @variable_parts[markup]?
-        parts = markup_string.scan(VariableParser).map {|p| p[0]? }.compact
+        parts = markup_string.scan(VariableParser).map { |p| p[0]? }.compact
 
         first_part = parts.shift
 
@@ -257,14 +257,13 @@ module Liquid
       first_part = @variable_parts[markup_string].first_part
 
       if object = find_variable(first_part)
-
         parts.each do |part|
           part = resolve($1) if part_resolved = (part =~ square_bracketed)
           # If object is a hash- or array-like object we look for the
           # presence of the key and if its available we return it
 
           if (object.is_a?(Hash) && has_key?(object, part)) ||
-              (object.is_a?(Array) && part.is_a?(Int))
+             (object.is_a?(Array) && part.is_a?(Int))
             res = lookup_and_evaluate(object, part)
             object = res.to_liquid
 
@@ -273,15 +272,15 @@ module Liquid
             # as commands and call them on the current object
           elsif !part_resolved && ["size", "first", "last"].includes?(part)
             raw = case part
-            when "first"
-              object.first if object.responds_to?(:first)
-            when "last"
-              object.last if object.responds_to?(:last)
-            when "size"
-              object.size if object.responds_to?(:size)
-            else
-	      # impossible!
-	    end
+                  when "first"
+                    object.first if object.responds_to?(:first)
+                  when "last"
+                    object.last if object.responds_to?(:last)
+                  when "size"
+                    object.size if object.responds_to?(:size)
+                  else
+                    # impossible!
+                  end
             object = raw.as Type
           elsif object.is_a?(Drop)
             object = object.invoke_drop(part).to_liquid.as Type
@@ -305,14 +304,14 @@ module Liquid
       if has_key?(obj, key)
         return Any.new(obj)[normalized_key(key)]
       else
-        return Any.new()
+        return Any.new
       end
 
       # if value.is_a?(Proc) && obj.respond_to?(:[]=)
       #   obj[key] = (value.arity == 0) ? value.call : value.call(self)
       # else
       #  value
-      #end
+      # end
     end # lookup_and_evaluate
 
     private def has_key?(obj, key)
@@ -325,7 +324,7 @@ module Liquid
       else
         key
       end
-  end
+    end
 
     private def squash_instance_assigns_with_environments
       @scopes.last.each_key do |k|
@@ -333,15 +332,15 @@ module Liquid
           if env.has_key?(k)
             value = lookup_and_evaluate(env, k)
             @scopes.last[k] = if value.nil?
-              nil
-            else
-              value.raw
-            end
+                                nil
+                              else
+                                value.raw
+                              end
             break
           end
         end
       end
     end # squash_instance_assigns_with_environments
-  end # Context
+  end   # Context
 
 end # Liquid
