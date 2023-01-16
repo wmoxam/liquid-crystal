@@ -1,5 +1,4 @@
 module Liquid
-
   # Cycle is usually used within a loop to alternate between values, like
   # colors or DOM classes.
   #
@@ -17,20 +16,20 @@ module Liquid
     SimpleSyntax = /^#{QuotedFragment}+/
     NamedSyntax  = /^(#{QuotedFragment})\s*\:\s*(.*)/
 
-    @variables: Array(String)
-    @name: String
+    @variables : Array(String)
+    @name : String
 
     def initialize(tag_name, markup, tokens)
       case markup
       when NamedSyntax
-      	@variables = variables_from_string($2)
-      	@name = $1
+        @variables = variables_from_string($2)
+        @name = $1
       when SimpleSyntax
         @variables = variables_from_string(markup)
-      	@name = "'#{@variables.to_s}'"
+        @name = "'#{@variables.to_s}'"
       else
         raise SyntaxError.new("Syntax Error in 'cycle' - Valid syntax: " \
-          "cycle [name :] var [, var2, var3 ...]")
+                              "cycle [name :] var [, var2, var3 ...]")
       end
       super
     end
@@ -50,13 +49,13 @@ module Liquid
       context.stack do
         key = context[@name].to_s
         iteration = if cycle_hash[key]?
-          Any.new(cycle_hash[key]?.not_nil!).to_i
-        else
-          0
-        end
+                      Any.new(cycle_hash[key]?.not_nil!).to_i
+                    else
+                      0
+                    end
         result = context[@variables[iteration]]
         iteration += 1
-        iteration  = 0  if iteration >= @variables.size
+        iteration = 0 if iteration >= @variables.size
         cycle_hash[key] = iteration.as(Type)
         context.registers[:cycle] = cycle_hash
         result
@@ -65,11 +64,10 @@ module Liquid
 
     private def variables_from_string(markup)
       markup.split(",").map do |var|
-    	  var =~ /\s*(#{QuotedFragment})\s*/
-    	  $1 || nil
-    	end.compact
+        var =~ /\s*(#{QuotedFragment})\s*/
+        $1 || nil
+      end.compact
     end
-
   end
 
   Template.register_tag("cycle", Cycle)

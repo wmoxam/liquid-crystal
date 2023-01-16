@@ -1,5 +1,4 @@
 module Liquid
-
   # decrement is used in a place where one needs to insert a counter
   #     into a template, and needs the counter to survive across
   #     multiple instantiations of the template.
@@ -19,7 +18,7 @@ module Liquid
   #    Hello: -3
   #
   class Decrement < Tag
-    @variable: String
+    @variable : String
 
     def initialize(tag_name, markup, tokens)
       @variable = markup.strip

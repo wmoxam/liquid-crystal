@@ -2,22 +2,21 @@ module Liquid
   class Include < Tag
     Syntax = /(#{QuotedFragment}+)(\s+(?:with|for)\s+(#{QuotedFragment}+))?/
 
-    @template_name: String
-    @variable_name: String | Nil
+    @template_name : String
+    @variable_name : String | Nil
 
     def initialize(tag_name, markup, tokens)
       if markup =~ Syntax
-
         @template_name = $1
         @variable_name = $3?
-        @attributes    = {} of String => Type
+        @attributes = {} of String => Type
 
         markup.scan(TagAttributes) do |match|
           @attributes[match[1]?.not_nil!] = match[2]?
         end
       else
         raise SyntaxError.new("Error in tag 'include' - Valid syntax: " \
-          "include '[template]' (with|for) [object|collection]")
+                              "include '[template]' (with|for) [object|collection]")
       end
 
       super
@@ -50,10 +49,10 @@ module Liquid
 
     private def _read_template_from_file_system(context)
       file_system = if context.registers.has_key?(:file_system)
-        context.registers[:file_system].raw.as(FileSystem)
-      else
-        Liquid::Template.file_system
-      end
+                      context.registers[:file_system].raw.as(FileSystem)
+                    else
+                      Liquid::Template.file_system
+                    end
 
       file_system.read_template_file(context[@template_name], context)
     end

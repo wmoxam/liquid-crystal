@@ -30,13 +30,13 @@ class OutputTest < Minitest::Test
     end
   end
 
-  @assigns: Hash(String, Type)
+  @assigns : Hash(String, Type)
 
   def initialize(r)
     @assigns = _h({
       "best_cars" => "bmw",
-      "car" => {"bmw" => "good", "gm" => "bad"}
-      })
+      "car"       => {"bmw" => "good", "gm" => "bad"},
+    })
     super
   end
 
