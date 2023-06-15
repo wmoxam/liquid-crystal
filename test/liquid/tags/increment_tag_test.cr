@@ -2,24 +2,22 @@ require "../../test_helper"
 
 class IncrementTagTest < Minitest::Test
   include Liquid
-  include Liquid::Data
 
   def test_inc
     assert_template_result("0", "{%increment port %}", {} of String => Type)
     assert_template_result("0 1", "{%increment port %} {%increment port%}", {} of String => Type)
     assert_template_result("0 0 1 2 1",
-                           "{%increment port %} {%increment starboard%} " +
-                           "{%increment port %} {%increment port%} " +
-                           "{%increment starboard %}", {} of String => Type)
+      "{%increment port %} {%increment starboard%} " +
+      "{%increment port %} {%increment port%} " +
+      "{%increment starboard %}", {} of String => Type)
   end
 
   def test_dec
-    assert_template_result("9", "{%decrement port %}", _h({ "port" => 10}))
+    assert_template_result("9", "{%decrement port %}", {"port" => 10})
     assert_template_result("-1 -2", "{%decrement port %} {%decrement port%}", {} of String => Type)
     assert_template_result("1 5 2 2 5",
-                           "{%increment port %} {%increment starboard%} " +
-                           "{%increment port %} {%decrement port%} " +
-                           "{%decrement starboard %}", _h({ "port" => 1, "starboard" => 5 }))
+      "{%increment port %} {%increment starboard%} " +
+      "{%increment port %} {%decrement port%} " +
+      "{%decrement starboard %}", {"port" => 1, "starboard" => 5})
   end
-
 end

@@ -9,15 +9,13 @@ A port of the [Liquid template engine](https://github.com/Shopify/liquid) to [Cr
 ```crystal
 require "liquid-crystal"
 
-include Liquid::Data
-
 markup = "{% if user %}
 <p>Hello {{ user.name }}!</p>
 {% endif %}"
 
 template = Liquid::Template.parse template
 
-result = template.render(_h({"user" => {"name" => "Matz"}}))
+result = template.render({"user" => {"name" => "Matz"}})
 
 # <p>Hello Matz</p>
 ```

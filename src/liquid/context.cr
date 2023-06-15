@@ -20,8 +20,6 @@ module Liquid
   end
 
   class Context
-    include Liquid::Data
-
     getter scopes : Array(Hash(String, Type)), :errors, :registers, :environments
     @literals : Hash(String, Type)
 
@@ -35,7 +33,7 @@ module Liquid
       @errors = [] of Exception
       @rethrow_errors = rethrow_errors
       @interrupts = [] of Interrupt
-      @literals = _h({
+      @literals = Liquid::Data.prepare({
         "nil"   => nil,
         "null"  => nil,
         ""      => nil,
@@ -107,7 +105,7 @@ module Liquid
 
     # Merge a hash of variables in the current local scope
     def merge(new_scopes)
-      merged = @scopes[0].merge(new_scopes).as Hash(String, Type)
+      merged = @scopes[0].merge(Data.prepare(new_scopes)).as Hash(String, Type)
       @scopes[0] = merged
     end
 

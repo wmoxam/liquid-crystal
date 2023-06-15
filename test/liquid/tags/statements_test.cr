@@ -2,7 +2,6 @@ require "../../test_helper"
 
 class StatementsTest < Minitest::Test
   include Liquid
-  include Liquid::Data
 
   def test_true_eql_true
     text = %[ {% if true == true %} true {% else %} false {% endif %} ]
@@ -45,7 +44,6 @@ class StatementsTest < Minitest::Test
     expected = %[  false  ]
     assert_equal expected, Template.parse(text).render
 
-
     text = %[ {% if 0 <= null %} true {% else %} false {% endif %} ]
     expected = %[  false  ]
     assert_equal expected, Template.parse(text).render
@@ -72,64 +70,63 @@ class StatementsTest < Minitest::Test
   def test_var_strings_equal
     text = %[ {% if var == "hello there!" %} true {% else %} false {% endif %} ]
     expected = %[  true  ]
-    assert_equal expected, Template.parse(text).render(_h({"var" => "hello there!"}))
+    assert_equal expected, Template.parse(text).render({"var" => "hello there!"})
   end
 
   def test_var_strings_are_not_equal
     text = %[ {% if "hello there!" == var %} true {% else %} false {% endif %} ]
     expected = %[  true  ]
-    assert_equal expected, Template.parse(text).render(_h({"var" => "hello there!"}))
+    assert_equal expected, Template.parse(text).render({"var" => "hello there!"})
   end
 
   def test_var_and_long_string_are_equal
     text = %[ {% if var == 'hello there!' %} true {% else %} false {% endif %} ]
     expected = %[  true  ]
-    assert_equal expected, Template.parse(text).render(_h({"var" => "hello there!"}))
+    assert_equal expected, Template.parse(text).render({"var" => "hello there!"})
   end
-
 
   def test_var_and_long_string_are_equal_backwards
     text = %[ {% if 'hello there!' == var %} true {% else %} false {% endif %} ]
     expected = %[  true  ]
-    assert_equal expected, Template.parse(text).render(_h({"var" => "hello there!"}))
+    assert_equal expected, Template.parse(text).render({"var" => "hello there!"})
   end
 
-  #def test_is_nil
+  # def test_is_nil
   #  text = %| {% if var != nil %} true {% else %} false {% end %} |
   #  @template.assigns = { 'var' => 'hello there!'}
   #  expected = %|  true  |
   #  assert_equal expected, @template.parse(text)
-  #end
+  # end
 
   def test_is_collection_empty
     text = %[ {% if array == empty %} true {% else %} false {% endif %} ]
     expected = %[  true  ]
-    assert_equal expected, Template.parse(text).render(_h({"array" => [] of Type}))
+    assert_equal expected, Template.parse(text).render({"array" => [] of Type})
   end
 
   def test_is_not_collection_empty
     text = %[ {% if array == empty %} true {% else %} false {% endif %} ]
     expected = %[  false  ]
-    assert_equal expected, Template.parse(text).render(_h({"array" => [1,2,3]}))
+    assert_equal expected, Template.parse(text).render({"array" => [1, 2, 3]})
   end
 
   def test_nil
     text = %[ {% if var == nil %} true {% else %} false {% endif %} ]
     expected = %[  true  ]
-    assert_equal expected, Template.parse(text).render(_h({"var" => nil}))
+    assert_equal expected, Template.parse(text).render({"var" => nil})
 
     text = %[ {% if var == null %} true {% else %} false {% endif %} ]
     expected = %[  true  ]
-    assert_equal expected, Template.parse(text).render(_h({"var" => nil}))
+    assert_equal expected, Template.parse(text).render({"var" => nil})
   end
 
   def test_not_nil
     text = %[ {% if var != nil %} true {% else %} false {% endif %} ]
     expected = %[  true  ]
-    assert_equal expected, Template.parse(text).render(_h({"var" => 1}))
+    assert_equal expected, Template.parse(text).render({"var" => 1})
 
     text = %[ {% if var != null %} true {% else %} false {% endif %} ]
     expected = %[  true  ]
-    assert_equal expected, Template.parse(text).render(_h({"var" => 1}))
+    assert_equal expected, Template.parse(text).render({"var" => 1})
   end
 end # StatementsTest

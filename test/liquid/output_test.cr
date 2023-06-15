@@ -2,7 +2,6 @@ require "../test_helper"
 
 class OutputTest < Minitest::Test
   include Liquid
-  include Liquid::Data
 
   class FunnyFilter < Liquid::Filter
     def make_funny(input)
@@ -30,13 +29,11 @@ class OutputTest < Minitest::Test
     end
   end
 
-  @assigns : Hash(String, Type)
-
   def initialize(r)
-    @assigns = _h({
+    @assigns = {
       "best_cars" => "bmw",
       "car"       => {"bmw" => "good", "gm" => "bad"},
-    })
+    }
     super
   end
 

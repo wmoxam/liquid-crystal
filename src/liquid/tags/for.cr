@@ -1,5 +1,4 @@
 module Liquid
-
   # "For" iterates over an array or collection.
   # Several useful variables are available to you within the loop.
   #
@@ -44,7 +43,6 @@ module Liquid
   # forloop.last:: Returns true if the item is the last item.
   #
   class For < Block
-    include Data
     Syntax = /(\w+)\s+in\s+(#{QuotedFragment}+)\s*(reversed)?/
 
     @variable_name : String
@@ -63,7 +61,7 @@ module Liquid
         end
       else
         raise SyntaxError.new("Syntax Error in 'for loop' - Valid syntax: " \
-          "for [item] in [collection]")
+                              "for [item] in [collection]")
       end
 
       @nodelist = @for_block = [] of Liquid::Tag | Liquid::Variable | String
@@ -96,22 +94,22 @@ module Liquid
       return render_else(context) unless collection.iterable?
 
       from = if @attributes["offset"]? == "continue"
-        if for_hash[@name]?.nil?
-          0
-        else
-          Any.new(for_hash[@name]).to_i
-        end
-      elsif @attributes["offset"]?.nil?
-        0
-      else
-        Any.new(context[@attributes["offset"]?]).to_i
-      end
+               if for_hash[@name]?.nil?
+                 0
+               else
+                 Any.new(for_hash[@name]).to_i
+               end
+             elsif @attributes["offset"]?.nil?
+               0
+             else
+               Any.new(context[@attributes["offset"]?]).to_i
+             end
 
       to = if @attributes["limit"]?
-        Any.new(context[@attributes["limit"]?]).to_i + from
-      else
-        nil
-      end
+             Any.new(context[@attributes["limit"]?]).to_i + from
+           else
+             nil
+           end
 
       segment = Utils.slice_collection_using_each(collection, from, to)
 
@@ -133,7 +131,7 @@ module Liquid
       context.stack do
         segment.each_with_index do |item, index|
           context[@variable_name] = item
-          context["forloop"] = _h({
+          context["forloop"] = Data.prepare({
             "name"    => @name,
             "length"  => length,
             "index"   => index + 1,
@@ -141,7 +139,8 @@ module Liquid
             "rindex"  => length - index,
             "rindex0" => length - index - 1,
             "first"   => (index == 0),
-            "last"    => (index == length - 1) })
+            "last"    => (index == length - 1),
+          })
 
           result << render_all(@for_block, context)
 

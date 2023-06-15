@@ -46,7 +46,7 @@ class CategoryDrop < Liquid::Drop
 end
 
 class CounterDrop < Liquid::Drop
-  def initialize()
+  def initialize
     @count = 0
     super()
   end
@@ -73,7 +73,6 @@ end
 
 class ContextTest < Minitest::Test
   include Liquid
-  include Liquid::Data
 
   def context
     @context ||= Liquid::Context.new
@@ -112,10 +111,10 @@ class ContextTest < Minitest::Test
   end
 
   def test_scoping
-    #assert_nothing_raised do
-      context.push
-      context.pop
-    #end
+    # assert_nothing_raised do
+    context.push
+    context.pop
+    # end
 
     assert_raises(Liquid::ContextError) do
       context.pop
@@ -129,14 +128,14 @@ class ContextTest < Minitest::Test
   end
 
   def test_length_query
-    context["numbers"] = _a([1,2,3,4])
+    context["numbers"] = Data.prepare([1, 2, 3, 4])
     assert_equal 4, context["numbers.size"]
 
-    context["numbers"] = _h({"1" => 1,"2" => 2,"3" => 3,"4" => 4})
+    context["numbers"] = Data.prepare({"1" => 1, "2" => 2, "3" => 3, "4" => 4})
 
     assert_equal 4, context["numbers.size"]
 
-    context["numbers"] = _h({"1" => 1,"2" => 2,"3" => 3,"4" => 4, "size" => 1000})
+    context["numbers"] = Data.prepare({"1" => 1, "2" => 2, "3" => 3, "4" => 4, "size" => 1000})
 
     assert_equal 1000, context["numbers.size"]
   end
@@ -153,7 +152,6 @@ class ContextTest < Minitest::Test
   end
 
   def test_add_filter
-
     filter = HiFilter
 
     c = Context.new
@@ -165,7 +163,6 @@ class ContextTest < Minitest::Test
 
     c.add_filters(filter)
     assert_equal "hi? hi!", c.invoke("hi", "hi?").raw
-
   end
 
   class GlobalNotice < Filter
@@ -191,7 +188,6 @@ class ContextTest < Minitest::Test
   # end
 
   def test_only_intended_filters_make_it_there
-
     filter = HiFilter
 
     c = Context.new
@@ -218,7 +214,7 @@ class ContextTest < Minitest::Test
   end
 
   def test_hierachical_data
-    context["hash"] = _h({"name" => "tobi"})
+    context["hash"] = Data.prepare({"name" => "tobi"})
     assert_equal "tobi", context["hash.name"]
     assert_equal "tobi", context["hash[\"name\"]"]
   end
@@ -247,7 +243,7 @@ class ContextTest < Minitest::Test
   # end
 
   def test_array_notation
-    context["test"] = _a([1,2,3,4,5])
+    context["test"] = Data.prepare([1, 2, 3, 4, 5])
 
     assert_equal 1, context["test[0]"]
     assert_equal 2, context["test[1]"]
@@ -257,21 +253,21 @@ class ContextTest < Minitest::Test
   end
 
   def test_recoursive_array_notation
-    context["test"] = _h({"test" => [1,2,3,4,5]})
+    context["test"] = Data.prepare({"test" => [1, 2, 3, 4, 5]})
 
     assert_equal 1, context["test.test[0]"]
 
-    context["test"] = _a([{"test" => "worked"}])
+    context["test"] = Data.prepare([{"test" => "worked"}])
 
     assert_equal "worked", context["test[0].test"]
   end
 
   def test_hash_to_array_transition
-    context["colors"] = _h({
-      "Blue"   => ["003366","336699", "6699CC", "99CCFF"],
-      "Green"  => ["003300","336633", "669966", "99CC99"],
-      "Yellow" => ["CC9900","FFCC00", "FFFF99", "FFFFCC"],
-      "Red"    => ["660000","993333", "CC6666", "FF9999"]
+    context["colors"] = Data.prepare({
+      "Blue"   => ["003366", "336699", "6699CC", "99CCFF"],
+      "Green"  => ["003300", "336633", "669966", "99CC99"],
+      "Yellow" => ["CC9900", "FFCC00", "FFFF99", "FFFFCC"],
+      "Red"    => ["660000", "993333", "CC6666", "FF9999"],
     })
 
     assert_equal "003366", context["colors.Blue[0]"]
@@ -279,24 +275,24 @@ class ContextTest < Minitest::Test
   end
 
   def test_try_first
-    context["test"] = _a([1,2,3,4,5])
+    context["test"] = Data.prepare([1, 2, 3, 4, 5])
 
     assert_equal 1, context["test.first"]
     assert_equal 5, context["test.last"]
 
-    context["test"] = _h({"test" => [1,2,3,4,5]})
+    context["test"] = Data.prepare({"test" => [1, 2, 3, 4, 5]})
 
     assert_equal 1, context["test.test.first"]
     assert_equal 5, context["test.test.last"]
 
-    context["test"] = _a([1])
+    context["test"] = Data.prepare([1])
     assert_equal 1, context["test.first"]
     assert_equal 1, context["test.last"]
   end
 
   def test_access_hashes_with_hash_notation
-    context["products"] = _h({"count" => 5, "tags" => ["deepsnow", "freestyle"]})
-    context["product"] = _h({"variants" => [ {"title" => "draft151cm"}, {"title" => "element151cm"}  ]})
+    context["products"] = Data.prepare({"count" => 5, "tags" => ["deepsnow", "freestyle"]})
+    context["product"] = Data.prepare({"variants" => [{"title" => "draft151cm"}, {"title" => "element151cm"}]})
 
     assert_equal 5, context["products[\"count\"]"]
     assert_equal "deepsnow", context["products[\"tags\"][0]"]
@@ -317,16 +313,16 @@ class ContextTest < Minitest::Test
 
   def test_access_hashes_with_hash_access_variables
     context["var"] = "tags"
-    context["nested"] = _h({"var" => "tags"})
-    context["products"] = _h({"count" => 5, "tags" => ["deepsnow", "freestyle"]})
+    context["nested"] = Data.prepare({"var" => "tags"})
+    context["products"] = Data.prepare({"count" => 5, "tags" => ["deepsnow", "freestyle"]})
 
     assert_equal "deepsnow", context["products[var].first"]
     assert_equal "freestyle", context["products[nested.var].last"]
   end
 
   def test_hash_notation_only_for_hash_access
-    context["array"] = _a([1,2,3,4,5])
-    context["hash"] = _h({"first" => "Hello"})
+    context["array"] = Data.prepare([1, 2, 3, 4, 5])
+    context["hash"] = Data.prepare({"first" => "Hello"})
 
     assert_equal 1, context["array.first"]
     assert_equal nil, context["array[\"first\"]"]
@@ -334,7 +330,7 @@ class ContextTest < Minitest::Test
   end
 
   def test_first_can_appear_in_middle_of_callchain
-    context["product"] = _h({"variants" => [ {"title" => "draft151cm"}, {"title" => "element151cm"}  ]})
+    context["product"] = Data.prepare({"variants" => [{"title" => "draft151cm"}, {"title" => "element151cm"}]})
 
     assert_equal "draft151cm", context["product.variants[0].title"]
     assert_equal "element151cm", context["product.variants[1].title"]
@@ -350,35 +346,35 @@ class ContextTest < Minitest::Test
   # end
 
   # def test_nested_cents
-  #   cents = _h({"cents" => {"amount" => HundredCentes.new}})
+  #   cents = {"cents" => {"amount" => HundredCentes.new}}
   #   context.merge(cents)
   #   assert_equal 100, context["cents.amount"]
   #
-  #   nested_cents = _h({"cents" => cents})
+  #   nested_cents = {"cents" => cents}
   #   context.merge(nested_cents)
   #   assert_equal 100, context["cents.cents.amount"]
   # end
   #
   # def test_cents_through_drop
-  #   cents = _h({"cents" => CentsDrop.new})
+  #   cents = {"cents" => CentsDrop.new}
   #   context.merge(cents)
   #   assert_equal 100, context["cents.amount"]
   # end
   #
   # def test_nested_cents_through_drop
-  #   vars = _h({"vars" => {"cents" => CentsDrop.new}})
+  #   vars = {"vars" => {"cents" => CentsDrop.new}}
   #   context.merge(vars)
   #   assert_equal 100, context["vars.cents.amount"]
   # end
   #
   # def test_drop_methods_with_question_marks
-  #   cents = _h({"cents" => CentsDrop.new})
+  #   cents = {"cents" => CentsDrop.new}
   #   context.merge(cents)
   #   assert context["cents.non_zero?"]
   # end
   #
   # def test_context_from_within_drop
-  #   sensitive = _h({"test" => "123", "vars" => ContextSensitiveDrop.new(context)})
+  #   sensitive = {"test" => "123", "vars" => ContextSensitiveDrop.new(context)}
   #   context.merge(sensitive)
   #
   #   assert_equal "123", context["test"]
@@ -386,28 +382,28 @@ class ContextTest < Minitest::Test
   # end
   #
   # def test_nested_context_from_within_drop
-  #   sensitive = _h({"test" => "123", "vars" => {"local" => ContextSensitiveDrop.new(context)}})
+  #   sensitive = {"test" => "123", "vars" => {"local" => ContextSensitiveDrop.new(context)}}
   #   context.merge(sensitive)
   #   assert_equal "123", context["vars.local.test"]
   # end
 
   def test_ranges
-    context.merge( _h({"test" => "5"}) )
+    context.merge({"test" => "5"})
     assert_equal (1..5), context["(1..5)"]
     assert_equal (1..5), context["(1..test)"]
     assert_equal (5..5), context["(test..test)"]
   end
 
   # def test_cents_through_drop_nestedly
-  #   cents = _h({"cents" => CentsDrop.new})
+  #   cents = {"cents" => CentsDrop.new}
   #   context.merge(cents)
   #   assert_equal 100, context["cents.amount"]
   #
-  #   nested_cents = _h({"cents" => cents})
+  #   nested_cents = {"cents" => cents}
   #   context.merge(nested_cents)
   #   assert_equal 100, context["cents.cents.amount"]
   #
-  #   triple_nested_cents = _h({"cents" => nested_cents})
+  #   triple_nested_cents = {"cents" => nested_cents}
   #   context.merge(triple_nested_cents)
   #   assert_equal 100, context["cents.cents.cents.amount"]
   # end

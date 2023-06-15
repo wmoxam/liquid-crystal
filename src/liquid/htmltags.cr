@@ -1,6 +1,5 @@
 module Liquid
   class TableRow < Block
-    include Liquid::Data
     Syntax = /(\w+)\s+in\s+(#{QuotedFragment}+)/
 
     @variable_name : String
@@ -16,7 +15,7 @@ module Liquid
         end
       else
         raise SyntaxError.new("Syntax Error in 'table_row loop' - Valid " \
-          "syntax: table_row [item] in [collection] cols=3")
+                              "syntax: table_row [item] in [collection] cols=3")
       end
 
       super
@@ -27,16 +26,16 @@ module Liquid
       return "" if collection.nil?
 
       from = if @attributes["offset"]?
-        Any.new(context[@attributes["offset"]]).to_i
-      else
-        0
-      end
+               Any.new(context[@attributes["offset"]]).to_i
+             else
+               0
+             end
 
       to = if @attributes["limit"]?
-        from + Any.new(context[@attributes["limit"]]).to_i
-      else
-        nil
-      end
+             from + Any.new(context[@attributes["limit"]]).to_i
+           else
+             nil
+           end
 
       collection = Utils.slice_collection_using_each(
         Any.new(collection),
@@ -53,24 +52,22 @@ module Liquid
       String.build do |result|
         result << "<tr class=\"row1\">\n"
         context.stack do
-
           collection.each_with_index do |item, index|
             context[@variable_name] = item
-            context["tablerowloop"] = _h({
-              "length"  => length,
-              "index"   => index + 1,
-              "index0"  => index,
-              "col"     => col + 1,
-              "col0"    => col,
-              "index0"  => index,
-              "rindex"  => length - index,
-              "rindex0" => length - index - 1,
-              "first"   => (index == 0),
-              "last"    => (index == length - 1),
+            context["tablerowloop"] = Liquid::Data.prepare({
+              "length"    => length,
+              "index"     => index + 1,
+              "index0"    => index,
+              "col"       => col + 1,
+              "col0"      => col,
+              "index0"    => index,
+              "rindex"    => length - index,
+              "rindex0"   => length - index - 1,
+              "first"     => (index == 0),
+              "last"      => (index == length - 1),
               "col_first" => (col == 0),
-              "col_last"  => (col == cols - 1)
+              "col_last"  => (col == cols - 1),
             })
-
 
             col += 1
 
@@ -79,11 +76,10 @@ module Liquid
             result << "</td>"
 
             if col == cols && !(index == length - 1)
-              col  = 0
+              col = 0
               row += 1
               result << "</tr>\n<tr class=\"row#{row}\">"
             end
-
           end
         end
         result << "</tr>\n"

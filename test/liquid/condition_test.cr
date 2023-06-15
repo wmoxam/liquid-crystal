@@ -2,11 +2,10 @@ require "../test_helper"
 
 class BlockTest < Minitest::Test
   include Liquid
-  include Liquid::Data
 
   def test_basic_condition
     assert_equal false, Condition.new("1", "==", "2").evaluate
-    assert_equal true,  Condition.new("1", "==", "1").evaluate
+    assert_equal true, Condition.new("1", "==", "1").evaluate
   end
 
   def test_default_operators_evalute_true
@@ -52,16 +51,16 @@ class BlockTest < Minitest::Test
 
   def test_contains_works_on_arrays
     context = Liquid::Context.new
-    context["array"] = _a([1,2,3,4,5])
+    context["array"] = Data.prepare([1, 2, 3, 4, 5])
 
     @context = context
 
     assert_evalutes_false "array", "contains", "0"
-    assert_evalutes_true "array",  "contains", "1"
-    assert_evalutes_true "array",  "contains", "2"
-    assert_evalutes_true "array",  "contains", "3"
-    assert_evalutes_true "array",  "contains", "4"
-    assert_evalutes_true "array",  "contains", "5"
+    assert_evalutes_true "array", "contains", "1"
+    assert_evalutes_true "array", "contains", "2"
+    assert_evalutes_true "array", "contains", "3"
+    assert_evalutes_true "array", "contains", "4"
+    assert_evalutes_true "array", "contains", "5"
     assert_evalutes_false "array", "contains", "6"
     assert_evalutes_false "array", "contains", "\"1\""
   end
@@ -121,11 +120,11 @@ class BlockTest < Minitest::Test
 
   private def assert_evalutes_true(left, op, right)
     assert Condition.new(left, op, right).evaluate(@context || Liquid::Context.new),
-           "Evaluated false: #{left} #{op} #{right}"
+      "Evaluated false: #{left} #{op} #{right}"
   end
 
   private def assert_evalutes_false(left, op, right)
     assert !Condition.new(left, op, right).evaluate(@context || Liquid::Context.new),
-           "Evaluated true: #{left} #{op} #{right}"
+      "Evaluated true: #{left} #{op} #{right}"
   end
 end # ConditionTest

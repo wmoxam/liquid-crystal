@@ -2,7 +2,6 @@ require "../test_helper"
 
 class TemplateTest < Minitest::Test
   include Liquid
-  include Liquid::Data
 
   # def test_tokenize_strings
   #   assert_equal [' '], Template.new.send(:tokenize, ' ')
@@ -15,7 +14,7 @@ class TemplateTest < Minitest::Test
   #   assert_equal [' ', '{{funk}}', ' ', '{{so}}', ' ', '{{brother}}', ' '], Template.new.send(:tokenize, ' {{funk}} {{so}} {{brother}} ')
   #   assert_equal [' ', '{{  funk  }}', ' '], Template.new.send(:tokenize, ' {{  funk  }} ')
   # end
- 
+
   # def test_tokenize_blocks
   #   assert_equal ['{%comment%}'], Template.new.send(:tokenize, '{%comment%}')
   #   assert_equal [' ', '{%comment%}', ' '], Template.new.send(:tokenize, ' {%comment%} ')
@@ -38,14 +37,14 @@ class TemplateTest < Minitest::Test
 
   def test_custom_assigns_do_not_persist_on_same_template
     t = Template.new
-    assert_equal "from custom assigns", t.parse("{{ foo }}").render(_h({"foo" => "from custom assigns"}))
+    assert_equal "from custom assigns", t.parse("{{ foo }}").render({"foo" => "from custom assigns"})
     assert_equal "", t.parse("{{ foo }}").render
   end
 
   def test_custom_assigns_squash_instance_assigns
     t = Template.new
     assert_equal "from instance assigns", t.parse("{% assign foo = 'from instance assigns' %}{{ foo }}").render
-    assert_equal "from custom assigns", t.parse("{{ foo }}").render(_h({"foo" => "from custom assigns"}))
+    assert_equal "from custom assigns", t.parse("{{ foo }}").render({"foo" => "from custom assigns"})
   end
 
   def test_persistent_assigns_squash_instance_assigns

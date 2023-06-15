@@ -20,7 +20,6 @@ end
 
 class ErrorHandlingTest < Minitest::Test
   include Liquid
-  include Liquid::Data
 
   def test_exceptions
     drop = ErrorDrop.new
@@ -82,7 +81,7 @@ class ErrorHandlingTest < Minitest::Test
   # def test_exceptions_propagate
   #   assert_raises Exception do
   #     template = Liquid::Template.parse(" {{ errors.exception }} ")
-  #     template.render(_h({"errors" => ErrorDrop.new}))
+  #     template.render({"errors" => ErrorDrop.new})
   #   end
   # end
 end # ErrorHandlingTest
