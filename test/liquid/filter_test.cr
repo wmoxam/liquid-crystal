@@ -24,7 +24,6 @@ end
 
 class FiltersTest < Minitest::Test
   include Liquid
-  include Liquid::Data
 
   def initialize(r)
     @context = Context.new
@@ -60,21 +59,21 @@ class FiltersTest < Minitest::Test
   end
 
   def test_join
-    @context["var"] = _a([1,2,3,4])
+    @context["var"] = Data.prepare([1, 2, 3, 4])
 
     assert_equal "1 2 3 4", Variable.new("var | join").render(@context).as(Any).raw
   end
 
   # def test_sort
   #   @context["value"] = 3
-  #   @context["numbers"] = _a([2,1,4,3])
-  #   @context["words"] = _a(["expected", "as", "alphabetic"])
-  #   @context["arrays"] = _a([["flattened"], ["are"]])
+  #   @context["numbers"] = Data.prepare([2,1,4,3])
+  #   @context["words"] = Data.prepare(["expected", "as", "alphabetic"])
+  #   @context["arrays"] = Data.prepare([["flattened"], ["are"]])
   #
-  #   assert_equal _a([1,2,3,4]), Variable.new("numbers | sort").render(@context).as(Any).raw
-  #   assert_equal _a(["alphabetic", "as", "expected"]), Variable.new("words | sort").render(@context).as(Any).raw
-  #   assert_equal _a([3]), Variable.new("value | sort").render(@context).as(Any).raw
-  #   assert_equal _a(["are", "flattened"]), Variable.new("arrays | sort").render(@context).as(Any).raw
+  #   assert_equal Data.prepare([1,2,3,4]), Variable.new("numbers | sort").render(@context).as(Any).raw
+  #   assert_equal Data.prepare(["alphabetic", "as", "expected"]), Variable.new("words | sort").render(@context).as(Any).raw
+  #   assert_equal Data.prepare([3]), Variable.new("value | sort").render(@context).as(Any).raw
+  #   assert_equal Data.prepare(["are", "flattened"]), Variable.new("arrays | sort").render(@context).as(Any).raw
   # end
 
   def test_strip_html
@@ -101,12 +100,12 @@ class FiltersTest < Minitest::Test
     assert_equal 1000, Variable.new("var | xyzzy").render(@context).as(Any).raw
   end
 
-#  def test_filter_with_keyword_arguments
-#    @context["surname"] = "john"
-#    @context.add_filters(SubstituteFilter)
-#    output = Variable.new(%[ 'hello %{first_name}, %{last_name}' | substitute: first_name: surname, last_name: 'doe' ]).render(@context)
-#    assert_equal "hello john, doe", output
-#  end
+  #  def test_filter_with_keyword_arguments
+  #    @context["surname"] = "john"
+  #    @context.add_filters(SubstituteFilter)
+  #    output = Variable.new(%[ 'hello %{first_name}, %{last_name}' | substitute: first_name: surname, last_name: 'doe' ]).render(@context)
+  #    assert_equal "hello john, doe", output
+  #  end
 end
 
 class FiltersInTemplate < Minitest::Test
@@ -115,7 +114,7 @@ class FiltersInTemplate < Minitest::Test
   def test_local_global
     Template.register_filter(MoneyFilter)
 
-    assert_equal " 1000$ ", Template.parse("{{1000 | money}}").render()
+    assert_equal " 1000$ ", Template.parse("{{1000 | money}}").render
     # assert_equal " 1000$ CAD ", Template.parse("{{1000 | money}}").render(({} of String => Type), CanadianMoneyFilter)
     assert_equal " 1000$ CAD ", Template.parse("{{1000 | money}}").render(({} of String => Type), [CanadianMoneyFilter])
   end

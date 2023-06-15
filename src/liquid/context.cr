@@ -20,8 +20,6 @@ module Liquid
   end
 
   class Context
-    include Liquid::Data
-
     getter scopes : Array(Hash(String, Type)), :errors, :registers, :environments
     @literals : Hash(String, Type)
 
@@ -35,7 +33,7 @@ module Liquid
       @errors = [] of Exception
       @rethrow_errors = rethrow_errors
       @interrupts = [] of Interrupt
-      @literals = _h({
+      @literals = Liquid::Data.prepare({
         "nil"   => nil,
         "null"  => nil,
         ""      => nil,

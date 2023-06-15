@@ -2,7 +2,6 @@ require "../test_helper"
 
 class ParsingQuirksTest < Minitest::Test
   include Liquid
-  include Liquid::Data
 
   def test_error_with_css
     text = %( div { font-weight: bold; } )
@@ -31,23 +30,23 @@ class ParsingQuirksTest < Minitest::Test
   end
 
   def test_error_on_empty_filter
-#    assert_nothing_raised do
-      Template.parse("{{test |a|b|}}")
-      Template.parse("{{test}}")
-      Template.parse("{{|test|}}")
-#    end
+    #    assert_nothing_raised do
+    Template.parse("{{test |a|b|}}")
+    Template.parse("{{test}}")
+    Template.parse("{{|test|}}")
+    #    end
   end
 
   def test_meaningless_parens
-    assigns = _h({"b" => "bar", "c" => "baz"})
+    assigns = Data.prepare({"b" => "bar", "c" => "baz"})
     markup = "a == 'foo' or (b == 'bar' and c == 'baz') or false"
-    assert_template_result(" YES ","{% if #{markup} %} YES {% endif %}", assigns)
+    assert_template_result(" YES ", "{% if #{markup} %} YES {% endif %}", assigns)
   end
 
   def test_unexpected_characters_silently_eat_logic
     markup = "true && false"
-    assert_template_result(" YES ","{% if #{markup} %} YES {% endif %}")
+    assert_template_result(" YES ", "{% if #{markup} %} YES {% endif %}")
     markup = "false || true"
-    assert_template_result("","{% if #{markup} %} YES {% endif %}")
+    assert_template_result("", "{% if #{markup} %} YES {% endif %}")
   end
 end # ParsingQuirksTest

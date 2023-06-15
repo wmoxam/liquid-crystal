@@ -62,23 +62,20 @@ liquid_template = <<-END
 
 END
 
-
 data = {
   "products" => 100.times.map do |n|
-    { "image" => "foo-#{rand 100}.png", "url" => "http://bar-#{rand 100}.com", "external_index" => "FOO #{rand 100}" }
-  end.to_a
+    {"image" => "foo-#{rand 100}.png", "url" => "http://bar-#{rand 100}.com", "external_index" => "FOO #{rand 100}"}
+  end.to_a,
 }
 
-include Liquid::Data
-
 def render_liquid(template, data)
- Liquid::Template.parse(template).render(_h(data))
+  Liquid::Template.parse(template).render(Liquid::Data.prepare(data))
 end
 
 liquid_template_pre = Liquid::Template.parse(liquid_template)
 
 def render_liquid_pre(tmpl, data)
- tmpl.render(_h(data))
+  tmpl.render(Liquid::Data.prepare(data))
 end
 
 Benchmark.ips do |x|
