@@ -181,14 +181,14 @@ class VariableResolutionTest < Minitest::Test
 
   def test_simple_variable
     template = Template.parse(%({{test}}))
-    assert_equal "worked", template.render(Data.prepare({"test" => "worked"}))
-    assert_equal "worked wonderfully", template.render(Data.prepare({"test" => "worked wonderfully"}))
+    assert_equal "worked", template.render({"test" => "worked"})
+    assert_equal "worked wonderfully", template.render({"test" => "worked wonderfully"})
   end
 
   def test_simple_with_whitespaces
     template = Template.parse(%(  {{ test }}  ))
-    assert_equal "  worked  ", template.render(Data.prepare({"test" => "worked"}))
-    assert_equal "  worked wonderfully  ", template.render(Data.prepare({"test" => "worked wonderfully"}))
+    assert_equal "  worked  ", template.render({"test" => "worked"})
+    assert_equal "  worked wonderfully  ", template.render({"test" => "worked wonderfully"})
   end
 
   def test_ignore_unknown
@@ -198,7 +198,7 @@ class VariableResolutionTest < Minitest::Test
 
   def test_hash_scoping
     template = Template.parse(%({{ test.test }}))
-    assert_equal "worked", template.render(Data.prepare({"test" => {"test" => "worked"}}))
+    assert_equal "worked", template.render({"test" => {"test" => "worked"}})
   end
 
   def test_preset_assigns
@@ -210,11 +210,11 @@ class VariableResolutionTest < Minitest::Test
   def test_reuse_parsed_template
     template = Template.parse(%({{ greeting }} {{ name }}))
     template.assigns["greeting"] = "Goodbye"
-    assert_equal "Hello Tobi", template.render(Data.prepare({"greeting" => "Hello", "name" => "Tobi"}))
-    assert_equal "Hello ", template.render(Data.prepare({"greeting" => "Hello", "unknown" => "Tobi"}))
-    assert_equal "Hello Brian", template.render(Data.prepare({"greeting" => "Hello", "name" => "Brian"}))
-    assert_equal(Data.prepare({"greeting" => "Goodbye"}), template.assigns)
-    assert_equal "Goodbye Brian", template.render(Data.prepare({"name" => "Brian"}))
+    assert_equal "Hello Tobi", template.render({"greeting" => "Hello", "name" => "Tobi"})
+    assert_equal "Hello ", template.render({"greeting" => "Hello", "unknown" => "Tobi"})
+    assert_equal "Hello Brian", template.render({"greeting" => "Hello", "name" => "Brian"})
+    assert_equal({"greeting" => "Goodbye"}, template.assigns)
+    assert_equal "Goodbye Brian", template.render({"name" => "Brian"})
   end
 
   def test_assigns_not_polluted_from_template
@@ -222,7 +222,7 @@ class VariableResolutionTest < Minitest::Test
     template.assigns["test"] = "baz"
     assert_equal "bazbar", template.render
     assert_equal "bazbar", template.render
-    assert_equal "foobar", template.render(Data.prepare({"test" => "foo"}))
+    assert_equal "foobar", template.render({"test" => "foo"})
     assert_equal "bazbar", template.render
   end
 

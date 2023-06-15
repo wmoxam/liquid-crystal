@@ -13,11 +13,11 @@ class IncrementTagTest < Minitest::Test
   end
 
   def test_dec
-    assert_template_result("9", "{%decrement port %}", Data.prepare({"port" => 10}))
+    assert_template_result("9", "{%decrement port %}", {"port" => 10})
     assert_template_result("-1 -2", "{%decrement port %} {%decrement port%}", {} of String => Type)
     assert_template_result("1 5 2 2 5",
       "{%increment port %} {%increment starboard%} " +
       "{%increment port %} {%decrement port%} " +
-      "{%decrement starboard %}", Data.prepare({"port" => 1, "starboard" => 5}))
+      "{%decrement starboard %}", {"port" => 1, "starboard" => 5})
   end
 end

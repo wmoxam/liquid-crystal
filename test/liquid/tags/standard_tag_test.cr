@@ -48,22 +48,22 @@ class StandardTagTest < Minitest::Test
   end
 
   def test_assign
-    assigns = Data.prepare({"var" => "content"})
+    assigns = {"var" => "content"}
     assert_template_result("var2:  var2:content", "var2:{{var2}} {%assign var2 = var%} var2:{{var2}}", assigns)
   end
 
   def test_hyphenated_assign
-    assigns = Data.prepare({"a-b" => "1"})
+    assigns = {"a-b" => "1"}
     assert_template_result("a-b:1 a-b:2", "a-b:{{a-b}} {%assign a-b = 2 %}a-b:{{a-b}}", assigns)
   end
 
   def test_assign_with_colon_and_spaces
-    assigns = Data.prepare({"var" => {"a:b c" => {"paged" => "1"}}})
+    assigns = {"var" => {"a:b c" => {"paged" => "1"}}}
     assert_template_result("var2: 1", "{%assign var2 = var['a:b c'].paged %}var2: {{var2}}", assigns)
   end
 
   def test_capture
-    assigns = Data.prepare({"var" => "content"})
+    assigns = {"var" => "content"}
     assert_template_result("content foo content foo ",
       "{{ var2 }}{% capture var2 %}{{ var }} foo {% endcapture %}{{ var2 }}{{ var2 }}",
       assigns)
@@ -73,87 +73,87 @@ class StandardTagTest < Minitest::Test
     assert_raises(SyntaxError) do
       assert_template_result("content foo content foo ",
         "{{ var2 }}{% capture %}{{ var }} foo {% endcapture %}{{ var2 }}{{ var2 }}",
-        Data.prepare({"var" => "content"}))
+        {"var" => "content"})
     end
   end
 
   def test_case
-    assigns = Data.prepare({"condition" => 2})
+    assigns = {"condition" => 2}
     assert_template_result(" its 2 ",
       "{% case condition %}{% when 1 %} its 1 {% when 2 %} its 2 {% endcase %}",
       assigns)
 
-    assigns = Data.prepare({"condition" => 1})
+    assigns = {"condition" => 1}
     assert_template_result(" its 1 ",
       "{% case condition %}{% when 1 %} its 1 {% when 2 %} its 2 {% endcase %}",
       assigns)
 
-    assigns = Data.prepare({"condition" => 3})
+    assigns = {"condition" => 3}
     assert_template_result("",
       "{% case condition %}{% when 1 %} its 1 {% when 2 %} its 2 {% endcase %}",
       assigns)
 
-    assigns = Data.prepare({"condition" => "string here"})
+    assigns = {"condition" => "string here"}
     assert_template_result(" hit ",
       "{% case condition %}{% when \"string here\" %} hit {% endcase %}",
       assigns)
 
-    assigns = Data.prepare({"condition" => "bad string here"})
+    assigns = {"condition" => "bad string here"}
     assert_template_result("",
       "{% case condition %}{% when \"string here\" %} hit {% endcase %}",
       assigns)
   end
 
   def test_case_with_else
-    assigns = Data.prepare({"condition" => 5})
+    assigns = {"condition" => 5}
     assert_template_result(" hit ",
       "{% case condition %}{% when 5 %} hit {% else %} else {% endcase %}",
       assigns)
 
-    assigns = Data.prepare({"condition" => 6})
+    assigns = {"condition" => 6}
     assert_template_result(" else ",
       "{% case condition %}{% when 5 %} hit {% else %} else {% endcase %}",
       assigns)
 
-    assigns = Data.prepare({"condition" => 6})
+    assigns = {"condition" => 6}
     assert_template_result(" else ",
       "{% case condition %} {% when 5 %} hit {% else %} else {% endcase %}",
       assigns)
   end
 
   def test_case_on_size
-    assert_template_result("", "{% case a.size %}{% when 1 %}1{% when 2 %}2{% endcase %}", Data.prepare({"a" => [] of Int32}))
-    assert_template_result("1", "{% case a.size %}{% when 1 %}1{% when 2 %}2{% endcase %}", Data.prepare({"a" => [1]}))
-    assert_template_result("2", "{% case a.size %}{% when 1 %}1{% when 2 %}2{% endcase %}", Data.prepare({"a" => [1, 1]}))
-    assert_template_result("", "{% case a.size %}{% when 1 %}1{% when 2 %}2{% endcase %}", Data.prepare({"a" => [1, 1, 1]}))
-    assert_template_result("", "{% case a.size %}{% when 1 %}1{% when 2 %}2{% endcase %}", Data.prepare({"a" => [1, 1, 1, 1]}))
-    assert_template_result("", "{% case a.size %}{% when 1 %}1{% when 2 %}2{% endcase %}", Data.prepare({"a" => [1, 1, 1, 1, 1]}))
+    assert_template_result("", "{% case a.size %}{% when 1 %}1{% when 2 %}2{% endcase %}", {"a" => [] of Int32})
+    assert_template_result("1", "{% case a.size %}{% when 1 %}1{% when 2 %}2{% endcase %}", {"a" => [1]})
+    assert_template_result("2", "{% case a.size %}{% when 1 %}1{% when 2 %}2{% endcase %}", {"a" => [1, 1]})
+    assert_template_result("", "{% case a.size %}{% when 1 %}1{% when 2 %}2{% endcase %}", {"a" => [1, 1, 1]})
+    assert_template_result("", "{% case a.size %}{% when 1 %}1{% when 2 %}2{% endcase %}", {"a" => [1, 1, 1, 1]})
+    assert_template_result("", "{% case a.size %}{% when 1 %}1{% when 2 %}2{% endcase %}", {"a" => [1, 1, 1, 1, 1]})
   end
 
   def test_case_on_size_with_else
     assert_template_result("else",
       "{% case a.size %}{% when 1 %}1{% when 2 %}2{% else %}else{% endcase %}",
-      Data.prepare({"a" => [] of Type}))
+      {"a" => [] of Type})
 
     assert_template_result("1",
       "{% case a.size %}{% when 1 %}1{% when 2 %}2{% else %}else{% endcase %}",
-      Data.prepare({"a" => [1]}))
+      {"a" => [1]})
 
     assert_template_result("2",
       "{% case a.size %}{% when 1 %}1{% when 2 %}2{% else %}else{% endcase %}",
-      Data.prepare({"a" => [1, 1]}))
+      {"a" => [1, 1]})
 
     assert_template_result("else",
       "{% case a.size %}{% when 1 %}1{% when 2 %}2{% else %}else{% endcase %}",
-      Data.prepare({"a" => [1, 1, 1]}))
+      {"a" => [1, 1, 1]})
 
     assert_template_result("else",
       "{% case a.size %}{% when 1 %}1{% when 2 %}2{% else %}else{% endcase %}",
-      Data.prepare({"a" => [1, 1, 1, 1]}))
+      {"a" => [1, 1, 1, 1]})
 
     assert_template_result("else",
       "{% case a.size %}{% when 1 %}1{% when 2 %}2{% else %}else{% endcase %}",
-      Data.prepare({"a" => [1, 1, 1, 1, 1]}))
+      {"a" => [1, 1, 1, 1, 1]})
   end
 
   def test_case_on_length_with_else
@@ -179,41 +179,41 @@ class StandardTagTest < Minitest::Test
     # Example from the shopify forums
     code = %q({% case collection.handle %}{% when 'menswear-jackets' %}{% assign ptitle = 'menswear' %}{% when 'menswear-t-shirts' %}{% assign ptitle = 'menswear' %}{% else %}{% assign ptitle = 'womenswear' %}{% endcase %}{{ ptitle }})
     template = Liquid::Template.parse(code)
-    assert_equal "menswear", template.render(Data.prepare({"collection" => {"handle" => "menswear-jackets"}}))
-    assert_equal "menswear", template.render(Data.prepare({"collection" => {"handle" => "menswear-t-shirts"}}))
-    assert_equal "womenswear", template.render(Data.prepare({"collection" => {"handle" => "x"}}))
-    assert_equal "womenswear", template.render(Data.prepare({"collection" => {"handle" => "y"}}))
-    assert_equal "womenswear", template.render(Data.prepare({"collection" => {"handle" => "z"}}))
+    assert_equal "menswear", template.render({"collection" => {"handle" => "menswear-jackets"}})
+    assert_equal "menswear", template.render({"collection" => {"handle" => "menswear-t-shirts"}})
+    assert_equal "womenswear", template.render({"collection" => {"handle" => "x"}})
+    assert_equal "womenswear", template.render({"collection" => {"handle" => "y"}})
+    assert_equal "womenswear", template.render({"collection" => {"handle" => "z"}})
   end
 
   def test_case_when_or
     code = "{% case condition %}{% when 1 or 2 or 3 %} its 1 or 2 or 3 {% when 4 %} its 4 {% endcase %}"
-    assert_template_result(" its 1 or 2 or 3 ", code, Data.prepare({"condition" => 1}))
-    assert_template_result(" its 1 or 2 or 3 ", code, Data.prepare({"condition" => 2}))
-    assert_template_result(" its 1 or 2 or 3 ", code, Data.prepare({"condition" => 3}))
-    assert_template_result(" its 4 ", code, Data.prepare({"condition" => 4}))
-    assert_template_result("", code, Data.prepare({"condition" => 5}))
+    assert_template_result(" its 1 or 2 or 3 ", code, {"condition" => 1})
+    assert_template_result(" its 1 or 2 or 3 ", code, {"condition" => 2})
+    assert_template_result(" its 1 or 2 or 3 ", code, {"condition" => 3})
+    assert_template_result(" its 4 ", code, {"condition" => 4})
+    assert_template_result("", code, {"condition" => 5})
 
     code = "{% case condition %}{% when 1 or \"string\" or null %} its 1 or 2 or 3 {% when 4 %} its 4 {% endcase %}"
-    assert_template_result(" its 1 or 2 or 3 ", code, Data.prepare({"condition" => 1}))
-    assert_template_result(" its 1 or 2 or 3 ", code, Data.prepare({"condition" => "string"}))
-    assert_template_result(" its 1 or 2 or 3 ", code, Data.prepare({"condition" => nil}))
-    assert_template_result("", code, Data.prepare({"condition" => "something else"}))
+    assert_template_result(" its 1 or 2 or 3 ", code, {"condition" => 1})
+    assert_template_result(" its 1 or 2 or 3 ", code, {"condition" => "string"})
+    assert_template_result(" its 1 or 2 or 3 ", code, {"condition" => nil})
+    assert_template_result("", code, {"condition" => "something else"})
   end
 
   def test_case_when_comma
     code = "{% case condition %}{% when 1, 2, 3 %} its 1 or 2 or 3 {% when 4 %} its 4 {% endcase %}"
-    assert_template_result(" its 1 or 2 or 3 ", code, Data.prepare({"condition" => 1}))
-    assert_template_result(" its 1 or 2 or 3 ", code, Data.prepare({"condition" => 2}))
-    assert_template_result(" its 1 or 2 or 3 ", code, Data.prepare({"condition" => 3}))
-    assert_template_result(" its 4 ", code, Data.prepare({"condition" => 4}))
-    assert_template_result("", code, Data.prepare({"condition" => 5}))
+    assert_template_result(" its 1 or 2 or 3 ", code, {"condition" => 1})
+    assert_template_result(" its 1 or 2 or 3 ", code, {"condition" => 2})
+    assert_template_result(" its 1 or 2 or 3 ", code, {"condition" => 3})
+    assert_template_result(" its 4 ", code, {"condition" => 4})
+    assert_template_result("", code, {"condition" => 5})
 
     code = "{% case condition %}{% when 1, \"string\", null %} its 1 or 2 or 3 {% when 4 %} its 4 {% endcase %}"
-    assert_template_result(" its 1 or 2 or 3 ", code, Data.prepare({"condition" => 1}))
-    assert_template_result(" its 1 or 2 or 3 ", code, Data.prepare({"condition" => "string"}))
-    assert_template_result(" its 1 or 2 or 3 ", code, Data.prepare({"condition" => nil}))
-    assert_template_result("", code, Data.prepare({"condition" => "something else"}))
+    assert_template_result(" its 1 or 2 or 3 ", code, {"condition" => 1})
+    assert_template_result(" its 1 or 2 or 3 ", code, {"condition" => "string"})
+    assert_template_result(" its 1 or 2 or 3 ", code, {"condition" => nil})
+    assert_template_result("", code, {"condition" => "something else"})
   end
 
   def test_assign
@@ -231,11 +231,11 @@ class StandardTagTest < Minitest::Test
 
   def test_case_detects_bad_syntax
     assert_raises(SyntaxError) do
-      assert_template_result("", "{% case false %}{% when %}true{% endcase %}", Data.prepare({} of String => Type))
+      assert_template_result("", "{% case false %}{% when %}true{% endcase %}", {} of String => Type)
     end
 
     assert_raises(SyntaxError) do
-      assert_template_result("", "{% case false %}{% huh %}true{% endcase %}", Data.prepare({} of String => Type))
+      assert_template_result("", "{% case false %}{% huh %}true{% endcase %}", {} of String => Type)
     end
   end
 
@@ -261,18 +261,18 @@ class StandardTagTest < Minitest::Test
   end
 
   def test_multiple_named_cycles_with_names_from_context
-    assigns = Data.prepare({"var1" => 1, "var2" => 2})
+    assigns = {"var1" => 1, "var2" => 2}
     assert_template_result("one one two two one one",
       %[{%cycle var1: "one", "two" %} {%cycle var2: "one", "two" %} {%cycle var1: "one", "two" %} {%cycle var2: "one", "two" %} {%cycle var1: "one", "two" %} {%cycle var2: "one", "two" %}], assigns)
   end
 
   def test_size_of_array
-    assigns = Data.prepare({"array" => [1, 2, 3, 4]})
+    assigns = {"array" => [1, 2, 3, 4]}
     assert_template_result("array has 4 elements", "array has {{ array.size }} elements", assigns)
   end
 
   # def test_size_of_hash
-  #   assigns = Data.prepare({"hash" => {"a" => 1, "b" => 2, "c" => 3, "d" => 4}})
+  #   assigns = {"hash" => {"a" => 1, "b" => 2, "c" => 3, "d" => 4}}
   #   assert_template_result("hash has 4 elements", "hash has {{ hash.size }} elements", assigns)
   # end
 
@@ -284,10 +284,10 @@ class StandardTagTest < Minitest::Test
   end
 
   def test_ifchanged
-    assigns = Data.prepare({"array" => [1, 1, 2, 2, 3, 3]})
+    assigns = {"array" => [1, 1, 2, 2, 3, 3]}
     assert_template_result("123", "{%for item in array%}{%ifchanged%}{{item}}{% endifchanged %}{%endfor%}", assigns)
 
-    assigns = Data.prepare({"array" => [1, 1, 1, 1]})
+    assigns = {"array" => [1, 1, 1, 1]}
     assert_template_result("1", "{%for item in array%}{%ifchanged%}{{item}}{% endifchanged %}{%endfor%}", assigns)
   end
 end # StandardTagTest

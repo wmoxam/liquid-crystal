@@ -37,14 +37,14 @@ class TemplateTest < Minitest::Test
 
   def test_custom_assigns_do_not_persist_on_same_template
     t = Template.new
-    assert_equal "from custom assigns", t.parse("{{ foo }}").render(Data.prepare({"foo" => "from custom assigns"}))
+    assert_equal "from custom assigns", t.parse("{{ foo }}").render({"foo" => "from custom assigns"})
     assert_equal "", t.parse("{{ foo }}").render
   end
 
   def test_custom_assigns_squash_instance_assigns
     t = Template.new
     assert_equal "from instance assigns", t.parse("{% assign foo = 'from instance assigns' %}{{ foo }}").render
-    assert_equal "from custom assigns", t.parse("{{ foo }}").render(Data.prepare({"foo" => "from custom assigns"}))
+    assert_equal "from custom assigns", t.parse("{{ foo }}").render({"foo" => "from custom assigns"})
   end
 
   def test_persistent_assigns_squash_instance_assigns

@@ -105,7 +105,7 @@ module Liquid
 
     # Merge a hash of variables in the current local scope
     def merge(new_scopes)
-      merged = @scopes[0].merge(new_scopes).as Hash(String, Type)
+      merged = @scopes[0].merge(Data.prepare(new_scopes)).as Hash(String, Type)
       @scopes[0] = merged
     end
 

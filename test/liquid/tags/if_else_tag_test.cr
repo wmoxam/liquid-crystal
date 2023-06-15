@@ -17,22 +17,22 @@ class IfElseTagTest < Minitest::Test
   end
 
   def test_if_boolean
-    assert_template_result(" YES ", "{% if var %} YES {% endif %}", Data.prepare({"var" => true}))
+    assert_template_result(" YES ", "{% if var %} YES {% endif %}", {"var" => true})
   end
 
   def test_if_or
-    assert_template_result(" YES ", "{% if a or b %} YES {% endif %}", Data.prepare({"a" => true, "b" => true}))
+    assert_template_result(" YES ", "{% if a or b %} YES {% endif %}", {"a" => true, "b" => true})
 
-    assert_template_result(" YES ", "{% if a or b %} YES {% endif %}", Data.prepare({"a" => true, "b" => false}))
-    assert_template_result(" YES ", "{% if a or b %} YES {% endif %}", Data.prepare({"a" => false, "b" => true}))
-    assert_template_result("", "{% if a or b %} YES {% endif %}", Data.prepare({"a" => false, "b" => false}))
+    assert_template_result(" YES ", "{% if a or b %} YES {% endif %}", {"a" => true, "b" => false})
+    assert_template_result(" YES ", "{% if a or b %} YES {% endif %}", {"a" => false, "b" => true})
+    assert_template_result("", "{% if a or b %} YES {% endif %}", {"a" => false, "b" => false})
 
-    assert_template_result(" YES ", "{% if a or b or c %} YES {% endif %}", Data.prepare({"a" => false, "b" => false, "c" => true}))
-    assert_template_result("", "{% if a or b or c %} YES {% endif %}", Data.prepare({"a" => false, "b" => false, "c" => false}))
+    assert_template_result(" YES ", "{% if a or b or c %} YES {% endif %}", {"a" => false, "b" => false, "c" => true})
+    assert_template_result("", "{% if a or b or c %} YES {% endif %}", {"a" => false, "b" => false, "c" => false})
   end
 
   def test_if_or_with_operators
-    data = Data.prepare({"a" => true, "b" => true})
+    data = {"a" => true, "b" => true}
     assert_template_result(" YES ", "{% if a == true or b == true %} YES {% endif %}", data)
     assert_template_result(" YES ", "{% if a == true or b == false %} YES {% endif %}", data)
     assert_template_result("", "{% if a == false or b == false %} YES {% endif %}", data)
@@ -41,13 +41,13 @@ class IfElseTagTest < Minitest::Test
   def test_comparison_of_strings_containing_and_or_or
     #    assert_nothing_raised do
     awful_markup = "a == 'and' and b == 'or' and c == 'foo and bar' and d == 'bar or baz' and e == 'foo' and foo and bar"
-    assigns = Data.prepare({"a" => "and", "b" => "or", "c" => "foo and bar", "d" => "bar or baz", "e" => "foo", "foo" => true, "bar" => true})
+    assigns = {"a" => "and", "b" => "or", "c" => "foo and bar", "d" => "bar or baz", "e" => "foo", "foo" => true, "bar" => true}
     assert_template_result(" YES ", "{% if #{awful_markup} %} YES {% endif %}", assigns)
     #    end
   end
 
   def test_comparison_of_expressions_starting_with_and_or_or
-    assigns = Data.prepare({"order" => {"items_count" => 0}, "android" => {"name" => "Roy"}})
+    assigns = {"order" => {"items_count" => 0}, "android" => {"name" => "Roy"}}
     # assert_nothing_raised do
     assert_template_result("YES",
       "{% if android.name == 'Roy' %}YES{% endif %}",
@@ -67,40 +67,40 @@ class IfElseTagTest < Minitest::Test
   end
 
   def test_hash_miss_generates_false
-    assert_template_result("", "{% if foo.bar %} NO {% endif %}", Data.prepare({"foo" => {} of String => Type}))
+    assert_template_result("", "{% if foo.bar %} NO {% endif %}", {"foo" => {} of String => Type})
   end
 
   def test_if_from_variable
-    assert_template_result("", "{% if var %} NO {% endif %}", Data.prepare({"var" => false}))
-    assert_template_result("", "{% if var %} NO {% endif %}", Data.prepare({"var" => nil}))
-    assert_template_result("", "{% if foo.bar %} NO {% endif %}", Data.prepare({"foo" => {"bar" => false}}))
-    assert_template_result("", "{% if foo.bar %} NO {% endif %}", Data.prepare({"foo" => {} of String => Type}))
-    assert_template_result("", "{% if foo.bar %} NO {% endif %}", Data.prepare({"foo" => nil}))
-    assert_template_result("", "{% if foo.bar %} NO {% endif %}", Data.prepare({"foo" => true}))
+    assert_template_result("", "{% if var %} NO {% endif %}", {"var" => false})
+    assert_template_result("", "{% if var %} NO {% endif %}", {"var" => nil})
+    assert_template_result("", "{% if foo.bar %} NO {% endif %}", {"foo" => {"bar" => false}})
+    assert_template_result("", "{% if foo.bar %} NO {% endif %}", {"foo" => {} of String => Type})
+    assert_template_result("", "{% if foo.bar %} NO {% endif %}", {"foo" => nil})
+    assert_template_result("", "{% if foo.bar %} NO {% endif %}", {"foo" => true})
 
-    assert_template_result(" YES ", "{% if var %} YES {% endif %}", Data.prepare({"var" => "text"}))
-    assert_template_result(" YES ", "{% if var %} YES {% endif %}", Data.prepare({"var" => true}))
-    assert_template_result(" YES ", "{% if var %} YES {% endif %}", Data.prepare({"var" => 1}))
-    assert_template_result(" YES ", "{% if var %} YES {% endif %}", Data.prepare({"var" => {} of String => Type}))
-    assert_template_result(" YES ", "{% if var %} YES {% endif %}", Data.prepare({"var" => [] of Type}))
+    assert_template_result(" YES ", "{% if var %} YES {% endif %}", {"var" => "text"})
+    assert_template_result(" YES ", "{% if var %} YES {% endif %}", {"var" => true})
+    assert_template_result(" YES ", "{% if var %} YES {% endif %}", {"var" => 1})
+    assert_template_result(" YES ", "{% if var %} YES {% endif %}", {"var" => {} of String => Type})
+    assert_template_result(" YES ", "{% if var %} YES {% endif %}", {"var" => [] of Type})
     assert_template_result(" YES ", "{% if 'foo' %} YES {% endif %}")
-    assert_template_result(" YES ", "{% if foo.bar %} YES {% endif %}", Data.prepare({"foo" => {"bar" => true}}))
-    assert_template_result(" YES ", "{% if foo.bar %} YES {% endif %}", Data.prepare({"foo" => {"bar" => "text"}}))
-    assert_template_result(" YES ", "{% if foo.bar %} YES {% endif %}", Data.prepare({"foo" => {"bar" => 1}}))
-    assert_template_result(" YES ", "{% if foo.bar %} YES {% endif %}", Data.prepare({"foo" => {"bar" => {} of String => Type}}))
-    assert_template_result(" YES ", "{% if foo.bar %} YES {% endif %}", Data.prepare({"foo" => {"bar" => [] of Type}}))
+    assert_template_result(" YES ", "{% if foo.bar %} YES {% endif %}", {"foo" => {"bar" => true}})
+    assert_template_result(" YES ", "{% if foo.bar %} YES {% endif %}", {"foo" => {"bar" => "text"}})
+    assert_template_result(" YES ", "{% if foo.bar %} YES {% endif %}", {"foo" => {"bar" => 1}})
+    assert_template_result(" YES ", "{% if foo.bar %} YES {% endif %}", {"foo" => {"bar" => {} of String => Type}})
+    assert_template_result(" YES ", "{% if foo.bar %} YES {% endif %}", {"foo" => {"bar" => [] of Type}})
 
-    assert_template_result(" YES ", "{% if var %} NO {% else %} YES {% endif %}", Data.prepare({"var" => false}))
-    assert_template_result(" YES ", "{% if var %} NO {% else %} YES {% endif %}", Data.prepare({"var" => nil}))
-    assert_template_result(" YES ", "{% if var %} YES {% else %} NO {% endif %}", Data.prepare({"var" => true}))
-    assert_template_result(" YES ", "{% if 'foo' %} YES {% else %} NO {% endif %}", Data.prepare({"var" => "text"}))
+    assert_template_result(" YES ", "{% if var %} NO {% else %} YES {% endif %}", {"var" => false})
+    assert_template_result(" YES ", "{% if var %} NO {% else %} YES {% endif %}", {"var" => nil})
+    assert_template_result(" YES ", "{% if var %} YES {% else %} NO {% endif %}", {"var" => true})
+    assert_template_result(" YES ", "{% if 'foo' %} YES {% else %} NO {% endif %}", {"var" => "text"})
 
-    assert_template_result(" YES ", "{% if foo.bar %} NO {% else %} YES {% endif %}", Data.prepare({"foo" => {"bar" => false}}))
-    assert_template_result(" YES ", "{% if foo.bar %} YES {% else %} NO {% endif %}", Data.prepare({"foo" => {"bar" => true}}))
-    assert_template_result(" YES ", "{% if foo.bar %} YES {% else %} NO {% endif %}", Data.prepare({"foo" => {"bar" => "text"}}))
-    assert_template_result(" YES ", "{% if foo.bar %} NO {% else %} YES {% endif %}", Data.prepare({"foo" => {"notbar" => true}}))
-    assert_template_result(" YES ", "{% if foo.bar %} NO {% else %} YES {% endif %}", Data.prepare({"foo" => {} of String => Type}))
-    assert_template_result(" YES ", "{% if foo.bar %} NO {% else %} YES {% endif %}", Data.prepare({"notfoo" => {"bar" => true}}))
+    assert_template_result(" YES ", "{% if foo.bar %} NO {% else %} YES {% endif %}", {"foo" => {"bar" => false}})
+    assert_template_result(" YES ", "{% if foo.bar %} YES {% else %} NO {% endif %}", {"foo" => {"bar" => true}})
+    assert_template_result(" YES ", "{% if foo.bar %} YES {% else %} NO {% endif %}", {"foo" => {"bar" => "text"}})
+    assert_template_result(" YES ", "{% if foo.bar %} NO {% else %} YES {% endif %}", {"foo" => {"notbar" => true}})
+    assert_template_result(" YES ", "{% if foo.bar %} NO {% else %} YES {% endif %}", {"foo" => {} of String => Type})
+    assert_template_result(" YES ", "{% if foo.bar %} NO {% else %} YES {% endif %}", {"notfoo" => {"bar" => true}})
   end
 
   def test_nested_if

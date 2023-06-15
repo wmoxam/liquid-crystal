@@ -15,7 +15,7 @@ markup = "{% if user %}
 
 template = Liquid::Template.parse template
 
-result = template.render(Liquid::Data.prepare({"user" => {"name" => "Matz"}}))
+result = template.render({"user" => {"name" => "Matz"}})
 
 # <p>Hello Matz</p>
 ```

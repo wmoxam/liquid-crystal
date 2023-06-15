@@ -6,16 +6,16 @@ class ForTagTest < Minitest::Test
   def test_for
     assert_template_result(" yo  yo  yo  yo ",
       "{%for item in array%} yo {%endfor%}",
-      Data.prepare({"array" => [1, 2, 3, 4]}))
+      {"array" => [1, 2, 3, 4]})
     assert_template_result("yoyo",
       "{%for item in array%}yo{%endfor%}",
-      Data.prepare({"array" => [1, 2]}))
+      {"array" => [1, 2]})
     assert_template_result(" yo ",
       "{%for item in array%} yo {%endfor%}",
-      Data.prepare({"array" => [1]}))
+      {"array" => [1]})
     assert_template_result("",
       "{%for item in array%}{%endfor%}",
-      Data.prepare({"array" => [1, 2]}))
+      {"array" => [1, 2]})
     expected = "
 
   yo
@@ -30,11 +30,11 @@ class ForTagTest < Minitest::Test
   yo
 {%endfor%}
 "
-    assert_template_result(expected, template, Data.prepare({"array" => [1, 2, 3]}))
+    assert_template_result(expected, template, {"array" => [1, 2, 3]})
   end
 
   def test_for_reversed
-    assigns = Data.prepare({"array" => [1, 2, 3]})
+    assigns = {"array" => [1, 2, 3]}
     assert_template_result("321",
       "{%for item in array reversed %}{{item}}{%endfor%}",
       assigns)
@@ -48,26 +48,26 @@ class ForTagTest < Minitest::Test
   def test_for_with_variable
     assert_template_result(" 1  2  3 ",
       "{%for item in array%} {{item}} {%endfor%}",
-      Data.prepare({"array" => [1, 2, 3]}))
+      {"array" => [1, 2, 3]})
     assert_template_result("123",
       "{%for item in array%}{{item}}{%endfor%}",
-      Data.prepare({"array" => [1, 2, 3]}))
+      {"array" => [1, 2, 3]})
     assert_template_result("123",
       "{% for item in array %}{{item}}{% endfor %}",
-      Data.prepare({"array" => [1, 2, 3]}))
+      {"array" => [1, 2, 3]})
     assert_template_result("abcd",
       "{%for item in array%}{{item}}{%endfor%}",
-      Data.prepare({"array" => ["a", "b", "c", "d"]}))
+      {"array" => ["a", "b", "c", "d"]})
     assert_template_result("a b c",
       "{%for item in array%}{{item}}{%endfor%}",
-      Data.prepare({"array" => ["a", " ", "b", " ", "c"]}))
+      {"array" => ["a", " ", "b", " ", "c"]})
     assert_template_result("abc",
       "{%for item in array%}{{item}}{%endfor%}",
-      Data.prepare({"array" => ["a", "", "b", "", "c"]}))
+      {"array" => ["a", "", "b", "", "c"]})
   end
 
   def test_for_helpers
-    assigns = Data.prepare({"array" => [1, 2, 3]})
+    assigns = {"array" => [1, 2, 3]}
     assert_template_result(
       " 1/3  2/3  3/3 ",
       "{%for item in array%} {{forloop.index}}/{{forloop.length}} {%endfor%}",
@@ -93,7 +93,7 @@ class ForTagTest < Minitest::Test
   end
 
   def test_for_and_if
-    assigns = Data.prepare({"array" => [1, 2, 3]})
+    assigns = {"array" => [1, 2, 3]}
     assert_template_result(
       "+--",
       "{%for item in array%}{% if forloop.first %}+{% else %}-{% endif %}{%endfor%}",
@@ -103,17 +103,17 @@ class ForTagTest < Minitest::Test
   def test_for_else
     assert_template_result("+++",
       "{%for item in array%}+{%else%}-{%endfor%}",
-      Data.prepare({"array" => [1, 2, 3]}))
+      {"array" => [1, 2, 3]})
     assert_template_result("-",
       "{%for item in array%}+{%else%}-{%endfor%}",
-      Data.prepare({"array" => [] of Liquid::Type}))
+      {"array" => [] of Liquid::Type})
     assert_template_result("-",
       "{%for item in array%}+{%else%}-{%endfor%}",
-      Data.prepare({"array" => nil}))
+      {"array" => nil})
   end
 
   def test_limiting
-    assigns = Data.prepare({"array" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]})
+    assigns = {"array" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]}
     assert_template_result("12",
       "{%for i in array limit:2 %}{{ i }}{%endfor%}",
       assigns)
@@ -131,9 +131,7 @@ class ForTagTest < Minitest::Test
   end
 
   def test_dynamic_variable_limiting
-    assigns = Data.prepare({"array" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]})
-    assigns["limit"] = 2
-    assigns["offset"] = 2
+    assigns = {"array" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 0], "limit" => 2, "offset" => 2}
 
     assert_template_result(
       "34",
@@ -142,7 +140,7 @@ class ForTagTest < Minitest::Test
   end
 
   def test_nested_for
-    assigns = Data.prepare({"array" => [[1, 2], [3, 4], [5, 6]]})
+    assigns = {"array" => [[1, 2], [3, 4], [5, 6]]}
     assert_template_result(
       "123456",
       "{%for item in array%}{%for i in item%}{{ i }}{%endfor%}{%endfor%}",
@@ -150,14 +148,14 @@ class ForTagTest < Minitest::Test
   end
 
   def test_offset_only
-    assigns = Data.prepare({"array" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]})
+    assigns = {"array" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]}
     assert_template_result("890",
       "{%for i in array offset:7 %}{{ i }}{%endfor%}",
       assigns)
   end
 
   def test_pause_resume
-    assigns = Data.prepare({"array" => {"items" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]}})
+    assigns = {"array" => {"items" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]}}
     markup = <<-MKUP
       {%for i in array.items limit: 3 %}{{i}}{%endfor%}
       next
@@ -176,7 +174,7 @@ class ForTagTest < Minitest::Test
   end
 
   def test_pause_resume_limit
-    assigns = Data.prepare({"array" => {"items" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]}})
+    assigns = {"array" => {"items" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]}}
     markup = <<-MKUP
       {%for i in array.items limit:3 %}{{i}}{%endfor%}
       next
@@ -195,7 +193,7 @@ class ForTagTest < Minitest::Test
   end
 
   def test_pause_resume_BIG_limit
-    assigns = Data.prepare({"array" => {"items" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]}})
+    assigns = {"array" => {"items" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]}}
     markup = <<-MKUP
       {%for i in array.items limit:3 %}{{i}}{%endfor%}
       next
@@ -214,7 +212,7 @@ class ForTagTest < Minitest::Test
   end
 
   def test_pause_resume_BIG_offset
-    assigns = Data.prepare({"array" => {"items" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]}})
+    assigns = {"array" => {"items" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]}}
     markup = %q({%for i in array.items limit:3 %}{{i}}{%endfor%}
       next
       {%for i in array.items offset:continue limit:3 %}{{i}}{%endfor%}
@@ -229,7 +227,7 @@ class ForTagTest < Minitest::Test
   end
 
   def test_for_with_break
-    assigns = Data.prepare({"array" => {"items" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}})
+    assigns = {"array" => {"items" => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}}
 
     markup = "{% for i in array.items %}{% break %}{% endfor %}"
     expected = ""
@@ -250,7 +248,7 @@ class ForTagTest < Minitest::Test
 
     # tests to ensure it only breaks out of the local for loop
     # and not all of them.
-    assigns = Data.prepare({"array" => [[1, 2], [3, 4], [5, 6]]})
+    assigns = {"array" => [[1, 2], [3, 4], [5, 6]]}
     markup = "{% for item in array %}" +
              "{% for i in item %}" +
              "{% if i == 1 %}" +
@@ -263,7 +261,7 @@ class ForTagTest < Minitest::Test
     assert_template_result(expected, markup, assigns)
 
     # test break does nothing when unreached
-    assigns = Data.prepare({"array" => {"items" => [1, 2, 3, 4, 5]}})
+    assigns = {"array" => {"items" => [1, 2, 3, 4, 5]}}
     markup = "{% for i in array.items %}{% if i == 9999 %}{% break %}" \
              "{% endif %}{{ i }}{% endfor %}"
     expected = "12345"
@@ -271,7 +269,7 @@ class ForTagTest < Minitest::Test
   end
 
   def test_for_with_continue
-    assigns = Data.prepare({"array" => {"items" => [1, 2, 3, 4, 5]}})
+    assigns = {"array" => {"items" => [1, 2, 3, 4, 5]}}
 
     markup = "{% for i in array.items %}{% continue %}{% endfor %}"
     expected = ""
@@ -296,7 +294,7 @@ class ForTagTest < Minitest::Test
     assert_template_result(expected, markup, assigns)
 
     # tests to ensure it only continues the local for loop and not all of them.
-    assigns = Data.prepare({"array" => [[1, 2], [3, 4], [5, 6]]})
+    assigns = {"array" => [[1, 2], [3, 4], [5, 6]]}
     markup = "{% for item in array %}" +
              "{% for i in item %}" +
              "{% if i == 1 %}" +
@@ -309,7 +307,7 @@ class ForTagTest < Minitest::Test
     assert_template_result(expected, markup, assigns)
 
     # test continue does nothing when unreached
-    assigns = Data.prepare({"array" => {"items" => [1, 2, 3, 4, 5]}})
+    assigns = {"array" => {"items" => [1, 2, 3, 4, 5]}}
     markup = "{% for i in array.items %}{% if i == 9999 %}{% continue %}" \
              "{% endif %}{{ i }}{% endfor %}"
     expected = "12345"
@@ -321,7 +319,7 @@ class ForTagTest < Minitest::Test
     # ruby 1.9.3 no longer supports .each on String though we mimic
     # the functionality for backwards compatibility
 
-    assigns = Data.prepare({"string" => "test string"})
+    assigns = {"string" => "test string"}
 
     assert_template_result("test string",
       "{%for val in string%}{{val}}{%endfor%}",
@@ -349,6 +347,6 @@ class ForTagTest < Minitest::Test
     assert_template_result(
       "",
       "{% for char in characters %}I WILL NOT BE OUTPUT{% endfor %}",
-      Data.prepare({"characters" => ""}))
+      {"characters" => ""})
   end
 end

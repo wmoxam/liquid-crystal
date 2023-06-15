@@ -52,17 +52,17 @@ class IncludeTagTest < Minitest::Test
 
   def test_include_tag_with
     assert_equal "Product: Draft 151cm ",
-      Template.parse("{% include 'product' with products[0] %}").render(Data.prepare({"products" => [{"title" => "Draft 151cm"}, {"title" => "Element 155cm"}]}))
+      Template.parse("{% include 'product' with products[0] %}").render({"products" => [{"title" => "Draft 151cm"}, {"title" => "Element 155cm"}]})
   end
 
   def test_include_tag_with_default_name
     assert_equal "Product: Draft 151cm ",
-      Template.parse("{% include 'product' %}").render(Data.prepare({"product" => {"title" => "Draft 151cm"}}))
+      Template.parse("{% include 'product' %}").render({"product" => {"title" => "Draft 151cm"}})
   end
 
   def test_include_tag_for
     assert_equal "Product: Draft 151cm Product: Element 155cm ",
-      Template.parse("{% include 'product' for products %}").render(Data.prepare({"products" => [{"title" => "Draft 151cm"}, {"title" => "Element 155cm"}]}))
+      Template.parse("{% include 'product' for products %}").render({"products" => [{"title" => "Draft 151cm"}, {"title" => "Element 155cm"}]})
   end
 
   def test_include_tag_with_local_variables
@@ -77,7 +77,7 @@ class IncludeTagTest < Minitest::Test
 
   def test_include_tag_with_multiple_local_variables_from_context
     assert_equal "Locale: test123 test321",
-      Template.parse("{% include 'locale_variables' echo1: echo1, echo2: more_echos.echo2 %}").render(Data.prepare({"echo1" => "test123", "more_echos" => {"echo2" => "test321"}}))
+      Template.parse("{% include 'locale_variables' echo1: echo1, echo2: more_echos.echo2 %}").render({"echo1" => "test123", "more_echos" => {"echo2" => "test321"}})
   end
 
   def test_nested_include_tag
@@ -90,10 +90,10 @@ class IncludeTagTest < Minitest::Test
 
   def test_nested_include_with_variable
     assert_equal "Product: Draft 151cm details ",
-      Template.parse("{% include 'nested_product_template' with product %}").render(Data.prepare({"product" => {"title" => "Draft 151cm"}}))
+      Template.parse("{% include 'nested_product_template' with product %}").render({"product" => {"title" => "Draft 151cm"}})
 
     assert_equal "Product: Draft 151cm details Product: Element 155cm details ",
-      Template.parse("{% include 'nested_product_template' for products %}").render(Data.prepare({"products" => [{"title" => "Draft 151cm"}, {"title" => "Element 155cm"}]}))
+      Template.parse("{% include 'nested_product_template' for products %}").render({"products" => [{"title" => "Draft 151cm"}, {"title" => "Element 155cm"}]})
   end
 
   def test_recursively_included_template_does_not_produce_endless_loop
@@ -105,9 +105,9 @@ class IncludeTagTest < Minitest::Test
   end
 
   def test_dynamically_choosen_template
-    assert_equal "Test123", Template.parse("{% include template %}").render(Data.prepare({"template" => "Test123"}))
-    assert_equal "Test321", Template.parse("{% include template %}").render(Data.prepare({"template" => "Test321"}))
+    assert_equal "Test123", Template.parse("{% include template %}").render({"template" => "Test123"})
+    assert_equal "Test321", Template.parse("{% include template %}").render({"template" => "Test321"})
 
-    assert_equal "Product: Draft 151cm ", Template.parse("{% include template for product %}").render(Data.prepare({"template" => "product", "product" => {"title" => "Draft 151cm"}}))
+    assert_equal "Product: Draft 151cm ", Template.parse("{% include template for product %}").render({"template" => "product", "product" => {"title" => "Draft 151cm"}})
   end
 end # IncludeTagTest

@@ -81,7 +81,7 @@ class ErrorHandlingTest < Minitest::Test
   # def test_exceptions_propagate
   #   assert_raises Exception do
   #     template = Liquid::Template.parse(" {{ errors.exception }} ")
-  #     template.render(Data.prepare({"errors" => ErrorDrop.new}))
+  #     template.render({"errors" => ErrorDrop.new})
   #   end
   # end
 end # ErrorHandlingTest

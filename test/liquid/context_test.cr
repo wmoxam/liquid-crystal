@@ -346,35 +346,35 @@ class ContextTest < Minitest::Test
   # end
 
   # def test_nested_cents
-  #   cents = Data.prepare({"cents" => {"amount" => HundredCentes.new}})
+  #   cents = {"cents" => {"amount" => HundredCentes.new}}
   #   context.merge(cents)
   #   assert_equal 100, context["cents.amount"]
   #
-  #   nested_cents = Data.prepare({"cents" => cents})
+  #   nested_cents = {"cents" => cents}
   #   context.merge(nested_cents)
   #   assert_equal 100, context["cents.cents.amount"]
   # end
   #
   # def test_cents_through_drop
-  #   cents = Data.prepare({"cents" => CentsDrop.new})
+  #   cents = {"cents" => CentsDrop.new}
   #   context.merge(cents)
   #   assert_equal 100, context["cents.amount"]
   # end
   #
   # def test_nested_cents_through_drop
-  #   vars = Data.prepare({"vars" => {"cents" => CentsDrop.new}})
+  #   vars = {"vars" => {"cents" => CentsDrop.new}}
   #   context.merge(vars)
   #   assert_equal 100, context["vars.cents.amount"]
   # end
   #
   # def test_drop_methods_with_question_marks
-  #   cents = Data.prepare({"cents" => CentsDrop.new})
+  #   cents = {"cents" => CentsDrop.new}
   #   context.merge(cents)
   #   assert context["cents.non_zero?"]
   # end
   #
   # def test_context_from_within_drop
-  #   sensitive = Data.prepare({"test" => "123", "vars" => ContextSensitiveDrop.new(context)})
+  #   sensitive = {"test" => "123", "vars" => ContextSensitiveDrop.new(context)}
   #   context.merge(sensitive)
   #
   #   assert_equal "123", context["test"]
@@ -382,28 +382,28 @@ class ContextTest < Minitest::Test
   # end
   #
   # def test_nested_context_from_within_drop
-  #   sensitive = Data.prepare({"test" => "123", "vars" => {"local" => ContextSensitiveDrop.new(context)}})
+  #   sensitive = {"test" => "123", "vars" => {"local" => ContextSensitiveDrop.new(context)}}
   #   context.merge(sensitive)
   #   assert_equal "123", context["vars.local.test"]
   # end
 
   def test_ranges
-    context.merge(Data.prepare({"test" => "5"}))
+    context.merge({"test" => "5"})
     assert_equal (1..5), context["(1..5)"]
     assert_equal (1..5), context["(1..test)"]
     assert_equal (5..5), context["(test..test)"]
   end
 
   # def test_cents_through_drop_nestedly
-  #   cents = Data.prepare({"cents" => CentsDrop.new})
+  #   cents = {"cents" => CentsDrop.new}
   #   context.merge(cents)
   #   assert_equal 100, context["cents.amount"]
   #
-  #   nested_cents = Data.prepare({"cents" => cents})
+  #   nested_cents = {"cents" => cents}
   #   context.merge(nested_cents)
   #   assert_equal 100, context["cents.cents.amount"]
   #
-  #   triple_nested_cents = Data.prepare({"cents" => nested_cents})
+  #   triple_nested_cents = {"cents" => nested_cents}
   #   context.merge(triple_nested_cents)
   #   assert_equal 100, context["cents.cents.cents.amount"]
   # end

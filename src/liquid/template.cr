@@ -124,42 +124,42 @@ module Liquid
       render context
     end
 
-    def render(environment : Hash(String, Type))
-      render Context.new([environment, assigns],
-                         instance_assigns,
-                         registers,
-                         @rethrow_errors)
+    def render(environment)
+      render Context.new([Data.prepare(environment), assigns],
+        instance_assigns,
+        registers,
+        @rethrow_errors)
     end
 
-    def render(environment : Hash(String, Type),
+    def render(environment,
                registers : Hash(Symbol, Type),
                filters : Array(Filter.class))
-      context = Context.new([environment, assigns],
-                            instance_assigns,
-                            registers,
-                            @rethrow_errors)
+      context = Context.new([Data.prepare(environment), assigns],
+        instance_assigns,
+        registers,
+        @rethrow_errors)
       self.registers.merge!(registers)
       context.add_filters(filters)
 
       render context
     end
 
-    def render(environment : Hash(String, Type),
+    def render(environment,
                registers : Hash(Symbol, Type))
-      context = Context.new([environment, assigns],
-                            instance_assigns,
-                            registers,
-                            @rethrow_errors)
+      context = Context.new([Data.prepare(environment), assigns],
+        instance_assigns,
+        registers,
+        @rethrow_errors)
       self.registers.merge!(registers)
       render context
     end
 
-    def render(environment : Hash(String, Type),
+    def render(environment,
                filters : Array(Filter.class))
-      context = Context.new([environment, assigns],
-                            instance_assigns,
-                            registers,
-                            @rethrow_errors)
+      context = Context.new([Data.prepare(environment), assigns],
+        instance_assigns,
+        registers,
+        @rethrow_errors)
       context.add_filters(filters)
 
       render context

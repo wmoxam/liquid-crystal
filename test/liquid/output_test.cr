@@ -29,13 +29,11 @@ class OutputTest < Minitest::Test
     end
   end
 
-  @assigns : Hash(String, Type)
-
   def initialize(r)
-    @assigns = Data.prepare({
+    @assigns = {
       "best_cars" => "bmw",
       "car"       => {"bmw" => "good", "gm" => "bad"},
-    })
+    }
     super
   end
 
