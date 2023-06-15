@@ -1,15 +1,15 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    benchmark-ips (2.7.2)
-    liquid (4.0.0)
+    benchmark-ips (2.12.0)
+    liquid (5.4.0)
 
 PLATFORMS
-  ruby
+  arm64-darwin-22
 
 DEPENDENCIES
   benchmark-ips
   liquid
 
 BUNDLED WITH
-   1.13.5
+   2.4.6

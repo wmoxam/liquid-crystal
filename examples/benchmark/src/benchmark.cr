@@ -69,13 +69,13 @@ data = {
 }
 
 def render_liquid(template, data)
-  Liquid::Template.parse(template).render(Liquid::Data.prepare(data))
+  Liquid::Template.parse(template).render(data)
 end
 
 liquid_template_pre = Liquid::Template.parse(liquid_template)
 
 def render_liquid_pre(tmpl, data)
-  tmpl.render(Liquid::Data.prepare(data))
+  tmpl.render(data)
 end
 
 Benchmark.ips do |x|
