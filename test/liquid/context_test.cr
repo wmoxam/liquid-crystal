@@ -88,8 +88,8 @@ class ContextTest < Minitest::Test
     context["time"] = Time.parse("2006-06-06 12:00:00", "%F", Time::Location.local)
     assert_equal Time.parse("2006-06-06 12:00:00", "%F", Time::Location.local), context["time"]
 
-    # context["date"] = Date.today
-    # assert_equal Date.today, context["date"]
+    # context["date"] = Time.local.date
+    # assert_equal Time.local.date, context["date"]
     #
     # now = DateTime.now
     # context["datetime"] = now
@@ -234,13 +234,13 @@ class ContextTest < Minitest::Test
     assert_equal "hello!", context["\"hello!\""]
   end
 
-  # def test_merge
-  #   context.merge({ "test" => "test" })
-  #   assert_equal "test", context["test"]
-  #   context.merge({ "test" => "newvalue", "foo" => "bar" })
-  #   assert_equal "newvalue", context["test"]
-  #   assert_equal "bar", context["foo"]
-  # end
+  def test_merge
+    context.merge({"test" => "test"})
+    assert_equal "test", context["test"]
+    context.merge({"test" => "newvalue", "foo" => "bar"})
+    assert_equal "newvalue", context["test"]
+    assert_equal "bar", context["foo"]
+  end
 
   def test_array_notation
     context["test"] = Data.prepare([1, 2, 3, 4, 5])
@@ -349,18 +349,18 @@ class ContextTest < Minitest::Test
   #   cents = {"cents" => {"amount" => HundredCentes.new}}
   #   context.merge(cents)
   #   assert_equal 100, context["cents.amount"]
-  #
+
   #   nested_cents = {"cents" => cents}
   #   context.merge(nested_cents)
   #   assert_equal 100, context["cents.cents.amount"]
   # end
-  #
+
   # def test_cents_through_drop
   #   cents = {"cents" => CentsDrop.new}
   #   context.merge(cents)
   #   assert_equal 100, context["cents.amount"]
   # end
-  #
+
   # def test_nested_cents_through_drop
   #   vars = {"vars" => {"cents" => CentsDrop.new}}
   #   context.merge(vars)
@@ -376,7 +376,7 @@ class ContextTest < Minitest::Test
   # def test_context_from_within_drop
   #   sensitive = {"test" => "123", "vars" => ContextSensitiveDrop.new(context)}
   #   context.merge(sensitive)
-  #
+
   #   assert_equal "123", context["test"]
   #   assert_equal "123", context["vars.test"]
   # end

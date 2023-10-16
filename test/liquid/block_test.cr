@@ -34,7 +34,7 @@ class BlockTest < Minitest::Test
     template = Liquid::Template.parse("  {{funk}} {{so}} {{brother}} ")
     assert_equal 7, template.root.try(&.nodelist).try(&.size)
     assert_equal [String, Variable, String, Variable, String, Variable, String],
-                 block_types(template.root.try(&.nodelist))
+      block_types(template.root.try(&.nodelist))
   end
 
   def test_with_block
@@ -43,13 +43,12 @@ class BlockTest < Minitest::Test
     assert_equal 3, template.root.try(&.nodelist).try(&.size)
   end
 
-  # def test_with_custom_tag
-  #   Liquid::Template.register_tag("testtag", Block)
-  #
-  #   assert_nothing_thrown do
-  #     template = Liquid::Template.parse( "{% testtag %} {% endtesttag %}")
-  #   end
-  # end
+  def test_with_custom_tag
+    Liquid::Template.register_tag("testtag", Block)
+
+    template = Liquid::Template.parse("{% testtag %} {% endtesttag %}")
+    assert_equal template.render, " "
+  end
 
   private def block_types(nodelist)
     return [] of Nil.class if nodelist.nil?
