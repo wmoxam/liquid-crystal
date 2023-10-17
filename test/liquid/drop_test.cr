@@ -65,17 +65,17 @@ class EnumerableDrop < Liquid::Drop
 end
 
 class DropsTest < Minitest::Test
-  # def test_protected
-  #   product = ProductDrop.new
-  #   assert_nil product["callmenot"]
-  # end
+  def test_protected
+    product = ProductDrop.new
+    assert_nil product["callmenot"]
+  end
 
-  # def test_drop_does_only_respond_to_whitelisted_methods
-  #   product = ProductDrop.new
-  #   assert_nil product["inspect"]
-  #   assert_nil product["to_s"]
-  #   assert_nil product["whatever"]
-  # end
+  def test_drop_does_only_respond_to_whitelisted_methods
+    product = ProductDrop.new
+    assert_nil product["inspect"]
+    assert_nil product["to_s"]
+    assert_nil product["whatever"]
+  end
 
   def test_text_drop
     product = ProductDrop.new
@@ -155,39 +155,38 @@ class DropsTest < Minitest::Test
     end
   end
 
-  #
-  #   def test_scope
-  #     assert_equal '1', Liquid::Template.parse( '{{ context.scopes }}'  ).render('context' => ContextDrop.new)
-  #     assert_equal '2', Liquid::Template.parse( '{%for i in dummy%}{{ context.scopes }}{%endfor%}'  ).render('context' => ContextDrop.new, 'dummy' => [1])
-  #     assert_equal '3', Liquid::Template.parse( '{%for i in dummy%}{%for i in dummy%}{{ context.scopes }}{%endfor%}{%endfor%}'  ).render('context' => ContextDrop.new, 'dummy' => [1])
-  #   end
-  #
+  def test_scope
+    assert_equal "1", Liquid::Template.parse("{{ context.scopes }}").render({"context" => ContextDrop.new})
+    assert_equal "2", Liquid::Template.parse("{%for i in dummy%}{{ context.scopes }}{%endfor%}").render({"context" => ContextDrop.new, "dummy" => [1]})
+    assert_equal "3", Liquid::Template.parse("{%for i in dummy%}{%for i in dummy%}{{ context.scopes }}{%endfor%}{%endfor%}").render({"context" => ContextDrop.new, "dummy" => [1]})
+  end
+
   #   def test_scope_though_proc
   #     assert_equal '1', Liquid::Template.parse( '{{ s }}'  ).render('context' => ContextDrop.new, 's' => Proc.new{|c| c['context.scopes'] })
   #     assert_equal '2', Liquid::Template.parse( '{%for i in dummy%}{{ s }}{%endfor%}'  ).render('context' => ContextDrop.new, 's' => Proc.new{|c| c['context.scopes'] }, 'dummy' => [1])
   #     assert_equal '3', Liquid::Template.parse( '{%for i in dummy%}{%for i in dummy%}{{ s }}{%endfor%}{%endfor%}'  ).render('context' => ContextDrop.new, 's' => Proc.new{|c| c['context.scopes'] }, 'dummy' => [1])
   #   end
-  #
-  #   def test_scope_with_assigns
-  #     assert_equal 'variable', Liquid::Template.parse( '{% assign a = "variable"%}{{a}}'  ).render('context' => ContextDrop.new)
-  #     assert_equal 'variable', Liquid::Template.parse( '{% assign a = "variable"%}{%for i in dummy%}{{a}}{%endfor%}'  ).render('context' => ContextDrop.new, 'dummy' => [1])
-  #     assert_equal 'test', Liquid::Template.parse( '{% assign header_gif = "test"%}{{header_gif}}'  ).render('context' => ContextDrop.new)
-  #     assert_equal 'test', Liquid::Template.parse( "{% assign header_gif = 'test'%}{{header_gif}}"  ).render('context' => ContextDrop.new)
-  #   end
-  #
-  #   def test_scope_from_tags
-  #     assert_equal '1', Liquid::Template.parse( '{% for i in context.scopes_as_array %}{{i}}{% endfor %}'  ).render('context' => ContextDrop.new, 'dummy' => [1])
-  #     assert_equal '12', Liquid::Template.parse( '{%for a in dummy%}{% for i in context.scopes_as_array %}{{i}}{% endfor %}{% endfor %}'  ).render('context' => ContextDrop.new, 'dummy' => [1])
-  #     assert_equal '123', Liquid::Template.parse( '{%for a in dummy%}{%for a in dummy%}{% for i in context.scopes_as_array %}{{i}}{% endfor %}{% endfor %}{% endfor %}'  ).render('context' => ContextDrop.new, 'dummy' => [1])
-  #   end
-  #
-  #   def test_access_context_from_drop
-  #     assert_equal '123', Liquid::Template.parse( '{%for a in dummy%}{{ context.loop_pos }}{% endfor %}'  ).render('context' => ContextDrop.new, 'dummy' => [1,2,3])
-  #   end
-  #
-  #   def test_enumerable_drop
-  #     assert_equal '123', Liquid::Template.parse( '{% for c in collection %}{{c}}{% endfor %}').render('collection' => EnumerableDrop.new)
-  #   end
+
+  def test_scope_with_assigns
+    assert_equal "variable", Liquid::Template.parse("{% assign a = \"variable\"%}{{a}}").render({"context" => ContextDrop.new})
+    assert_equal "variable", Liquid::Template.parse("{% assign a = 'variable'%}{%for i in dummy%}{{a}}{%endfor%}").render({"context" => ContextDrop.new, "dummy" => [1]})
+    assert_equal "test", Liquid::Template.parse("{% assign header_gif = \"test\"%}{{header_gif}}").render({"context" => ContextDrop.new})
+    assert_equal "test", Liquid::Template.parse("{% assign header_gif = 'test'%}{{header_gif}}").render({"context" => ContextDrop.new})
+  end
+
+  def test_scope_from_tags
+    assert_equal "1", Liquid::Template.parse("{% for i in context.scopes_as_array %}{{i}}{% endfor %}").render({"context" => ContextDrop.new, "dummy" => [1]})
+    assert_equal "12", Liquid::Template.parse("{%for a in dummy%}{% for i in context.scopes_as_array %}{{i}}{% endfor %}{% endfor %}").render({"context" => ContextDrop.new, "dummy" => [1]})
+    assert_equal "123", Liquid::Template.parse("{%for a in dummy%}{%for a in dummy%}{% for i in context.scopes_as_array %}{{i}}{% endfor %}{% endfor %}{% endfor %}").render({"context" => ContextDrop.new, "dummy" => [1]})
+  end
+
+  def test_access_context_from_drop
+    assert_equal "123", Liquid::Template.parse("{%for a in dummy%}{{ context.loop_pos }}{% endfor %}").render({"context" => ContextDrop.new, "dummy" => [1, 2, 3]})
+  end
+
+  def test_enumerable_drop
+    assert_equal "123", Liquid::Template.parse("{% for c in collection %}{{c}}{% endfor %}").render({"collection" => EnumerableDrop.new})
+  end
 
   def test_enumerable_drop_size
     tpl = Liquid::Template.parse("{{collection.size}}")
