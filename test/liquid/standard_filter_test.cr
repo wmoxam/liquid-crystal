@@ -1,26 +1,26 @@
 require "../test_helper"
 
-# class TestThing < Liquid::Drop
-#   def initialize
-#     super
-#     @foo = 0
-#   end
-#
-#   def to_s
-#     "woot: #{@foo}"
-#   end
-#
-#   def to_liquid
-#     @foo += 1
-#     self
-#   end
-# end
+class TestThing < Liquid::Drop
+  def initialize
+    super
+    @foo = 0
+  end
 
-#class TestDrop < Liquid::Drop
-#  def test
-#    "testfoo"
-#  end
-#end
+  def to_s
+    "woot: #{@foo}"
+  end
+
+  def to_liquid
+    @foo += 1
+    self
+  end
+end
+
+class TestDrop < Liquid::Drop
+  def test
+    "testfoo"
+  end
+end
 
 class StandardFiltersTest < Minitest::Test
   include Liquid
@@ -114,16 +114,16 @@ class StandardFiltersTest < Minitest::Test
   #   assert_equal "", Liquid::Template.parse("{{ 'foo' | map: 'inspect' }}").render
   # end
 
-  # def test_map_calls_to_liquid
-  #   t = TestThing.new
-  #   assert_equal "woot: 1", Liquid::Template.parse("{{ foo }}").render({"foo" => t.as Type})
-  # end
+  def test_map_calls_to_liquid
+    t = TestThing.new
+    assert_equal "woot: 1", Liquid::Template.parse("{{ foo }}").render({"foo" => t})
+  end
 
   # def test_map_over_proc
   #   drop = TestDrop.new
-  #   p = Proc.new{ drop }
+  #   p = Proc.new { drop }
   #   templ = "{{ procs | map: 'test' }}"
-  #   assert_equal "testfoo", Liquid::Template.parse(templ).render("procs" => [p])
+  #   assert_equal "testfoo", Liquid::Template.parse(templ).render({"procs" => [p]})
   # end
 
   def test_date
@@ -216,14 +216,14 @@ class StandardFiltersTest < Minitest::Test
 
   def test_append
     assigns = {"a" => "bc".as Type, "b" => "d".as Type}
-    assert_template_result("bcd","{{ a | append: 'd'}}",assigns)
+    assert_template_result("bcd", "{{ a | append: 'd'}}", assigns)
     assert_template_result("bcd", "{{ a | append: b}}", assigns)
   end
 
   def test_prepend
     assigns = {"a" => "bc".as Type, "b" => "a".as Type}
-    assert_template_result("abc","{{ a | prepend: 'a'}}",assigns)
-    assert_template_result("abc","{{ a | prepend: b}}",assigns)
+    assert_template_result("abc", "{{ a | prepend: 'a'}}", assigns)
+    assert_template_result("abc", "{{ a | prepend: b}}", assigns)
   end
 
   def test_cannot_access_private_methods

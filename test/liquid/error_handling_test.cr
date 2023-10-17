@@ -28,13 +28,13 @@ class ErrorHandlingTest < Minitest::Test
     end
   end
 
-  # def test_standard_error
-  #   template = Liquid::Template.parse(" {{ errors.standard_error }} ")
-  #   assert_equal " Liquid error: standard error ", template.render({"errors" => ErrorDrop.new})
+  def test_standard_error
+    template = Liquid::Template.parse(" {{ errors.standard_error }} ")
+    assert_equal " Liquid error: standard error ", template.render({"errors" => ErrorDrop.new})
 
-  #   assert_equal 1, template.errors.size
-  #   assert_equal StandardError, template.errors.first.class
-  # end
+    assert_equal 1, template.errors.size
+    assert_equal StandardError, template.errors.first.class
+  end
 
   #
   # def test_syntax
