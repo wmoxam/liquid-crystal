@@ -143,18 +143,18 @@ class DropsTest < Minitest::Test
     assert_equal " carrot ", output
   end
 
-  #
-  #   def test_nested_context_drop
-  #     output = Liquid::Template.parse( ' {{ product.context.foo }} '  ).render('product' => ProductDrop.new, 'foo' => "monkey")
-  #     assert_equal ' monkey ', output
-  #   end
-  #
-  #   def test_object_methods_not_allowed
-  #     [:dup, :clone, :singleton_class, :eval, :class_eval, :inspect].each do |method|
-  #       output = Liquid::Template.parse(" {{ product.#{method} }} ").render('product' => ProductDrop.new)
-  #       assert_equal '  ', output
-  #     end
-  #   end
+  def test_nested_context_drop
+    output = Liquid::Template.parse(" {{ product.context.foo }} ").render({"product" => ProductDrop.new, "foo" => "monkey"})
+    assert_equal " monkey ", output
+  end
+
+  def test_object_methods_not_allowed
+    [:dup, :clone, :singleton_class, :eval, :class_eval, :inspect].each do |method|
+      output = Liquid::Template.parse(" {{ product.#{method} }} ").render({"product" => ProductDrop.new})
+      assert_equal "  ", output
+    end
+  end
+
   #
   #   def test_scope
   #     assert_equal '1', Liquid::Template.parse( '{{ context.scopes }}'  ).render('context' => ContextDrop.new)
