@@ -24,8 +24,7 @@ result = template.render({"user" => {"name" => "Matz"}})
 
 It's still a WIP, however much of the code and specs have been converted. Work
 needs to be done for added stability, adding missing filters, implementing
-missing tests and improving the data passing interface which is a bit clunky
-(ie: Liquid::Data)
+missing tests
 
 ## Todo
 
@@ -38,5 +37,3 @@ missing tests and improving the data passing interface which is a bit clunky
 
 * Template tokenize tests
 * All tests that expect an error to *not* be raised
-* Half of the Drop & Context tests
-* Half of the if/else tag tests
