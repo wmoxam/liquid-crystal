@@ -28,7 +28,7 @@ module Liquid
             end
           else
             raise SyntaxError.new "Tag '#{token}' was not properly terminated" \
-             " with regexp: #{TagEnd.inspect} "
+                                  " with regexp: #{TagEnd.inspect} "
           end
         when IsVariable
           @nodelist << create_variable(token)
@@ -54,7 +54,7 @@ module Liquid
         raise SyntaxError.new "#{block_name} tag does not expect else tag"
       when "end"
         raise SyntaxError.new "'end' is not a valid delimiter for " \
-          "#{block_name} tags. use #{block_delimiter}"
+                              "#{block_name} tags. use #{block_delimiter}"
       else
         raise SyntaxError.new "Unknown tag '#{tag}'"
       end
@@ -73,7 +73,7 @@ module Liquid
         return Variable.new(content[1])
       end
       raise SyntaxError.new("Variable '#{token}' was not properly terminated" \
-                           " with regexp: #{VariableEnd.inspect} ")
+                            " with regexp: #{VariableEnd.inspect} ")
     end
 
     def render(context)
@@ -85,7 +85,7 @@ module Liquid
     end
 
     protected def render_all(list, context)
-      String.build do |output|
+      String.build(32*1024) do |output|
         list.not_nil!.each do |token|
           # Break out if we have any unhanded interrupts.
           break if context.has_interrupt?

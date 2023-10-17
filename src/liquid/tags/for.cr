@@ -81,10 +81,7 @@ module Liquid
 
       if context.registers.has_key?(:for)
         if (hash = context.registers[:for].raw).is_a?(Hash)
-          hash.each_key do |key|
-            value = hash[key]
-            for_hash[key] = value
-          end
+          for_hash = hash
         end
       end
 
@@ -116,43 +113,39 @@ module Liquid
       return render_else(context) if segment.empty?
 
       segment = segment.reverse if !@reversed.nil?
-      result = String::Builder.new
-      length = segment.size
+      String.build do |result|
+        length = segment.size
 
-      # Store our progress through the collection for the continue flag
-      for_hash[@name] = (from + segment.size).as(Type)
+        # Store our progress through the collection for the continue flag
+        for_hash[@name] = (from + segment.size).as(Type)
 
-      context.registers[:for] = {} of String => Type
-      for_hash.each_key do |key|
-        value = for_hash[key]
-        context.registers[:for][key] = value
-      end
+        context.registers[:for] = for_hash
 
-      context.stack do
-        segment.each_with_index do |item, index|
-          context[@variable_name] = item
-          context["forloop"] = Data.prepare({
-            "name"    => @name,
-            "length"  => length,
-            "index"   => index + 1,
-            "index0"  => index,
-            "rindex"  => length - index,
-            "rindex0" => length - index - 1,
-            "first"   => (index == 0),
-            "last"    => (index == length - 1),
-          })
+        context.stack do
+          segment.each_with_index do |item, index|
+            context[@variable_name] = item
+            context["forloop"] = Data.prepare({
+              "name"    => @name,
+              "length"  => length,
+              "index"   => index + 1,
+              "index0"  => index,
+              "rindex"  => length - index,
+              "rindex0" => length - index - 1,
+              "first"   => (index == 0),
+              "last"    => (index == length - 1),
+            })
 
-          result << render_all(@for_block, context)
+            result << render_all(@for_block, context)
 
-          # Handle any interrupts if they exist.
-          if context.has_interrupt?
-            interrupt = context.pop_interrupt
-            break if interrupt.is_a? BreakInterrupt
-            next if interrupt.is_a? ContinueInterrupt
+            # Handle any interrupts if they exist.
+            if context.has_interrupt?
+              interrupt = context.pop_interrupt
+              break if interrupt.is_a? BreakInterrupt
+              next if interrupt.is_a? ContinueInterrupt
+            end
           end
         end
       end
-      result.to_s
     end
 
     private def render_else(context)
