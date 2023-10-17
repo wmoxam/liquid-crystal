@@ -225,6 +225,7 @@ module Liquid
       end
 
       variable = lookup.to_liquid
+      variable.context = self if variable.is_a?(Drop)
       # variable.context = self if variable.respond_to?(:context=)
 
       return variable
