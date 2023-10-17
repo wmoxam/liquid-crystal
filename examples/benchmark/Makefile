@@ -4,7 +4,7 @@ all: compile test
 
 test:
 	bundle install --path .bundle
-	bundle exec ruby src/benchmark.rb
+	bundle exec ruby --yjit src/benchmark.rb
 	./benchmark
 
 compile:

@@ -12,6 +12,6 @@ dependencies:
   liquid-crystal:
     path: ../../.
 
-crystal: 0.20.5
+crystal: 1.10.0
 
 license: MIT
