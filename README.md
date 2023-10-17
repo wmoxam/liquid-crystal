@@ -37,3 +37,7 @@ missing tests
 
 * Template tokenize tests
 * All tests that expect an error to *not* be raised
+
+### Support for procs in templates
+
+* I'm not sure if I actually want to support this
