@@ -338,54 +338,54 @@ class ContextTest < Minitest::Test
     assert_equal "element151cm", context["product.variants.last.title"]
   end
 
-  # def test_cents
-  #   cents = {} of String => Type
-  #   cents["cents"] = HundredCentes.new
-  #   context.merge(cents)
-  #   assert_equal 100, context["cents"]
-  # end
+  def test_cents
+    cents = {} of String => Type
+    cents["cents"] = HundredCentes.new
+    context.merge(cents)
+    assert_equal 100, context["cents"]
+  end
 
-  # def test_nested_cents
-  #   cents = {"cents" => {"amount" => HundredCentes.new}}
-  #   context.merge(cents)
-  #   assert_equal 100, context["cents.amount"]
+  def test_nested_cents
+    cents = {"cents" => {"amount" => HundredCentes.new}}
+    context.merge(cents)
+    assert_equal 100, context["cents.amount"]
 
-  #   nested_cents = {"cents" => cents}
-  #   context.merge(nested_cents)
-  #   assert_equal 100, context["cents.cents.amount"]
-  # end
+    nested_cents = {"cents" => cents}
+    context.merge(nested_cents)
+    assert_equal 100, context["cents.cents.amount"]
+  end
 
-  # def test_cents_through_drop
-  #   cents = {"cents" => CentsDrop.new}
-  #   context.merge(cents)
-  #   assert_equal 100, context["cents.amount"]
-  # end
+  def test_cents_through_drop
+    cents = {"cents" => CentsDrop.new}
+    context.merge(cents)
+    assert_equal 100, context["cents.amount"]
+  end
 
-  # def test_nested_cents_through_drop
-  #   vars = {"vars" => {"cents" => CentsDrop.new}}
-  #   context.merge(vars)
-  #   assert_equal 100, context["vars.cents.amount"]
-  # end
-  #
-  # def test_drop_methods_with_question_marks
-  #   cents = {"cents" => CentsDrop.new}
-  #   context.merge(cents)
-  #   assert context["cents.non_zero?"]
-  # end
-  #
-  # def test_context_from_within_drop
-  #   sensitive = {"test" => "123", "vars" => ContextSensitiveDrop.new(context)}
-  #   context.merge(sensitive)
+  def test_nested_cents_through_drop
+    vars = {"vars" => {"cents" => CentsDrop.new}}
+    context.merge(vars)
+    assert_equal 100, context["vars.cents.amount"]
+  end
 
-  #   assert_equal "123", context["test"]
-  #   assert_equal "123", context["vars.test"]
-  # end
-  #
-  # def test_nested_context_from_within_drop
-  #   sensitive = {"test" => "123", "vars" => {"local" => ContextSensitiveDrop.new(context)}}
-  #   context.merge(sensitive)
-  #   assert_equal "123", context["vars.local.test"]
-  # end
+  def test_drop_methods_with_question_marks
+    cents = {"cents" => CentsDrop.new}
+    context.merge(cents)
+    assert context["cents.non_zero?"]
+  end
+
+  def test_context_from_within_drop
+    sensitive = {"test" => "123", "vars" => ContextSensitiveDrop.new(context)}
+    context.merge(sensitive)
+
+    assert_equal "123", context["test"]
+    assert_equal "123", context["vars.test"]
+  end
+
+  def test_nested_context_from_within_drop
+    sensitive = {"test" => "123", "vars" => {"local" => ContextSensitiveDrop.new(context)}}
+    context.merge(sensitive)
+    assert_equal "123", context["vars.local.test"]
+  end
 
   def test_ranges
     context.merge({"test" => "5"})
@@ -394,35 +394,35 @@ class ContextTest < Minitest::Test
     assert_equal (5..5), context["(test..test)"]
   end
 
-  # def test_cents_through_drop_nestedly
-  #   cents = {"cents" => CentsDrop.new}
-  #   context.merge(cents)
-  #   assert_equal 100, context["cents.amount"]
-  #
-  #   nested_cents = {"cents" => cents}
-  #   context.merge(nested_cents)
-  #   assert_equal 100, context["cents.cents.amount"]
-  #
-  #   triple_nested_cents = {"cents" => nested_cents}
-  #   context.merge(triple_nested_cents)
-  #   assert_equal 100, context["cents.cents.cents.amount"]
-  # end
-  #
-  # def test_drop_with_variable_called_only_once
-  #   context["counter"] = CounterDrop.new
-  #
-  #   assert_equal 1, context["counter.count"]
-  #   assert_equal 2, context["counter.count"]
-  #   assert_equal 3, context["counter.count"]
-  # end
-  #
-  # def test_drop_with_key_called_only_once
-  #   context["counter"] = CounterDrop.new
-  #
-  #   assert_equal 1, context["counter[\"count\"]"]
-  #   assert_equal 2, context["counter[\"count\"]"]
-  #   assert_equal 3, context["counter[\"count\"]"]
-  # end
+  def test_cents_through_drop_nestedly
+    cents = {"cents" => CentsDrop.new}
+    context.merge(cents)
+    assert_equal 100, context["cents.amount"]
+
+    nested_cents = {"cents" => cents}
+    context.merge(nested_cents)
+    assert_equal 100, context["cents.cents.amount"]
+
+    triple_nested_cents = {"cents" => nested_cents}
+    context.merge(triple_nested_cents)
+    assert_equal 100, context["cents.cents.cents.amount"]
+  end
+
+  def test_drop_with_variable_called_only_once
+    context["counter"] = CounterDrop.new
+
+    assert_equal 1, context["counter.count"]
+    assert_equal 2, context["counter.count"]
+    assert_equal 3, context["counter.count"]
+  end
+
+  def test_drop_with_key_called_only_once
+    context["counter"] = CounterDrop.new
+
+    assert_equal 1, context["counter[\"count\"]"]
+    assert_equal 2, context["counter[\"count\"]"]
+    assert_equal 3, context["counter[\"count\"]"]
+  end
 
   # # def test_proc_as_variable
   # #   context["dynamic"] = Proc.new { "Hello" }
@@ -486,9 +486,9 @@ class ContextTest < Minitest::Test
   # #   assert_equal 345392, context["magic"]
   # # end
 
-  # def test_to_liquid_and_context_at_first_level
-  #   context["category"] = Category.new("foobar", context)
-  #   assert_equal CategoryDrop, context["category"].class
-  #   assert_equal context, (context["category"].as CategoryDrop).context
-  # end
+  def test_to_liquid_and_context_at_first_level
+    context["category"] = Category.new("foobar", context)
+    assert_equal CategoryDrop, context["category"].class
+    assert_equal context, (context["category"].as CategoryDrop).context
+  end
 end # ContextTest
