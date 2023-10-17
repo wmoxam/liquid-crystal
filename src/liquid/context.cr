@@ -157,6 +157,10 @@ module Liquid
       resolve(key) != nil
     end
 
+    def to_liquid
+      self
+    end
+
     # Look up variable, either resolve directly after considering the name.
     # We can directly handle Strings, digits, floats and booleans (true,false).
     # If no match is made we lookup the variable in the current scope and
@@ -225,6 +229,7 @@ module Liquid
       end
 
       variable = lookup.to_liquid
+      variable.context = self if variable.is_a?(Drop)
       # variable.context = self if variable.respond_to?(:context=)
 
       return variable

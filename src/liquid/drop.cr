@@ -1,5 +1,4 @@
 module Liquid
-
   # A drop in liquid is a class which allows you to export DOM like things to
   # liquid.
   # Methods of drops are callable.
@@ -44,14 +43,13 @@ module Liquid
         nil
       {% for method in @type.methods %}
         {% if !method.name.ends_with?("=") &&
-            method.visibility == :public &&
-            !["context",
-              "before_method",
-              "invoke_drop",
-              "[]",
-              "has_key?",
-              "each",
-              "inspect"].any? {|meth| meth == method.name} %}
+                method.visibility == :public &&
+                !["before_method",
+                  "invoke_drop",
+                  "[]",
+                  "has_key?",
+                  "each",
+                  "inspect"].any? { |meth| meth == method.name } %}
       when {{method.name.stringify}}
         self.{{method.name}}()
         {% end %}
@@ -61,8 +59,8 @@ module Liquid
       end
       {% end %}
 
-      if value.is_a?(Array)
-        value.map {|item| item.as Liquid::Type }
+      if value.is_a?(Array) || value.is_a?(Hash)
+        Liquid::Data.prepare(value)
       else
         value
       end

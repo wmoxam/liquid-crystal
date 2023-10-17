@@ -3,7 +3,7 @@ module Liquid
     getter raw : Type
 
     def initialize(raw)
-      @raw = raw.as Type
+      @raw = raw
       @uninitialized = false
     end
 
@@ -56,8 +56,9 @@ module Liquid
       when Hash
         return object.has_key?(key)
       else
-        raise "expected Array or Hash for #has_key?(key : Type), " \
-              "not #{object.class}"
+        return false
+        # raise "expected Array or Hash for #has_key?(key : Type), " \
+        #       "not #{object.class}"
       end
     end
 

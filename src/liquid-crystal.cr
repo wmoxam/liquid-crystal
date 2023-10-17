@@ -44,9 +44,10 @@ module Liquid
   TemplateParser             = /(#{PartialTemplateParser}|#{AnyStartingTag})/
   VariableParser             = /\[[^\]]+\]|#{VariableSegment}+\??/
 
-  alias Type = Nil | Bool | Int32 | Float32 | Int64 | Float64 | String | Time | Liquid::Drop | Array(Type) | Hash(String, Type) | Range(Int32, Int32) | Symbol | Liquid::FileSystem
+  alias Type = Nil | Bool | Int32 | Float32 | Int64 | Float64 | String | Time | Liquid::Drop | Liquid::Context | Array(Type) | Hash(String, Type) | Range(Int32, Int32) | Symbol | Liquid::FileSystem
 end
 
+require "./liquid/context"
 require "./liquid/drop"
 require "./liquid/file_system"
 
@@ -59,7 +60,6 @@ require "./liquid/filter"
 require "./liquid/register_collection"
 require "./liquid/strainer"
 require "./liquid/standard_filters"
-require "./liquid/context"
 require "./liquid/tag"
 require "./liquid/block"
 require "./liquid/document"
