@@ -1,13 +1,12 @@
 .PHONY: test
 
-all: compile test
+all: deps test
 
 test:
-	bundle install --path .bundle
 	bundle exec ruby --yjit src/benchmark.rb
+	crystal build --release src/benchmark.cr
 	./benchmark
 
-compile:
+deps:
 	shards install
-	crystal build --release src/benchmark.cr
-
+	bundle install --path .bundle
