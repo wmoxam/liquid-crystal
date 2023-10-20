@@ -23,6 +23,13 @@ module Liquid
     getter scopes : Array(Hash(String, Type)), :errors, :registers, :environments
     @literals : Hash(String, Type)
 
+    FLOATS   = /^(-?\d[\d\.]+)$/
+    INTEGERS = /^(-?\d+)$/
+    RANGES   = /^\((\S+)\.\.(\S+)\)$/
+    STRINGS  = /^['"](.*)['"]$/
+
+    LITERALS = Regex.union([FLOATS, INTEGERS, RANGES, STRINGS])
+
     def initialize(environments = [] of Hash(String, Type),
                    outer_scope = {} of String => Type,
                    registers = {} of Symbol => Type,
@@ -174,26 +181,30 @@ module Liquid
     private def resolve(key)
       if key.nil?
         return nil
-      elsif key.is_a?(String) && @literals.has_key?(key)
-        @literals[key]
-      else
-        is_variable = false
-        value = case key
-                when /^'(.*)'$/ # Single quoted strings
-                  $1
-                when /^"(.*)"$/ # Double quoted strings
-                  $1
-                when /^(-?\d+)$/ # Integer and floats
-                  $1.to_i
-                when /^\((\S+)\.\.(\S+)\)$/ # Ranges
-                  range_start = resolve($1).as Int32 | String
-                  range_end = resolve($2).as Int32 | String
-                  (range_start.to_i..range_end.to_i)
-                when /^(-?\d[\d\.]+)$/ # Floats
-                  $1.to_f
-                else
-                  is_variable = true
+      end
+
+      if key.is_a?(String)
+        if @literals.has_key?(key)
+          return @literals[key]
+        end
+
+        is_variable = !LITERALS.match(key)
+
+        value = if is_variable
                   variable(key)
+                else
+                  case key
+                  when STRINGS
+                    $1
+                  when INTEGERS
+                    $1.to_i
+                  when RANGES
+                    range_start = resolve($1).as Int32 | String
+                    range_end = resolve($2).as Int32 | String
+                    (range_start.to_i..range_end.to_i)
+                  when FLOATS
+                    $1.to_f
+                  end
                 end
 
         if !is_variable && key.is_a?(String)
@@ -201,6 +212,8 @@ module Liquid
         end
 
         value
+      else
+        variable(key)
       end
     end
 

@@ -7,3 +7,4 @@ lib
 examples/benchmark/benchmark
 examples/benchmark/lib
 examples/benchmark/.bundle/
+callgrind.out*

@@ -16,48 +16,7 @@ liquid_template = <<-END
     </div>
   </div>
 {% endfor %}
-{% for product in products %}
-  <div class='product_brick'>
-    <div class='container'>
-      <div class='element'>
-        <img src='images/{{ product.image }}' class='product_miniature' />
-      </div>
-      <div class='element description'>
-        <a href={{ product.url }} class='product_name block bold'>
-          {{ product.external_index }}
-        </a>
-      </div>
-    </div>
-  </div>
-{% endfor %}
-{% for product in products %}
-  <div class='product_brick'>
-    <div class='container'>
-      <div class='element'>
-        <img src='images/{{ product.image }}' class='product_miniature' />
-      </div>
-      <div class='element description'>
-        <a href={{ product.url }} class='product_name block bold'>
-          {{ product.external_index }}
-        </a>
-      </div>
-    </div>
-  </div>
-{% endfor %}
-{% for product in products %}
-  <div class='product_brick'>
-    <div class='container'>
-      <div class='element'>
-        <img src='images/{{ product.image }}' class='product_miniature' />
-      </div>
-      <div class='element description'>
-        <a href={{ product.url }} class='product_name block bold'>
-          {{ product.external_index }}
-        </a>
-      </div>
-    </div>
-  </div>
-{% endfor %}
+
 
 END
 
