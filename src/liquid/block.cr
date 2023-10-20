@@ -85,7 +85,7 @@ module Liquid
     end
 
     protected def render_all(list, context)
-      String.build(32*1024) do |output|
+      String.build do |output|
         list.not_nil!.each do |token|
           # Break out if we have any unhanded interrupts.
           break if context.has_interrupt?
@@ -112,6 +112,5 @@ module Liquid
         end
       end
     end
-
   end
 end
