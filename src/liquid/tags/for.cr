@@ -49,6 +49,45 @@ module Liquid
     @collection_name : String
     @reversed : String | Nil
 
+    class Drop < Liquid::Drop
+      property name : String
+      property length : Int32
+      property :context
+
+      @index : Int32
+
+      def initialize(name, length, index, context)
+        @name = name
+        @length = length
+        @index = index
+        super(context)
+      end
+
+      def index
+        @index + 1
+      end
+
+      def index0
+        @index
+      end
+
+      def rindex
+        length - @index
+      end
+
+      def rindex0
+        rindex - 1
+      end
+
+      def first?
+        @index == 0
+      end
+
+      def last?
+        @index == (length - 1)
+      end
+    end
+
     def initialize(tag_name, markup, tokens)
       if markup =~ Syntax
         @variable_name = $1
@@ -113,6 +152,7 @@ module Liquid
       return render_else(context) if segment.empty?
 
       segment = segment.reverse if !@reversed.nil?
+
       String.build do |result|
         length = segment.size
 
@@ -124,16 +164,7 @@ module Liquid
         context.stack do
           segment.each_with_index do |item, index|
             context[@variable_name] = item
-            context["forloop"] = Data.prepare({
-              "name"    => @name,
-              "length"  => length,
-              "index"   => index + 1,
-              "index0"  => index,
-              "rindex"  => length - index,
-              "rindex0" => length - index - 1,
-              "first"   => (index == 0),
-              "last"    => (index == length - 1),
-            })
+            context["forloop"] = Drop.new(@name, length, index, context)
 
             result << render_all(@for_block, context)
 

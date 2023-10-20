@@ -20,7 +20,6 @@ liquid_template = <<-END
 
 END
 
-
 data = {
   "products" => 100.times.map do |n|
     { "image" => "foo-#{rand 100}.png", "url" => "http://bar-#{rand 100}.com", "external_index" => "FOO #{rand 100}" }
