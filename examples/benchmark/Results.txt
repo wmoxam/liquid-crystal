@@ -3,7 +3,7 @@ Results
 Simple benchmark (Linux)
 
 Crystal v 1.10.0
-	- 4000 i/s
+	- 5250 i/s
 
 Ruby v 3.2.1 w Liquid v5.4.0 & --yjit
 	- 5619 i/s

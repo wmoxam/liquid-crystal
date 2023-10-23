@@ -278,15 +278,14 @@ module Liquid
           # If object is a hash- or array-like object we look for the
           # presence of the key and if its available we return it
 
-          if (object.is_a?(Hash) && has_key?(object, part)) ||
-             (object.is_a?(Array) && part.is_a?(Int))
-            res = lookup_and_evaluate(object, part)
-            object = res.to_liquid
-
+          if (object.is_a?(Hash) && has_key?(object, part))
+            object = lookup_and_evaluate(object, part, true).to_liquid
+          elsif (object.is_a?(Array) && part.is_a?(Int))
+            object = lookup_and_evaluate(object, part).to_liquid
+          elsif !part_resolved && ["size", "first", "last"].includes?(part)
             # Some special cases. If the part wasn't in square brackets and
             # no key with the same name was found we interpret following calls
             # as commands and call them on the current object
-          elsif !part_resolved && ["size", "first", "last"].includes?(part)
             raw = case part
                   when "first"
                     object.first if object.responds_to?(:first)
@@ -316,7 +315,9 @@ module Liquid
       object
     end # variable
 
-    private def lookup_and_evaluate(obj, key) : Any
+    private def lookup_and_evaluate(obj, key, known_has_key = false) : Any
+      return Any.new(obj)[normalized_key(key)] if known_has_key # we already tested if it has a key
+
       if has_key?(obj, key)
         return Any.new(obj)[normalized_key(key)]
       else
@@ -346,7 +347,7 @@ module Liquid
       @scopes.last.each_key do |k|
         @environments.each do |env|
           if env.has_key?(k)
-            value = lookup_and_evaluate(env, k)
+            value = lookup_and_evaluate(env, k, true)
             @scopes.last[k] = if value.nil?
                                 nil
                               else
