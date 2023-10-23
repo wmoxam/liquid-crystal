@@ -10,7 +10,7 @@ liquid_template = <<-END
       </div>
       <div class='element description'>
         <a href={{ product.url }} class='product_name block bold'>
-          {{ product.external_index }}
+          {{ product.name }}
         </a>
       </div>
     </div>
@@ -22,7 +22,7 @@ END
 
 data = {
   "products" => 100.times.map do |n|
-    { "image" => "foo-#{rand 100}.png", "url" => "http://bar-#{rand 100}.com", "external_index" => "FOO #{rand 100}" }
+    { "image" => "foo-#{rand 100}.png", "url" => "http://bar-#{rand 100}.com", "name" => "FOO #{"a" * rand(100)}" }
   end.to_a
 }
 

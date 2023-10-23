@@ -30,9 +30,7 @@ module Liquid
         case result
         when FilterNotInvokable
           # no-op
-        when Array
-          return Any.new(Data.prepare(result))
-        when Hash
+        when Array, Hash
           return Any.new(Data.prepare(result))
         else
           return Any.new(result.as Type)

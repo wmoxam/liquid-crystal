@@ -11,7 +11,7 @@ liquid_template = <<-END
       </div>
       <div class='element description'>
         <a href={{ product.url }} class='product_name block bold'>
-          {{ product.name }}
+          {{ product.name | truncate:16 }}
         </a>
       </div>
     </div>
