@@ -5,6 +5,8 @@ pkg
 .shards
 lib
 examples/benchmark/benchmark
+examples/benchmark/benchmark-with-filter
 examples/benchmark/lib
 examples/benchmark/.bundle/
 callgrind.out*
+*.dwarf

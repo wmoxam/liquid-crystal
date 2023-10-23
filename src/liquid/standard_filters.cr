@@ -28,11 +28,11 @@ module Liquid
 
     def escape_once(input)
       regexp = /["><']|&(?!([a-zA-Z]+|(#\d+));)/
-      mappings = {"&" => "&amp;",
-                  ">" => "&gt;",
-                  "<" => "&lt;",
+      mappings = {"&"  => "&amp;",
+                  ">"  => "&gt;",
+                  "<"  => "&lt;",
                   "\"" => "&quot;",
-                  "'" => "&#39;"}
+                  "'"  => "&#39;"}
       input.to_s.gsub(regexp, mappings)
     end
 
