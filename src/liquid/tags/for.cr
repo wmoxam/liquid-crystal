@@ -79,12 +79,20 @@ module Liquid
         rindex - 1
       end
 
-      def first?
+      def first
         @index == 0
       end
 
-      def last?
+      def first?
+        first
+      end
+
+      def last
         @index == (length - 1)
+      end
+
+      def last?
+        last
       end
     end
 
