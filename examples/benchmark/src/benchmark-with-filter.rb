@@ -10,7 +10,7 @@ liquid_template = <<-END
       </div>
       <div class='element description'>
         <a href={{ product.url }} class='product_name block bold'>
-          {{ product.name | truncate:8 }}
+          {{ product.name | truncate:8 | strip_html | newline_to_br | strip_newlines | escape_once | to_number}}
         </a>
       </div>
     </div>
