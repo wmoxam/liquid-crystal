@@ -4,11 +4,11 @@ Linux - Ryzen 5 3600
 
 Crystal v 1.10.0
 	simple - 5440 i/s
-	filter - 4680 i/s
+	filter - 3550 i/s
 
 Ruby v 3.2.1 w Liquid v5.4.0 & --yjit
 	simple - 5619 i/s
-	filter - 3114 i/s
+	filter - 1150 i/s
 
 Ruby v 3.2.1 w Liquid v5.4.0
 	simple - 1588 i/s
@@ -24,8 +24,8 @@ Mac - M1 Pro
 
 Crystal v 1.10.0
 	simple - 8330 i/s
-	filter - 7150 i/s
+	filter - 4950 i/s
 
 Ruby v 3.2.1 w Liquid v5.4.0 & --yjit
 	simple - 8240 i/s
-	filter - 5808 i/s
+	filter - 2190 i/s

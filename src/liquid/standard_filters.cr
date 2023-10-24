@@ -2,6 +2,16 @@ require "html"
 
 module Liquid
   class StandardFilters < Filter
+    EscapeMappings = {"&"  => "&amp;",
+                      ">"  => "&gt;",
+                      "<"  => "&lt;",
+                      "\"" => "&quot;",
+                      "'"  => "&#39;"}
+    EscapeParser = /["><']|&(?!([a-zA-Z]+|(#\d+));)/
+    FloatParser  = /^\d+\.\d+$/
+    HtmlParser   = Regex.union(/<script.*?<\/script>/, /<!--.*?-->/, /<.*?>/)
+    NewLine      = /\n/
+
     # Return the size of an array or of an string
     def size(input)
       input.responds_to?(:size) ? input.size : 0
@@ -27,13 +37,7 @@ module Liquid
     end
 
     def escape_once(input)
-      regexp = /["><']|&(?!([a-zA-Z]+|(#\d+));)/
-      mappings = {"&"  => "&amp;",
-                  ">"  => "&gt;",
-                  "<"  => "&lt;",
-                  "\"" => "&quot;",
-                  "'"  => "&#39;"}
-      input.to_s.gsub(regexp, mappings)
+      input.to_s.gsub(EscapeParser, EscapeMappings)
     end
 
     def h(input)
@@ -74,12 +78,12 @@ module Liquid
     end
 
     def strip_html(input)
-      input.to_s.gsub(/<script.*?<\/script>/, "").gsub(/<!--.*?-->/, "").gsub(/<.*?>/, "")
+      input.to_s.gsub(HtmlParser, "")
     end
 
     # Remove all newlines from the string
     def strip_newlines(input)
-      input.to_s.gsub(/\n/, "")
+      input.to_s.gsub(NewLine, "")
     end
 
     # Join elements of the array with certain character between them
@@ -147,7 +151,7 @@ module Liquid
 
     # Add <br /> tags in front of all newlines in input string
     def newline_to_br(input)
-      input.to_s.gsub(/\n/, "<br />\n")
+      input.to_s.gsub(NewLine, "<br />\n")
     end
 
     # Reformat a date
@@ -270,7 +274,7 @@ module Liquid
       when Number
         obj
       when String
-        if (obj.strip =~ /^\d+\.\d+$/)
+        if (obj.strip =~ FloatParser)
           obj.to_f rescue 0.0
         else
           obj.to_i rescue 0

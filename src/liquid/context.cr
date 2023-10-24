@@ -23,10 +23,11 @@ module Liquid
     getter scopes : Array(Hash(String, Type)), :errors, :registers, :environments
     @literals : Hash(String, Type)
 
-    FLOATS   = /^(-?\d[\d\.]+)$/
-    INTEGERS = /^(-?\d+)$/
-    RANGES   = /^\((\S+)\.\.(\S+)\)$/
-    STRINGS  = /^['"](.*)['"]$/
+    FLOATS          = /^(-?\d[\d\.]+)$/
+    INTEGERS        = /^(-?\d+)$/
+    RANGES          = /^\((\S+)\.\.(\S+)\)$/
+    STRINGS         = /^['"](.*)['"]$/
+    SquareBracketed = /^\[(.*)\]$/
 
     LITERALS = Regex.union([FLOATS, INTEGERS, RANGES, STRINGS])
 
@@ -255,14 +256,13 @@ module Liquid
     #  assert_equal "tobi", @context["hash.name"]
     #  assert_equal "tobi", @context["hash["name"]"]
     private def variable(markup)
-      square_bracketed = /^\[(.*)\]$/
       markup_string = markup.to_s
       unless @variable_parts[markup]?
         parts = markup_string.scan(VariableParser).map { |p| p[0]? }.compact
 
         first_part = parts.shift
 
-        if first_part =~ square_bracketed
+        if first_part =~ SquareBracketed
           first_part = resolve($1)
         end
 
@@ -274,7 +274,7 @@ module Liquid
 
       if object = find_variable(first_part)
         parts.each do |part|
-          part = resolve($1) if part_resolved = (part =~ square_bracketed)
+          part = resolve($1) if part_resolved = (part =~ SquareBracketed)
           # If object is a hash- or array-like object we look for the
           # presence of the key and if its available we return it
 
