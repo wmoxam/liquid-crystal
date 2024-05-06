@@ -19,6 +19,7 @@ Ruby v 3.1.2 w Liquid v5.4.0
 Ruby v 2.7.8 w Liquid v5.4.0
 	simple - 1537 i/s
 
+-------------------------------------
 
 Mac - M1 Pro
 
@@ -29,3 +30,14 @@ Crystal v 1.10.0
 Ruby v 3.2.1 w Liquid v5.4.0 & --yjit
 	simple - 8240 i/s
 	filter - 2190 i/s
+
+May 6, 2024
+------------
+
+Crystal v 1.12.1
+	simple - 8670 i/s (4% faster than Crystal 1.10)
+	filter - 5610 i/s (13.3% faster than Crystal 1.10)
+
+Ruby v 3.3.0 w Liquid v5.4.0 & --yjit
+	simple - 9530 i/s  (15.6% faster than Ruby 3.2.1)
+	filter - 2780 i/s  (26.9% faster than Ruby 3.2.1)

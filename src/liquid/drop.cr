@@ -49,7 +49,9 @@ module Liquid
                   "[]",
                   "has_key?",
                   "each",
-                  "inspect"].any? { |meth| meth == method.name } %}
+                  "inspect",
+                  "pretty_print",
+                  "pretty_inspect"].any? { |meth| meth == method.name } %}
       when {{method.name.stringify}}
         self.{{method.name}}()
         {% end %}

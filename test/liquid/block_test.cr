@@ -54,4 +54,4 @@ class BlockTest < Minitest::Test
     return [] of Nil.class if nodelist.nil?
     nodelist.not_nil!.map { |node| node.class }
   end
-end # VariableTest
+end

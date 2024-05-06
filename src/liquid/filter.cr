@@ -12,12 +12,14 @@ module Liquid
         nil
       {% for method in @type.methods %}
         {% if !method.name.ends_with?("=") &&
-            method.visibility == :public &&
-            !["invoke",
-              "[]",
-              "has_key?",
-              "each",
-              "inspect"].any? { |meth| meth == method.name } %}
+                method.visibility == :public &&
+                !["invoke",
+                  "[]",
+                  "has_key?",
+                  "each",
+                  "inspect",
+                  "pretty_print",
+                  "pretty_inspect"].any? { |meth| meth == method.name } %}
       when {{method.name.stringify}}
         {% for i in (0..(method.args.size - 1)) %}
           default{{i}} = {% if method.args[i].default_value %}{{method.args[i].default_value}}{% else %}nil{% end %}

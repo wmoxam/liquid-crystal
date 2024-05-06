@@ -6,7 +6,7 @@ module Liquid
   #   c = Condition.new("1", "==", "1")
   #   c.evaluate #=> true
   #
-  class Condition #:nodoc:
+  class Condition # :nodoc:
     getter :attachment
     property left : Type, operator : String | Nil, right : Type
 
@@ -15,7 +15,7 @@ module Liquid
 
     def initialize(left = nil, operator = nil, right = nil)
       @left, @operator, @right = left, operator, right
-      @child_relation  = :nil
+      @child_relation = :nil
     end
 
     def evaluate(context = Context.new)
@@ -64,8 +64,8 @@ module Liquid
         when :empty?
           right_raw.empty? if right_raw.responds_to?(:empty?)
         else
-	  raise "unsupported context '#{left_raw}'"
-	end
+          raise "unsupported context '#{left_raw}'"
+        end
       end
 
       if right_raw.is_a? Symbol
@@ -74,8 +74,8 @@ module Liquid
           left_raw.blank? if left_raw.responds_to?(:blank?)
         when :empty?
           left_raw.empty? if left_raw.responds_to?(:empty?)
-	else
-	  raise "unsupported context '#{right_raw}'"
+        else
+          raise "unsupported context '#{right_raw}'"
         end
       end
 
@@ -116,5 +116,4 @@ module Liquid
       true
     end
   end
-
 end
