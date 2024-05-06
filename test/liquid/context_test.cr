@@ -177,15 +177,15 @@ class ContextTest < Minitest::Test
     end
   end
 
-  # def test_override_global_filter
-  #   global = GlobalNotice
-  #
-  #   local = LocalNotice
-  #
-  #   Template.register_filter(global)
-  #   assert_equal "Global test", Template.parse("{{\"test\" | notice }}").render
-  #   assert_equal "Local test", Template.parse("{{\"test\" | notice }}").render({}, :filters => [local])
-  # end
+  def test_override_global_filter
+    global = GlobalNotice
+
+    local = LocalNotice
+
+    Template.register_filter(global)
+    assert_equal "Global test", Template.parse("{{\"test\" | notice }}").render
+    assert_equal "Local test", Template.parse("{{\"test\" | notice }}").render({} of String => Type, [local])
+  end
 
   def test_only_intended_filters_make_it_there
     filter = HiFilter
