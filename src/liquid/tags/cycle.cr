@@ -26,7 +26,7 @@ module Liquid
         @name = $1
       when SimpleSyntax
         @variables = variables_from_string(markup)
-        @name = "'#{@variables.to_s}'"
+        @name = "'#{@variables}'"
       else
         raise SyntaxError.new("Syntax Error in 'cycle' - Valid syntax: " \
                               "cycle [name :] var [, var2, var3 ...]")

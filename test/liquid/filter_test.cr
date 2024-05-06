@@ -2,17 +2,17 @@ require "../test_helper"
 
 class MoneyFilter < Liquid::Filter
   def money(input)
-    " %d$ " % input.to_s
+    " %d$ " % input
   end
 
   def money_with_underscore(input)
-    " %d$ " % input.to_s
+    " %d$ " % input
   end
 end
 
 class CanadianMoneyFilter < Liquid::Filter
   def money(input)
-    " %d$ CAD " % input.to_s
+    " %d$ CAD " % input
   end
 end
 
@@ -115,7 +115,6 @@ class FiltersInTemplate < Minitest::Test
     Template.register_filter(MoneyFilter)
 
     assert_equal " 1000$ ", Template.parse("{{1000 | money}}").render
-    # assert_equal " 1000$ CAD ", Template.parse("{{1000 | money}}").render(({} of String => Type), CanadianMoneyFilter)
     assert_equal " 1000$ CAD ", Template.parse("{{1000 | money}}").render(({} of String => Type), [CanadianMoneyFilter])
   end
 end # FiltersTest
