@@ -64,17 +64,17 @@ class FiltersTest < Minitest::Test
     assert_equal "1 2 3 4", Variable.new("var | join").render(@context).as(Any).raw
   end
 
-  # def test_sort
-  #   @context["value"] = 3
-  #   @context["numbers"] = Data.prepare([2,1,4,3])
-  #   @context["words"] = Data.prepare(["expected", "as", "alphabetic"])
-  #   @context["arrays"] = Data.prepare([["flattened"], ["are"]])
-  #
-  #   assert_equal Data.prepare([1,2,3,4]), Variable.new("numbers | sort").render(@context).as(Any).raw
-  #   assert_equal Data.prepare(["alphabetic", "as", "expected"]), Variable.new("words | sort").render(@context).as(Any).raw
-  #   assert_equal Data.prepare([3]), Variable.new("value | sort").render(@context).as(Any).raw
-  #   assert_equal Data.prepare(["are", "flattened"]), Variable.new("arrays | sort").render(@context).as(Any).raw
-  # end
+  def test_sort
+    @context["value"] = 3
+    @context["numbers"] = Data.prepare([2, 1, 4, 3])
+    @context["words"] = Data.prepare(["expected", "as", "alphabetic"])
+    @context["arrays"] = Data.prepare([["flattened"], ["are"]])
+
+    assert_equal Data.prepare([1, 2, 3, 4]), Variable.new("numbers | sort").render(@context).as(Any).raw
+    assert_equal Data.prepare(["alphabetic", "as", "expected"]), Variable.new("words | sort").render(@context).as(Any).raw
+    assert_equal Data.prepare([3]), Variable.new("value | sort").render(@context).as(Any).raw
+    assert_equal Data.prepare(["are", "flattened"]), Variable.new("arrays | sort").render(@context).as(Any).raw
+  end
 
   def test_strip_html
     @context["var"] = "<b>bla blub</a>"

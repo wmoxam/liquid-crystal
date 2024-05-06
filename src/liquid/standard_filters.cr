@@ -93,16 +93,25 @@ module Liquid
 
     # # Sort elements of the array
     # # provide optional property with which to sort an array of hashes or drops
-    # def sort(input, property = nil)
-    #   ary = [input].flatten
-    #   if property.nil?
-    #     ary.sort
-    #   elsif ary.first.responds_to?("[]") && !ary.first[property].nil?
-    #     ary.sort {|a,b| a[property] <=> b[property] }
-    #   elsif ary.first.responds_to?(property)
-    #     ary.sort {|a,b| a.send(property) <=> b.send(property) }
-    #   end
-    # end
+    def sort(input, property = nil)
+      ary = [input].flatten
+
+      ary.sort do |a, b|
+        if a.is_a?(Number) && b.is_a?(Number)
+          a <=> b
+        elsif a.is_a?(String) && b.is_a?(String)
+          a <=> b
+        else
+          nil
+        end
+      end
+      # if property.nil?
+      # elsif ary.first.responds_to?("[]") && !ary.first[property].nil?
+      #   ary.sort {|a,b| a[property] <=> b[property] }
+      # elsif ary.first.responds_to?(property)
+      #   ary.sort {|a,b| a.send(property) <=> b.send(property) }
+      # end
+    end
 
     # map/collect on a given property
     # def map(input, property)
