@@ -106,7 +106,11 @@ module Liquid
             else
               token.to_s
             end
+          rescue e : ArgumentError
+            output << (context.handle_error(e))
           rescue e : StandardError
+            output << (context.handle_error(e))
+          rescue e : SyntaxError
             output << (context.handle_error(e))
           end
         end
