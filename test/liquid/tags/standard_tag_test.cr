@@ -3,11 +3,11 @@ require "../../test_helper"
 class StandardTagTest < Minitest::Test
   include Liquid
 
-  # def test_tag
-  #   tag = Tag.new('tag', [], [])
-  #   assert_equal 'liquid::tag', tag.name
-  #   assert_equal '', tag.render(Context.new)
-  # end
+  def test_tag
+    tag = Tag.new("tag", "", [] of String)
+    assert_equal "liquid::tag", tag.name
+    assert_equal "", tag.render(Context.new)
+  end
 
   def test_no_transform
     assert_template_result("this text should come out of the template without change...",
@@ -271,10 +271,10 @@ class StandardTagTest < Minitest::Test
     assert_template_result("array has 4 elements", "array has {{ array.size }} elements", assigns)
   end
 
-  # def test_size_of_hash
-  #   assigns = {"hash" => {"a" => 1, "b" => 2, "c" => 3, "d" => 4}}
-  #   assert_template_result("hash has 4 elements", "hash has {{ hash.size }} elements", assigns)
-  # end
+  def test_size_of_hash
+    assigns = {"hash" => {"a" => 1, "b" => 2, "c" => 3, "d" => 4}}
+    assert_template_result("hash has 4 elements", "hash has {{ hash.size }} elements", assigns)
+  end
 
   def test_illegal_symbols
     assert_template_result("", "{% if true == empty %}?{% endif %}", {} of String => Type)
