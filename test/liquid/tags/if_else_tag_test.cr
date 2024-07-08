@@ -143,14 +143,14 @@ class IfElseTagTest < Minitest::Test
   end
 
   # def test_if_with_custom_condition
-  #   Condition.operators['contains'] = :[]
-  #
-  #   assert_template_result('yes', %({% if 'bob' contains 'o' %}yes{% endif %}))
-  #   assert_template_result('no', %({% if 'bob' contains 'f' %}yes{% else %}no{% endif %}))
+  #   Condition.operators["contains"] = :[]
+
+  #   assert_template_result("yes", %({% if 'bob' contains 'o' %}yes{% endif %}))
+  #   assert_template_result("no", %({% if 'bob' contains 'f' %}yes{% else %}no{% endif %}))
   # ensure
-  #   Condition.operators.delete 'contains'
+  #   Condition.operators.delete "contains"
   # end
-  #
+
   # def test_operators_are_ignored_unless_isolated
   #   Condition.operators['contains'] = :[]
   #

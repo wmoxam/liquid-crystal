@@ -17,7 +17,7 @@ class CanadianMoneyFilter < Liquid::Filter
 end
 
 # class SubstituteFilter < Liquid::Filter
-#   def substitute(input, params={} of String => Filter)
+#   def substitute(input, params={} of String => String)
 #     input.to_s.gsub(/%\{(\w+)\}/) { |match| params[$1] }
 #   end
 # end

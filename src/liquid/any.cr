@@ -132,7 +132,7 @@ module Liquid
         end
       elsif (raw = @raw).responds_to?(:each_char)
         raw.each_char do |element|
-          yield element.to_s
+          yield element
         end
       end
     end

@@ -31,7 +31,7 @@ class ProductDrop < Liquid::Drop
 
   class CatchallDrop < Liquid::Drop
     def before_method(method)
-      "method: #{method.to_s}"
+      "method: #{method}"
     end
   end
 

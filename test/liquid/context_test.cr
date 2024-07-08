@@ -147,7 +147,7 @@ class ContextTest < Minitest::Test
 
   class HiFilter < Filter
     def hi(output)
-      output.to_s + " hi!"
+      "#{output} hi!"
     end
   end
 
