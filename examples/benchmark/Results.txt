@@ -41,3 +41,14 @@ Crystal v 1.12.1
 Ruby v 3.3.0 w Liquid v5.4.0 & --yjit
 	simple - 9530 i/s  (15.6% faster than Ruby 3.2.1)
 	filter - 2780 i/s  (26.9% faster than Ruby 3.2.1)
+
+Aug 6 2024 - Linux
+----------
+
+Crystal v 1.13.1
+	simple - 5060 i/s
+	filter - 3170 i/s
+
+Ruby v 3.3.0 w Liquid v5.4.0 & --yjit
+	simple - 6029.7 i/s
+	filter - 1418.8
